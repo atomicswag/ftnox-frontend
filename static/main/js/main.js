@@ -2467,21 +2467,21 @@ templates['exchange_pending_orders.html'] = template({"1":function(depth0,helper
   return buffer + "\n    </tbody>\n    </table>\n</div>\n";
 },"useData":true});
 templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) {
-  return "\n                <li name=\"treasury\"><a href=\"/treasury/\">Treasury</a></li>\n                ";
+  return "\n                    <li name=\"treasury\"><a href=\"/treasury/\">Treasury</a></li>\n                ";
   },"3":function(depth0,helpers,partials,data) {
-  return "\n                <li name=\"market\"><a href=\"/#market\">Trade</a></li>\n                <li name=\"account\"><a href=\"/#account\">Account</a></li>\n                ";
+  return "\n                    <li name=\"market\"><a href=\"/#market\">Trade</a></li>\n                    <li name=\"account\"><a href=\"/#account\">Account</a></li>\n                ";
   },"5":function(depth0,helpers,partials,data) {
-  return "\n                <li name=\"logout\"><a href=\"/#logout\">Logout</a></li>\n                ";
+  return "\n                    <li name=\"logout\"><a href=\"/#logout\">Logout</a></li>\n                ";
   },"7":function(depth0,helpers,partials,data) {
-  return "\n                <li name=\"login\"><a href=\"/#login\">Login</a></li>\n                ";
+  return "\n                    <li name=\"login\"><a href=\"/#login\">Login</a></li>\n                ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", buffer = "\n<!-- Fixed navbar -->\n<div id=\"navbar\" class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a href=\"/\">\n                <img class=\"navbar-logo\" src=\"/img/logo.png\" alt=\"FtNox\"/>\n            </a>\n        </div>\n        <div class=\"collapse navbar-collapse\">\n            <ul class=\"nav navbar-nav\" style=\"float: right;\">\n                ";
+  var stack1, helper, functionType="function", buffer = "<!-- Fixed navbar -->\n<div class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a href=\"/\">\n                <img class=\"navbar-logo\" src=\"/img/logo.png\" alt=\"FtNox\"/>\n            </a>\n            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\">\n                <span class=\"sr-only\">Toggle navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n        </div>\n        <div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n            <ul class=\"nav navbar-nav\">\n                ";
   stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.roles)),stack1 == null || stack1 === false ? stack1 : stack1.treasury), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                <li name=\"about\"><a href=\"/#about\">About</a></li>\n                ";
+  buffer += "\n                    <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                    <li name=\"about\"><a href=\"/#about\">About</a></li>\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\">\n</div>\n\n<!-- Begin page content -->\n<div id=\"content\" class=\"container\">\n    ";
