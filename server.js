@@ -2,7 +2,7 @@ var http = require("http"),
     url = require("url"),
     path = require("path"),
     fs = require("fs")
-    port = process.argv[2] || 8888;
+    port = process.argv[2] || 8889;
 
 if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
@@ -15,7 +15,7 @@ http.createServer(function(request, response) {
     var uri = url.parse(request.url).pathname;
     var filename;
     if (uri.startsWith("/treasury")) {
-        filename = path.join(process.cwd(), "static/treasury", uri);
+        filename = path.join(process.cwd(), "static", uri);
     } else {
         filename = path.join(process.cwd(), "static/main", uri);
     }

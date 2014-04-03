@@ -519,7 +519,7 @@ App.getKV = function(key, cb) {
     if (app.kvMap) {
         cb(app.kvMap[key]);
     } else {
-        api("/kvstore/get", function(res) {
+        app.api("/kvstore/get", function(res) {
             app.kvMap = res.data;
             cb(app.kvMap[key]);
         });
@@ -527,7 +527,7 @@ App.getKV = function(key, cb) {
 }
 
 App.setKV = function(key, value, cb) {
-    api("/kvstore/set", {key:key, value:value}, function(res) {
+    app.api("/kvstore/set", {key:key, value:value}, function(res) {
         cb();
     });
 }
@@ -578,7 +578,16 @@ App.api = function(path, params, cb) {
         console.log("API error:", err);
         if (cb) { cb(err); }
     }
-    $.post(path, params, onSuccess, "json").fail(onFailure);
+    //$.post("https://ftnox.com"+path, params, onSuccess, "json").fail(onFailure);
+    $.ajax({
+        type:       "POST",
+        dataType:   "json",
+        url:        "https://ftnox.com"+path,
+        data:       params,
+        xhrFields:  {withCredentials: true},
+        success:    onSuccess,
+        error:      onFailure,
+    });
 }
 
 //////////// VIEW
@@ -10146,7 +10155,11 @@ templates['totp_confirm.html'] = template({"compiler":[5,">= 2.0.0"],"main":func
 
   };
 
-  Downcased = ['and', 'or', 'nor', 'a', 'an', 'the', 'so', 'but', 'to', 'of', 'at', 'by', 'from', 'into', 'on', 'onto', 'off', 'out', 'in', 'over', 'with', 'for'];
+  Downcased = [
+    'and', 'or', 'nor', 'a', 'an', 'the', 'so', 'but', 'to', 'of', 'at',
+    'by', 'from', 'into', 'on', 'onto', 'off', 'out', 'in', 'over',
+    'with', 'for'
+  ];
 
   Inflector.plural(/$/, 's');
   Inflector.plural(/s$/gi, 's');

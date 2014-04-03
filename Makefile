@@ -1,4 +1,7 @@
-run: static
+run: server
+
+server: .FORCE
+	node server.js
 
 scss: .FORCE
 	scss scss/style.scss:static/main/css/style.css
