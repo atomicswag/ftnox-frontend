@@ -1,7 +1,7 @@
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['about.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div id=\"about\">\n\n    <h2>About Us</h2>\n    <hr/>\n    <p class=\"lead\">\n        FtNox is a next generation cryptocurrency exchange done right.\n    </p>\n    <ul>\n        <li>Proof of Solvency</li>\n        <li>Cold Wallet Storage</li>\n        <li>Fastest Engine in the West</li>\n    </ul>\n\n    <br />\n\n    <h4>Contact Us</h4>\n    <address>\n        <strong>FtNox.com</strong><br/>\n        2501 Bryant St.</br>\n        San Francisco, CA 94110</br>\n        <abbr title=\"Phone\">P:</abbr> (415) 409-8733<br/>\n        <abbr title=\"Email\">E:</abbr> <a href=\"email:hello@ftnox.com\">hello@ftnox.com</a>\n    </address>\n\n</div>\n";
+  return "<div class=\"container\">\n    <div id=\"about\">\n\n        <h2>About Us</h2>\n        <hr/>\n        <p class=\"lead\">\n            FtNox is a next generation cryptocurrency exchange done right.\n        </p>\n        <ul>\n            <li>Proof of Solvency</li>\n            <li>Cold Wallet Storage</li>\n            <li>Fastest Engine in the West</li>\n        </ul>\n\n        <br />\n\n        <h4>Contact Us</h4>\n        <address>\n            <strong>FtNox.com</strong><br/>\n            2501 Bryant St.</br>\n            San Francisco, CA 94110</br>\n            <abbr title=\"Phone\">P:</abbr> (415) 409-8733<br/>\n            <abbr title=\"Email\">E:</abbr> <a href=\"email:hello@ftnox.com\">hello@ftnox.com</a>\n        </address>\n\n    </div>\n</div>\n";
   },"useData":true});
 templates['account.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
@@ -33,6 +33,21 @@ templates['account_balance.html'] = template({"1":function(depth0,helpers,partia
   stack1 = helpers.each.call(depth0, (depth0 && depth0.balance), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</table>\n";
+},"useData":true});
+templates['account_balance_simple.html'] = template({"1":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+  return "\n<li data-coin=\""
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\n    <span class=\"coin\">"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</span>\n    <span class=\"amount\">"
+    + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, depth0, {"name":"divide8","hash":{},"data":data})))
+    + "</span>\n</li>\n";
+},"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.balance), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer + "\n";
 },"useData":true});
 templates['account_deposit.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -145,7 +160,7 @@ templates['beta_success.html'] = template({"compiler":[5,">= 2.0.0"],"main":func
     + " soon.\n            </p>\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
 templates['bootstrap_test.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div id=\"bootstrap_test\">\n<style type=\"text/css\">\n.bs-example {\n    padding: 10px;\n    margin-left: 0;\n    margin-right: 0;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #444;\n    border-radius: 4px 4px 0 0;\n    box-shadow: none;\n}\n.bs-example>.dropdown>.dropdown-menu {\n    position: static;\n    display: block;\n    margin-bottom: 5px;\n}\n</style>\n\n<div id=\"about\">\n\n    <h2>Bootstrap test</h2>\n    <hr/>\n    <p class=\"lead\">\n        This is a theme test for bootstrap components\n    </p>\n    <ul>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n    </ul>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"dropdown clearfix\">\n            <button class=\"btn dropdown-toggle sr-only\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\">\n                Dropdown\n                <span class=\"caret\"></span>\n            </button>\n                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu2\">\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Another action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Something else here</a></li>\n                <li role=\"presentation\" class=\"divider\"></li>\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Separated link</a></li>\n            </ul>\n        </div>\n    </div>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read this important alert message.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This alert needs your attention, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're not looking too good.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> Change a few things up and try submitting again.\n        </div>\n    </div>\n\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read <a href=\"#\" class=\"alert-link\">this important alert message</a>.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This <a href=\"#\" class=\"alert-link\">alert needs your attention</a>, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're <a href=\"#\" class=\"alert-link\">not looking too good</a>.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> <a href=\"#\" class=\"alert-link\">Change a few things up</a> and try submitting again.\n        </div>\n    </div>\n\n    <h3>Code</h3>\n    <div class=\"bs-example\">\n<pre>\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=eIsWZZYqy18wx0zPXAKAIvkj\n</pre>\n\n        This is in a code element: <code>blah blah blah</code>\n\n    </div>\n\n</div>\n</div>\n";
+  return "<div id=\"bootstrap_test\" class=\"container\">\n<style type=\"text/css\">\n.bs-example {\n    padding: 10px;\n    margin-left: 0;\n    margin-right: 0;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #444;\n    border-radius: 4px 4px 0 0;\n    box-shadow: none;\n}\n.bs-example>.dropdown>.dropdown-menu {\n    position: static;\n    display: block;\n    margin-bottom: 5px;\n}\n</style>\n\n<div id=\"about\">\n\n    <h2>Bootstrap test</h2>\n    <hr/>\n    <p class=\"lead\">\n        This is a theme test for bootstrap components\n    </p>\n    <ul>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n    </ul>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"dropdown clearfix\">\n            <button class=\"btn dropdown-toggle sr-only\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\">\n                Dropdown\n                <span class=\"caret\"></span>\n            </button>\n                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu2\">\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Another action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Something else here</a></li>\n                <li role=\"presentation\" class=\"divider\"></li>\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Separated link</a></li>\n            </ul>\n        </div>\n    </div>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read this important alert message.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This alert needs your attention, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're not looking too good.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> Change a few things up and try submitting again.\n        </div>\n    </div>\n\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read <a href=\"#\" class=\"alert-link\">this important alert message</a>.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This <a href=\"#\" class=\"alert-link\">alert needs your attention</a>, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're <a href=\"#\" class=\"alert-link\">not looking too good</a>.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> <a href=\"#\" class=\"alert-link\">Change a few things up</a> and try submitting again.\n        </div>\n    </div>\n\n    <h3>Code</h3>\n    <div class=\"bs-example\">\n<pre>\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=eIsWZZYqy18wx0zPXAKAIvkj\n</pre>\n\n        This is in a code element: <code>blah blah blah</code>\n\n    </div>\n\n</div>\n</div>\n";
   },"useData":true});
 templates['breadcrumbs.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n<ol class=\"breadcrumb\">\n    ";
@@ -178,8 +193,8 @@ templates['breadcrumbs.html'] = template({"1":function(depth0,helpers,partials,d
   return buffer + "\n";
 },"useData":true});
 templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
-  return "\n        <div class=\"section clearfix enter-order\">\n            <div class=\"col-xs-4\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Buy "
+  var stack1, functionType="function", escapeExpression=this.escapeExpression;
+  return "\n        <div class=\"section clearfix enter-order\">\n            <div class=\"col-xs-6\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Buy "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        <form class=\"form-buy form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-3 control-label\">Buy</label>\n                                <div class=\"col-xs-9\"><div class=\"input-group\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -195,7 +210,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span> (or less)\n                                </div>\n                            </div>\n                            <button class=\"btn btn-primary\" type=\"submit\">Buy "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</button>\n                        </form>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"col-xs-4\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Sell "
+    + "</button>\n                        </form>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"col-xs-6\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Sell "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        <form class=\"form-sell form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-3 control-label\">Sell</label>\n                                <div class=\"col-xs-9\"><div class=\"input-group\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -211,9 +226,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span> (or more)\n                                </div>\n                            </div>\n                            <button class=\"btn btn-primary\" type=\"submit\">Sell "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</button>\n                        </form>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"col-xs-4\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Your Balance</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        "
-    + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "account_balance", (depth0 && depth0.balance), {"name":"render","hash":{},"data":data})))
-    + "\n                    </div>\n                </div>\n            </div>\n\n        </div>\n\n        ";
+    + "</button>\n                        </form>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        ";
 },"3":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "\n        <div class=\"section clearfix\">\n            <div class=\"col-xs-12\">\n                <h4>Open Orders</h4>\n                <div class=\"js-pending-orders\">\n                    "
@@ -236,13 +249,13 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
 },"useData":true});
 templates['exchange_market_button.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
-  return "\n        <span class=\"small\">"
+  return "\n        <p class=\"small\">"
     + escapeExpression(((helper = helpers.last || (depth0 && depth0.last)),(typeof helper === functionType ? helper.call(depth0, {"name":"last","hash":{},"data":data}) : helper)))
     + " "
     + escapeExpression(((helper = helpers.basisCoin || (depth0 && depth0.basisCoin)),(typeof helper === functionType ? helper.call(depth0, {"name":"basisCoin","hash":{},"data":data}) : helper)))
-    + "</span>\n    ";
+    + "</p>\n    ";
 },"3":function(depth0,helpers,partials,data) {
-  return "\n        <span class=\"small\">-</span>\n    ";
+  return "\n        <p class=\"small\">-</p>\n    ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, buffer = "<a href=\"/#market/"
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
@@ -252,11 +265,11 @@ templates['exchange_market_button.html'] = template({"1":function(depth0,helpers
     + escapeExpression(((helper = helpers.name || (depth0 && depth0.name)),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "\">\n    <img src=\"/img/"
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
-    + ".png\"/>\n    <span class=\"coin\">"
+    + ".png\"/>\n    <p>"
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
-    + "</span>/"
+    + "/"
     + escapeExpression(((helper = helpers.basisCoin || (depth0 && depth0.basisCoin)),(typeof helper === functionType ? helper.call(depth0, {"name":"basisCoin","hash":{},"data":data}) : helper)))
-    + "<br/>\n    ";
+    + "</p>\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.last), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</a>\n";
@@ -333,22 +346,22 @@ templates['exchange_pending_orders.html'] = template({"1":function(depth0,helper
   return buffer + "\n    </tbody>\n    </table>\n</div>\n";
 },"useData":true});
 templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) {
-  return "\n                    <li name=\"treasury\"><a href=\"/treasury/\">Treasury</a></li>\n                ";
+  return "\n                    <li name=\"market\"><a href=\"/#market\">Trade</a></li>\n                ";
   },"3":function(depth0,helpers,partials,data) {
-  return "\n                    <li name=\"market\"><a href=\"/#market\">Trade</a></li>\n                    <li name=\"account\"><a href=\"/#account\">Account</a></li>\n                ";
-  },"5":function(depth0,helpers,partials,data) {
-  return "\n                    <li name=\"logout\"><a href=\"/#logout\">Logout</a></li>\n                ";
-  },"7":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "\n\n                    <!--\n                    <li class=\"dropdown\">\n                      <span class=\"link\">BALANCE <span class=\"caret\"></span></span>\n\n                      <ul class=\"dropdown-menu js-account-balance\" role=\"menu\">\n                            <li><a href=\"#\">BTC: 2.450</a></li>\n                            <li><a href=\"#\">DOGE: 224.450</a></li>\n                            <li><a href=\"#\">LTC: 24.450</a></li>\n                      </ul>\n                    </li>\n                    -->\n\n                    <li class=\"dropdown\">\n                      <span class=\"link\">user@email.com <span class=\"caret\"></span></span>\n                      <ul class=\"dropdown-menu\" role=\"menu\">\n                        <li><a href=\"/#account\">Account</a></li>\n                        ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.roles)),stack1 == null || stack1 === false ? stack1 : stack1.treasury), {"name":"if","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer + "\n                        <li class=\"divider\"></li>\n                        <li><a href=\"/#logout\">Logout</a></li>\n                      </ul>\n                    </li>\n\n                ";
+},"4":function(depth0,helpers,partials,data) {
+  return "\n                            <li name=\"treasury\"><a href=\"/treasury/\">Treasury</a></li>\n                        ";
+  },"6":function(depth0,helpers,partials,data) {
   return "\n                    <li name=\"login\"><a href=\"/#login\">Login</a></li>\n                ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", buffer = "<!-- Fixed navbar -->\n<div id=\"navbar\" class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a class=\"navbar-brand\" href=\"/\">\n                <img src=\"/img/logo.png\" alt=\"FtNox\" height=\"24\"/>\n            </a>\n\n            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\">\n                <span class=\"sr-only\">Toggle navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n        </div>\n        <div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n            <ul class=\"nav navbar-nav navbar-right\">\n                ";
-  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.roles)),stack1 == null || stack1 === false ? stack1 : stack1.treasury), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                    <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                    <li name=\"about\"><a href=\"/#about\">About</a></li>\n                ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
+  buffer += "\n                    <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                    <li name=\"about\"><a href=\"/#about\">About</a></li>\n\n                ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.program(6, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<!-- Begin page content -->\n<div id=\"content\">";
   stack1 = ((helper = helpers.content || (depth0 && depth0.content)),(typeof helper === functionType ? helper.call(depth0, {"name":"content","hash":{},"data":data}) : helper));

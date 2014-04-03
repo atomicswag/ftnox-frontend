@@ -1,9 +1,9 @@
 <a href="/#market/{{coin}}/{{basisCoin}}" type="button" role="button" class="market-tab js-marketButton" data-market-name="{{name}}">
     <img src="/img/{{coin}}.png"/>
-    <span class="coin">{{coin}}</span>/{{basisCoin}}<br/>
+    <p>{{coin}}/{{basisCoin}}</p>
     {{#if last}}
-        <span class="small">{{last}} {{basisCoin}}</span>
+        <p class="small">{{last}} {{basisCoin}}</p>
     {{else}}
-        <span class="small">-</span>
+        <p class="small">-</p>
     {{/if}}
 </a>

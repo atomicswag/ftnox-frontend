@@ -30,7 +30,7 @@
     }
 
     .pricelog>path {
-        stroke-width: 3.0px;
+        stroke-width: 1.0px;
         //shape-rendering: crispEdges;
 
         &.lows {
@@ -54,6 +54,4 @@
             stroke-width: 0;
         }
     }
-    font-size: 0.85em;
-
 }

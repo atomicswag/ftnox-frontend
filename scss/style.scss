@@ -48,15 +48,37 @@ table.bordered {
 // NAVBAR
 /* ---------------------------------------------------------------------- */
 
-.navbar {
+#navbar.navbar {
     background: none;
     border: none;
+    border-top: 3px solid #333;
     margin: 0;
     height: 64px;
 }
 
 #navbar.navbar .nav li {
     font-weight: bold;
+}
+#navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;    
+}
+#navbar .nav > li > a,
+#navbar .nav > li > span.link {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#navbar .nav > li > a {
+    text-transform: uppercase;
+    border-top: 3px solid $txt;
+    margin-top: -3px;
+    &:hover {
+        border-top-color: $link-color;
+    }
+}
+#navbar .nav > li > span.link {
+    display: block;
+    padding: 15px 30px;
 }
 /* ---------------------------------------------------------------------- */
 // ACCOUNT
