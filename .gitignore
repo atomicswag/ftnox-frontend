@@ -1,3 +1,4 @@
 .sass-cache
 js/node_modules
 .vimrc
+.DS_Store
