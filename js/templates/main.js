@@ -223,12 +223,12 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_pending_orders", (depth0 && depth0.orders), {"name":"render","hash":{},"data":data})))
     + "\n                </div>\n            </div>\n        </div>\n        ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n    <!-- Sidebar with market names -->\n    <div class=\"sidebar col-md-3\">\n        ";
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <!-- market tabs -->\n    <div class=\"js-exchange-markets\">\n        \n    </div>\n\n    <!-- Sidebar with market names -->\n    <div class=\"sidebar col-md-3\">\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        <div class=\"\">\n            <h4>Markets</h4>\n            <div class=\"js-exchange-markets\">\n                \n            </div>\n        </div>\n    </div>\n\n    <!-- The market -->\n    <div class=\"main col-md-9\">\n        <h2 class=\"row js-marketName coin\">"
+  buffer += "\n\n    </div>\n\n    <!-- The market -->\n    <div class=\"main col-md-9\">\n        <!--<h2 class=\"row js-marketName coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h2>\n        <div class=\"row js-chart orderbook-chart\" style=\"margin-bottom: 20px;\">\n        </div>\n        ";
+    + "</h2>-->\n\n        <div class=\"row js-chart orderbook-chart\" style=\"margin-bottom: 20px;\">\n        </div>\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        ";
@@ -273,7 +273,7 @@ templates['exchange_markets.html'] = template({"1":function(depth0,helpers,parti
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_market_button", depth0, {"name":"render","hash":{},"data":data})))
     + "\n";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<div class=\"btn-group-vertical\" style=\"width: 100%\">\n";
+  var stack1, buffer = "<div class=\"btn-group\">\n";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.markets), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</div>\n";

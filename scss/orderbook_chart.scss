@@ -1,7 +1,7 @@
 .orderbook-chart {
 
     svg {
-        fill: $gray-light;
+        fill: $gray-dark;
     }
 
     .axis path,
@@ -17,7 +17,7 @@
     .line {
         fill: none;
         stroke: steelblue;
-        stroke-width: 1.5px;
+        stroke-width: 2px;
     }
 
     .orders>path {
@@ -44,7 +44,7 @@
     }
 
     .grid {
-        opacity: 1.0;
+        opacity: 0.25;
         .tick {
             fill: none;
             shape-rendering: crispEdges;
@@ -54,7 +54,6 @@
             stroke-width: 0;
         }
     }
-
     font-size: 0.85em;
 
 }

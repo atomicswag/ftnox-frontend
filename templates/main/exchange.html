@@ -1,4 +1,10 @@
 <div id="market">
+
+    <!-- market tabs -->
+    <div class="js-exchange-markets">
+        {{!--{{render 'exchange_markets' markets=markets}}--}}
+    </div>
+
     <!-- Sidebar with market names -->
     <div class="sidebar col-md-3">
         {{#if user}}
@@ -8,19 +14,16 @@
         </div>
         <hr />
         {{/if}}
-        <div class="">
-            <h4>Markets</h4>
-            <div class="js-exchange-markets">
-                {{!--{{render 'exchange_markets' markets=markets}}--}}
-            </div>
-        </div>
+
     </div>
 
     <!-- The market -->
     <div class="main col-md-9">
-        <h2 class="row js-marketName coin">{{market.name}}</h2>
+        <!--<h2 class="row js-marketName coin">{{market.name}}</h2>-->
+
         <div class="row js-chart orderbook-chart" style="margin-bottom: 20px;">
         </div>
+
         {{#if user}}
         <div class="row enter-order">
             <div class="col-xs-6">

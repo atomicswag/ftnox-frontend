@@ -6322,7 +6322,7 @@ button.close {
 .orderbook-chart {
   font-size: 0.85em; }
   .orderbook-chart svg {
-    fill: #999999; }
+    fill: #333333; }
   .orderbook-chart .axis path,
   .orderbook-chart .axis line {
     fill: none;
@@ -6331,7 +6331,7 @@ button.close {
   .orderbook-chart .line {
     fill: none;
     stroke: steelblue;
-    stroke-width: 1.5px; }
+    stroke-width: 2px; }
   .orderbook-chart .orders > path.bids {
     stroke: #85DDFF; }
   .orderbook-chart .orders > path.asks {
@@ -6345,7 +6345,7 @@ button.close {
       stroke: #FFE574;
       opacity: 0.25; }
   .orderbook-chart .grid {
-    opacity: 1.0; }
+    opacity: 0.25; }
     .orderbook-chart .grid .tick {
       fill: none;
       shape-rendering: crispEdges;
@@ -6366,42 +6366,15 @@ body,
 
 .address, .code {
   font-weight: bold;
-  border: 1px dotted #333333; }
+  background: #eeeeee; }
 
 table.bordered {
   border: 1px dotted #333333; }
-
-h4.panel-title {
-  color: #eeeeee; }
 
 .vertical-table label {
   text-align: right; }
 
 /* Wrapper for page content to push down footer */
-#navbar_and_content {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -60px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px; }
-  #navbar_and_content .container {
-    max-width: 960px;
-    width: 960px; }
-
-#navbar .navbar-header {
-  position: relative;
-  width: 200px; }
-  #navbar .navbar-header .navbar-logo {
-    float: left;
-    position: relative;
-    top: 10px; }
-  #navbar .navbar-header .navbar-brand {
-    font-size: 28px;
-    font-weight: 600;
-    height: 50px;
-    color: #333333; }
-
 /* Set the fixed height of the footer here */
 #footer {
   height: 60px;
@@ -6421,18 +6394,15 @@ table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
 #market .sidebar {
   max-width: 400px; }
 #market .market-button {
-  background-color: #111;
-  border-color: #222222;
-  color: #999999; }
+  width: 240px; }
   #market .market-button img {
     width: 40px;
     height: 40px;
     float: left; }
   #market .market-button:hover {
-    background-color: #222222; }
+    background-color: #eeeeee; }
   #market .market-button.active {
-    border-color: #666;
-    background-color: #222222;
+    background-color: #eeeeee;
     z-index: 3; }
 #market h2 {
   margin-top: 0px;
