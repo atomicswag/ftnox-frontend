@@ -59,17 +59,27 @@ h4.panel-title {
 
 #navbar {
 
-
-}
-
-#content {
+    .navbar-header {
+        position: relative;
+        width: 200px;
+        .navbar-logo {
+            float: left;
+            position: relative;
+            top: 10px;
+        }
+        .navbar-brand {
+            font-size:28px;
+            font-weight: 600;
+            height: 50px;
+            color: $gray-dark;
+        }
+    }
 }
 
 /* Set the fixed height of the footer here */
 #footer {
     height: 60px;
     border-top: 1px solid $gray-dark;
-    background-color: black;
 
     &>.container {
         max-width: 960px;
