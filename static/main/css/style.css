@@ -6194,11 +6194,7 @@ table.bordered {
 .vertical-table label {
   text-align: right; }
 
-.js-exchange-markets {
-  border-bottom: 3px solid #333333; }
-
 .orderbook-chart {
-  border: 1px solid #dddddd;
   margin-bottom: 3em; }
 
 table.deposits-list .confirmed, table.withdrawals-list .confirmed {
@@ -6206,10 +6202,8 @@ table.deposits-list .confirmed, table.withdrawals-list .confirmed {
 table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
   color: #C9C5B0; }
 
-#market .sidebar {
-  max-width: 400px; }
 #market .market-button {
-  width: 240px; }
+  width: 100%; }
   #market .market-button img {
     width: 40px;
     height: 40px;
@@ -6219,30 +6213,27 @@ table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
   #market .market-button.active {
     background-color: #eeeeee;
     z-index: 3; }
-#market h2 {
-  margin-top: 0px;
-  font-weight: 100; }
 #market .main {
-  max-width: 679px; }
-  #market .main .enter-order .form-buy button.btn {
-    background-color: #006085;
-    border-color: #00aaeb; }
-    #market .main .enter-order .form-buy button.btn:hover, #market .main .enter-order .form-buy button.btn:active {
-      background-color: #0085b8;
-      border-color: #85DDFF; }
-  #market .main .enter-order .form-sell button.btn {
-    background-color: #745e00;
-    border-color: #dab100; }
-    #market .main .enter-order .form-sell button.btn:hover, #market .main .enter-order .form-sell button.btn:active {
-      background-color: #a78800;
-      border-color: #FFE574; }
-  #market .main .enter-order .form-group > label {
-    padding-right: 0px; }
-  #market .main .enter-order .form-group .input-group-addon.market-name {
-    padding: 6px 6px; }
-  #market .main .exchange-orders table.head {
-    margin-bottom: 0; }
-  #market .main .exchange-orders table {
-    table-layout: fixed; }
-  #market .main .exchange-orders .exchange-orders-body {
-    margin-bottom: 40px; }
+  border-left: 1px solid #dddddd; }
+#market .enter-order .form-buy button.btn {
+  background-color: #006085;
+  border-color: #00aaeb; }
+  #market .enter-order .form-buy button.btn:hover, #market .enter-order .form-buy button.btn:active {
+    background-color: #0085b8;
+    border-color: #85DDFF; }
+#market .enter-order .form-sell button.btn {
+  background-color: #745e00;
+  border-color: #dab100; }
+  #market .enter-order .form-sell button.btn:hover, #market .enter-order .form-sell button.btn:active {
+    background-color: #a78800;
+    border-color: #FFE574; }
+#market .enter-order .form-group > label {
+  padding-right: 0px; }
+#market .enter-order .form-group .input-group-addon.market-name {
+  padding: 6px 6px; }
+#market .exchange-orders table.head {
+  margin-bottom: 0; }
+#market .exchange-orders table {
+  table-layout: fixed; }
+#market .exchange-orders .exchange-orders-body {
+  margin-bottom: 40px; }

@@ -2157,7 +2157,7 @@ templates['account_balance.html'] = template({"1":function(depth0,helpers,partia
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a></li>\n            </ul>\n        </div>\n    </td>\n</tr>\n";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<table class=\"js-account-balance table table-striped table-condensed bordered\">\n<thead><tr>\n    <th>Coin</th>\n    <th>Balance</th>\n    <th></th>\n</tr></thead>\n";
+  var stack1, buffer = "<table class=\"js-account-balance table table-striped table-condensed bordered\">\n<thead><tr>\n    <th>Coin</th>\n    <th>Amount</th>\n    <th></th>\n</tr></thead>\n";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.balance), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</table>\n";
@@ -2307,7 +2307,7 @@ templates['breadcrumbs.html'] = template({"1":function(depth0,helpers,partials,d
 },"useData":true});
 templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "\n        <div class=\"\">\n            <h4>Account</h4>\n            "
+  return "\n        <div class=\"\">\n            <h4>Balance</h4>\n            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "account_balance", (depth0 && depth0.balance), {"name":"render","hash":{},"data":data})))
     + "\n        </div>\n        <hr />\n        ";
 },"3":function(depth0,helpers,partials,data) {
@@ -2351,7 +2351,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_pending_orders", (depth0 && depth0.orders), {"name":"render","hash":{},"data":data})))
     + "\n                </div>\n            </div>\n        </div>\n        ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <!-- market tabs -->\n    <div class=\"js-exchange-markets\">\n        \n    </div>\n\n    <!-- Sidebar with market names -->\n    <div class=\"sidebar col-md-3\">\n        ";
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\" class=\"container\">\n\n    <!-- Sidebar with market names -->\n    <div class=\"sidebar col-md-3\">\n\n        <!-- market tabs -->\n        <div class=\"js-exchange-markets\">\n            \n        </div>\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </div>\n\n    <!-- The market -->\n    <div class=\"main col-md-9\">\n        <!--<h2 class=\"row js-marketName coin\">"
@@ -2366,7 +2366,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.bids), {"name":"render","hash":{},"data":data})))
     + "\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <h4>Asks</h4>\n                <div class=\"js-asks\">\n                    "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.asks), {"name":"render","hash":{},"data":data})))
-    + "\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n";
+    + "\n                </div>\n            </div>\n        </div>\n    </div>\n\n\n\n</div>\n";
 },"useData":true});
 templates['exchange_market_button.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -2475,7 +2475,7 @@ templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) 
   },"7":function(depth0,helpers,partials,data) {
   return "\n                    <li name=\"login\"><a href=\"/#login\">Login</a></li>\n                ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", buffer = "<!-- Fixed navbar -->\n<div class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a href=\"/\">\n                <img class=\"navbar-logo\" src=\"/img/logo.png\" alt=\"FtNox\"/>\n            </a>\n            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\">\n                <span class=\"sr-only\">Toggle navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n        </div>\n        <div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n            <ul class=\"nav navbar-nav\">\n                ";
+  var stack1, helper, functionType="function", buffer = "<!-- Fixed navbar -->\n<div class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a href=\"/\">\n                <img class=\"navbar-logo\" src=\"/img/logo.png\" alt=\"FtNox\"/>\n            </a>\n            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\">\n                <span class=\"sr-only\">Toggle navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n        </div>\n        <div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n            <ul class=\"nav navbar-nav navbar-right\">\n                ";
   stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.roles)),stack1 == null || stack1 === false ? stack1 : stack1.treasury), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                ";
@@ -2484,7 +2484,7 @@ templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) 
   buffer += "\n                    <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                    <li name=\"about\"><a href=\"/#about\">About</a></li>\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\">\n</div>\n\n<!-- Begin page content -->\n<div id=\"content\" class=\"container\">\n    ";
+  buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\">\n</div>\n\n<!-- Begin page content -->\n<div id=\"content\">\n    ";
   stack1 = ((helper = helpers.content || (depth0 && depth0.content)),(typeof helper === functionType ? helper.call(depth0, {"name":"content","hash":{},"data":data}) : helper));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</div>\n\n\n<div id=\"footer\">\n    <div class=\"container\">\n        <p class=\"credit\">AllInBits, Inc. 2014</p>\n    </div>\n</div>\n";

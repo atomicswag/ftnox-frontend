@@ -1,15 +1,16 @@
-<div id="market">
-
-    <!-- market tabs -->
-    <div class="js-exchange-markets">
-        {{!--{{render 'exchange_markets' markets=markets}}--}}
-    </div>
+<div id="market" class="container">
 
     <!-- Sidebar with market names -->
     <div class="sidebar col-md-3">
+
+        <!-- market tabs -->
+        <div class="js-exchange-markets">
+            {{!--{{render 'exchange_markets' markets=markets}}--}}
+        </div>
+
         {{#if user}}
         <div class="">
-            <h4>Account</h4>
+            <h4>Balance</h4>
             {{render 'account_balance' balance}}
         </div>
         <hr />
@@ -122,4 +123,7 @@
             </div>
         </div>
     </div>
+
+
+
 </div>

@@ -13,7 +13,7 @@
             </button>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav navbar-right">
                 {{#if user.roles.treasury}}
                     <li name="treasury"><a href="/treasury/">Treasury</a></li>
                 {{/if}}
@@ -38,7 +38,7 @@
 </div>
 
 <!-- Begin page content -->
-<div id="content" class="container">
+<div id="content">
     {{{content}}}
 </div>
 

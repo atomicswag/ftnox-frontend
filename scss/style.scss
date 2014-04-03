@@ -28,16 +28,14 @@ table.bordered {
     }
 }
 
-
 //////////// LAYOUT
 //////////// LAYOUT
 
 .js-exchange-markets {
-    border-bottom: 3px solid $gray-dark;
 }
 
 .orderbook-chart {
-    border: 1px solid $gray-light;
+    //border: 1px solid $gray-light;
     margin-bottom: 3em;
 }
 
@@ -62,12 +60,8 @@ table.deposits-list, table.withdrawals-list {
 
 #market {
 
-    .sidebar {
-        max-width: 400px;
-    }
-
     .market-button {
-        width: 240px;
+        width: 100%;
 
         img {
             width: 40px;
@@ -84,57 +78,53 @@ table.deposits-list, table.withdrawals-list {
         }
     }
 
-    h2 {
-        margin-top: 0px;
-        font-weight: 100;
+    .main {
+        border-left: 1px solid $gray-light;
     }
 
-    .main {
-        max-width: 679px;
-        .enter-order {
-            .order-form-panel {
-            }
-            .form-buy button.btn {
-                background-color: darken(#85DDFF, 50%);
-                border-color: darken(#85DDFF, 30%);
-                &:hover, &:active {
-                    background-color: darken(#85DDFF, 40%);
-                    border-color: #85DDFF;
-                }
-            }
-            .form-sell button.btn {
-                background-color: darken(#FFE574, 50%);
-                border-color: darken(#FFE574, 30%);
-                &:hover, &:active {
-                    background-color: darken(#FFE574, 40%);
-                    border-color: #FFE574;
-                }
-            }
-            .form-group {
-                &>label {
-                    padding-right: 0px;
-                }
-                &>div {
-                }
-                .input-group-addon.market-name {
-                    padding: 6px 6px;
-                }
+    .enter-order {
+        .order-form-panel {
+        }
+        .form-buy button.btn {
+            background-color: darken(#85DDFF, 50%);
+            border-color: darken(#85DDFF, 30%);
+            &:hover, &:active {
+                background-color: darken(#85DDFF, 40%);
+                border-color: #85DDFF;
             }
         }
-        .exchange-pending-orders {
+        .form-sell button.btn {
+            background-color: darken(#FFE574, 50%);
+            border-color: darken(#FFE574, 30%);
+            &:hover, &:active {
+                background-color: darken(#FFE574, 40%);
+                border-color: #FFE574;
+            }
         }
-        .exchange-orders {
-            table.head {
-                margin-bottom: 0;
+        .form-group {
+            &>label {
+                padding-right: 0px;
             }
-            table {
-                table-layout: fixed;
+            &>div {
             }
-            .exchange-orders-body {
-                //max-height: 440px;
-                //overflow-y: auto;
-                margin-bottom: 40px;
+            .input-group-addon.market-name {
+                padding: 6px 6px;
             }
+        }
+    }
+    .exchange-pending-orders {
+    }
+    .exchange-orders {
+        table.head {
+            margin-bottom: 0;
+        }
+        table {
+            table-layout: fixed;
+        }
+        .exchange-orders-body {
+            //max-height: 440px;
+            //overflow-y: auto;
+            margin-bottom: 40px;
         }
     }
 }
