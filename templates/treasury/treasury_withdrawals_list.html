@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">Withdrawals</h4>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+        <thead><tr>
+            <th>Amount</th>
+            <th>UserId</th>
+            <th>Wallet</th>
+            <th>Address</th>
+            <th>Approved</th>
+            <th>Status</th>
+            <th>Time</th>
+            <th></th>
+        </tr></thead>
+        {{#each withdrawals}}
+        <tr data-withdrawal-id="{{id}}">
+            <td>{{divide8 amount}} {{coin}}</td>
+            <td>{{userId}}</td>
+            <td>{{wallet}}</td>
+            <td>{{toAddress}}</td>
+            <td>{{approved}}</td>
+            <td>{{status}}</td>
+            <td>{{formatDate time format="YYYY-MM-DD hh:mma"}}</td>
+            <td>
+                <div name="withdrawal-settings" class="dropdown dropdown-menu-right" style="float: right; position: relative;">
+                    <a href="#" class="dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" data-order-id="{{id}}">
+                        <span class="glyphicon glyphicon-cog"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        {{#ifCond status "==" 4}}
+                        <li><a href="#" class="js-resume">Resume</a></li>
+                        {{/ifCond}}
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+        </table>
+    </div>
+</div>

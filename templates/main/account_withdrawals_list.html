@@ -1,0 +1,26 @@
+<table class="withdrawals-list table table-striped table-condensed bordered">
+<thead><tr>
+    <th>Date</th>
+    <th>To</th>
+    <th>Amount</th>
+    <th>Status</th>
+</tr></thead>
+{{#if withdrawals}}
+{{#each withdrawals}}
+<tr>
+    <td class="small date">
+        {{formatDate time format="YYYY-MM-DD hh:mma"}}<br />
+    </td>
+    <td class="address">{{toAddress}}</td>
+    <td class="amount">{{divide8 amount}}</td>
+    <td class="small">{{statusText}}</td>
+</tr>
+{{/each}}
+{{else}}
+<tr>
+    <td colspan="4" style="text-align: center;">
+        You have no withdrawals.
+    </td>
+</tr>
+{{/if}}
+</table>

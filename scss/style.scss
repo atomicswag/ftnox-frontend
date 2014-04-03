@@ -1,0 +1,226 @@
+@import "bootstrap/bootstrap";
+@import "font-awesome/font-awesome.scss";
+@import "orderbook_chart.scss";
+
+html,
+body,
+#main {
+    height: 100%;
+}
+
+body {
+    // Dark background:
+    // http://www.lighterra.com/articles/macosxtextaabug/
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+}
+
+code {
+//    font-size: 80%;
+}
+
+h1 {
+}
+
+h2 {
+}
+
+h3 {
+}
+
+h4 {
+    font-weight: normal;
+    color: #c8b8a2;
+}
+
+.panel-heading {
+    padding: 6px 15px;
+}
+
+//////////// COMMON
+//////////// COMMON
+
+.date, .coin, .amount, .address, .code {
+    font-family: $font-family-monospace;
+}
+
+.address, .code {
+    font-weight: bold;
+    border: 1px dotted $gray-dark;
+}
+
+table.bordered {
+    border: 1px dotted $gray-dark;
+}
+
+h4.panel-title {
+    color: $gray-lighter;
+}
+
+.vertical-table {
+    label {
+        text-align: right;
+    }
+}
+
+
+//////////// LAYOUT
+//////////// LAYOUT
+
+/* Wrapper for page content to push down footer */
+#navbar_and_content {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
+
+    .container {
+        max-width: 960px;
+        width: 960px;
+    }
+}
+
+#navbar {
+    background: url('/img/banner_bg.png');
+    background-repeat: repeat-x;
+    height: 65px;
+    border: none;
+    border-radius: 0px;
+
+    .navbar-header {
+        position: relative;
+        width: 200px;
+        .navbar-logo {
+            float: left;
+            position: relative;
+            top: 10px;
+        }
+        .navbar-brand {
+            font-size:28px;
+            font-weight: 600;
+            height: 50px;
+            color: $gray-dark;
+        }
+    }
+}
+
+#content {
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+    height: 60px;
+    border-top: 1px solid $gray-dark;
+    background-color: black;
+
+    &>.container {
+        max-width: 960px;
+        width: 960px;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+//////////// LOGIN & REGISTER
+//////////// LOGIN & REGISTER
+
+//////////// ACCOUNT
+//////////// ACCOUNT
+
+table.deposits-list, table.withdrawals-list {
+    .confirmed {
+        color: #ACBDA5;
+    }
+    .unconfirmed {
+        color: #C9C5B0;
+    }
+}
+
+//////////// EXCHANGE
+//////////// EXCHANGE
+
+#market {
+
+    .sidebar {
+        max-width: 400px;
+    }
+
+    .market-button {
+        background-color: #111;
+        border-color: $gray-darker;
+        color: $gray-light;
+
+        img {
+            width: 40px;
+            height: 40px;
+            float: left;
+        }
+
+        &:hover {
+            background-color: $gray-darker;
+        }
+        &.active {
+            border-color: #666;
+            background-color: $gray-darker;
+            z-index: 3;
+        }
+    }
+
+    h2 {
+        margin-top: 0px;
+        font-weight: 100;
+    }
+
+    .main {
+        max-width: 679px;
+        .enter-order {
+            .order-form-panel {
+            }
+            .form-buy button.btn {
+                background-color: darken(#85DDFF, 50%);
+                border-color: darken(#85DDFF, 30%);
+                &:hover, &:active {
+                    background-color: darken(#85DDFF, 40%);
+                    border-color: #85DDFF;
+                }
+            }
+            .form-sell button.btn {
+                background-color: darken(#FFE574, 50%);
+                border-color: darken(#FFE574, 30%);
+                &:hover, &:active {
+                    background-color: darken(#FFE574, 40%);
+                    border-color: #FFE574;
+                }
+            }
+            .form-group {
+                &>label {
+                    padding-right: 0px;
+                }
+                &>div {
+                }
+                .input-group-addon.market-name {
+                    padding: 6px 6px;
+                }
+            }
+        }
+        .exchange-pending-orders {
+        }
+        .exchange-orders {
+            table.head {
+                margin-bottom: 0;
+            }
+            table {
+                table-layout: fixed;
+            }
+            .exchange-orders-body {
+                //max-height: 440px;
+                //overflow-y: auto;
+                margin-bottom: 40px;
+            }
+        }
+    }
+}

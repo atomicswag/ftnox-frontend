@@ -1,0 +1,47 @@
+<div class="modal fade">
+    <div class="modal-dialog" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Withdraw {{coin}}</h4>
+            </div>
+            <form class="form-withdraw form-horizontal">
+                <input name="coin" type="hidden" value="{{coin}}"/>
+                <div class="modal-body">
+                    <div class="modal-alerts"></div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-3 control-label">Balance:</label>
+                        <div class="col-xs-8">
+                            <span class="js-amount amount">{{divide8 amount}}</span> &nbsp;{{coin}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="toAddress" class="col-xs-3 control-label">To:</label>
+                        <div class="col-xs-8">
+                            <input name="toAddress" type="text" class="form-control" placeholder="Destination address" required autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:30px;">
+                        <label for="amount" class="col-xs-3 control-label">Amount:</label>
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <input name="amount" type="text" class="form-control" placeholder="0.00" required>
+                                <span class="input-group-addon"><small>{{coin}}</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="js-my-withdrawals">
+                        <h4>{{coin}} withdrawals:</h4>
+                        <div class="js-withdrawals">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Withdraw</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

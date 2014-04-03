@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FtNox</title>
+    <link rel="stylesheet" media="screen" href="/css/bootstrap.sortable.css"></link>
+    <link rel="stylesheet" media="screen" href="/css/style.css"></link>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<!-- Everything goes in here -->
+<div id="main">
+    Email confirmation successful. Redirecting you now...
+</div>
+
+<!-- Placed at the end so page loads faster -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script>
+$(function() {
+    setInterval(function() {
+        window.location.href = "/#login?totp=0";
+    }, 3000);
+});
+</script>
+
+</body>
+</html>

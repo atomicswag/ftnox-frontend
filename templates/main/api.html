@@ -1,0 +1,248 @@
+<div id="api">
+<h2>API Docs</h2>
+<hr />
+<div>
+
+{{! GENERATE INFORMATION }}
+<h3>General information</h3>
+<h4>HTTP method & parameters</h4>
+<p>
+    The server accepts all parameters in the form of <code>x-www-form-urlencoded</code> POST parameters.
+</p>
+<br />
+
+<h4>Authentication</h4>
+<p>
+    All API requests must include the <code>api_key</code> parameter. You can find them <a href="/#account">here</a>.<br/>
+    In the near future, HMAC-SHA512 signatures and incrementing nonces will be used.
+</p>
+<pre>
+Sample request to /account/balance:
+
+POST https://ftnox.com/account/balance
+Content-Type: application/x-www-form-urlencoded
+
+api_key=MY_API_KEY
+</pre>
+<br />
+
+<h4>Units</h4>
+<p>
+    All units are in Satoshis (1/100000000).<br />
+    All timestamps are seconds from epoch UTC.
+</p>
+<br />
+
+{{! ACCOUNT API CALLS }}
+<h3>Account API Calls</h3>
+<h4>Balance</h4>
+<pre>
+GET /account/balance
+Params: None
+
+Response JSON:
+{
+    status: "OK",
+    data: {
+        "BTC":  10000,
+        "DOGE": 10000,
+        "LTC":  10000,
+        ...
+    }
+}
+</pre>
+<br />
+
+<h4>Deposit Address</h4>
+<pre>
+GET /account/deposit_address
+Params:
+    coin:   The type of coin, e.g. "BTC"
+
+Response JSON:
+{
+    status: "OK",
+    data:   "1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU"
+}
+</pre>
+<br />
+
+<h4>List Deposits</h4>
+<pre>
+GET /account/deposits
+Params:
+    address:    Deposit address, as returned by a call to '/account/deposit_address'.
+
+Response JSON:
+{
+    "status": "OK",
+    "data": [
+        {
+            "coin": "BTC",
+            "txid": "e3985f8279169d572ae1b3e89d9b449e35bf2e2c8bc1262c5f648c28df059055",
+            "vout": 0,
+            "blockhash": "0000000000000000ac2c5fe4942a7d6baa8cb2ff6bc9932e9eb23a5f15b8e939",
+            "blockheight": 289635,
+            "address": "1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU",
+            "userId": 1,
+            "amount": 500000,
+            "scriptPk": "76a9149040d4a7c8deced4a8d3805f2bbbdc81b82a039288ac",
+            "orphaned": 0,
+            "credited": 1,
+            "confirms": 2158,
+            "time": 1394332995
+        },
+        ...
+    ]
+}
+</pre>
+<br />
+
+<h4>Withdraw</h4>
+<pre>
+POST /account/withdraw
+Params:
+    to_address: The address to send the coins to
+    coin:       The type of coin, e.g. "BTC"
+    amount:     The amount to withdraw in Satoshis
+
+Response JSON:  The resulting balance. See /account/balance.
+</pre>
+<br />
+
+<h4>List Withdraws</h4>
+<pre>
+GET /account/withdrawals
+Params:
+    coin:       The type of coin, e.g. "BTC"
+
+Response JSON:
+{
+    "status": "OK",
+    "data": [
+        {
+            "id": 2,
+            "userId": 1,
+            "wallet": "main",
+            "coin": "BTC",
+            "toAddress": "1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU",
+            "amount": 500000,
+            "status": 1,
+            "time": 1395037039
+        },
+        ...
+    ]
+}
+</pre>
+<br />
+
+{{! EXCHANGE INFORMATION }}
+<h3>Exchange API Calls</h3>
+<h4>List Markets</h4>
+<pre>
+GET /exchange/markets
+
+Response JSON:
+{
+    "status": "OK",
+    "data": [
+        {
+            "coin": "DOGE",
+            "basisCoin": "BTC",
+            "last": "0.0000e+00"
+        },
+        {
+            "coin": "LTC",
+            "basisCoin": "BTC",
+            "last": "0.0000e+00"
+        },
+        ...
+    ]
+}
+</pre>
+<br />
+
+<h4>Orderbook</h4>
+<pre>
+GET /exchange/orderbook
+
+TODO: document
+</pre>
+<br />
+
+<h4>Historical Prices</h4>
+<pre>
+GET /exchange/pricelog
+
+TODO: document
+</pre>
+<br />
+
+<h4>Place Order</h4>
+<pre>
+POST /exchange/add_order
+Params:
+    market:     The market to enter order into, e.g. "DOGE/BTC"
+    amount:     The amount of coins (e.g. DOGE) to buy or sell, in satoshis.
+    price:      The price of a coin (e.g. DOGE) in basis coins (e.g. BTC).
+                This is a floating point number, like 0.00000124.
+                The number is rounded to 5 significant digits.
+    order_type: "B" = bid, "A" = ask
+
+Response JSON:
+{
+    "status": "OK",
+    "data": {
+        "id": 1,
+        ... // order data
+    }
+}
+</pre>
+<br />
+
+<h4>Cancel Order</h4>
+<pre>
+POST /exchange/cancel_order
+Params:
+    id:         The order id, a long positive integer.
+
+Response JSON:
+{
+    "status": "OK",
+    "data": "CANCELED"
+}
+</pre>
+<br />
+
+<h4>List Pending Orders</h4>
+<pre>
+GET /exchange/pending_orders
+
+Response JSON:
+{
+    "status": "OK",
+    "data": [
+        {
+            "id": 1,
+            "coin": "DOGE",
+            "basisCoin": "BTC",
+            "status": 0,            // 0 = pending, 1 = reserved, 2 = complete, 3 = canceled
+            "type": "B",            // "B" = bid, "A" = ask
+            "amount": 1000000000,   // max amount of coins (e.g. DOGE) to purchase for bids, to sell for asks
+            "basisAmount": 100000,  // max amount of basis coins (e.g. BTC) to spend for bids, to receive for asks
+            "filled": 0,            // amount of coins purchased for bids, sold for asks
+            "basisFilled": 0        // amount of basis coins spent for bids, received for asks
+            "basisFeeRatio": 0,     // fee schedule, 0.001 = 0.1%
+            "basisFee": 0,          // max fee to pay
+            "basisFeeFilled": 0,    // amount of fee paid
+            "price": 0.0001,        // price in basis coins per coin
+            "time": 1395638636,
+        },
+        ...
+    ]
+}
+</pre>
+<br />
+
+</div>
+</div>

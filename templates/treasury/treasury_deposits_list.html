@@ -1,0 +1,39 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title" style="display: inline; margin-right: 20px;">Deposits</h4>
+        {{!--
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="js-selected-coin">BTC</span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                {{#each coins}}
+                <li><a href="#" class="js-filter-by-coin" data-coin="{{code}}">{{code}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+        --}}
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+        <thead><tr>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Orphaned</th>
+            <th>Credited</th>
+            <th>Height</th>
+            <th>Time</th>
+        </tr></thead>
+        {{#each deposits}}
+        <tr>
+            <td>{{divide8 amount}} {{coin}}</td>
+            <td>{{address}}</td>
+            <td>{{orphaned}}</td>
+            <td>{{credited}}</td>
+            <td>{{blockheight}}</td>
+            <td>{{formatDate time format="YYYY-MM-DD hh:mma"}}</td>
+        </tr>
+        {{/each}}
+        </table>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<table class="js-account-balance table table-striped table-condensed bordered">
+<thead><tr>
+    <th>Coin</th>
+    <th>Balance</th>
+    <th></th>
+</tr></thead>
+{{#each balance}}
+<tr data-coin="{{@key}}">
+    <td class="coin">{{@key}}</td>
+    <td class="amount">{{divide8 this}}</td>
+    <td class="">
+        <div name="coin-settings" class="dropdown dropdown-menu-right" style="float: right; position: relative;">
+            <a href="#" class="dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" data-order-id="{{id}}">
+                <span class="glyphicon glyphicon-cog"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#" class="js-deposit">Deposit {{@key}}</a></li>
+                <li><a href="#" class="js-withdraw">Withdraw {{@key}}</a></li>
+            </ul>
+        </div>
+    </td>
+</tr>
+{{/each}}
+</table>

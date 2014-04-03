@@ -1,0 +1,26 @@
+<table class="deposits-list table table-striped table-condensed bordered">
+<thead><tr>
+    <th>Date</th>
+    <th>Amount</th>
+    <th>Confirmations</th>
+</tr></thead>
+{{#if deposits}}
+{{#each deposits}}
+<tr>
+    <td class="date">{{formatDate time format="YYYY-MM-DD hh:mma"}}</td>
+    <td class="amount">{{divide8 amount}}</td>
+    {{#ifCond confirms '==' 0}}
+    <td class="unconfirmed">unconfirmed</td>
+    {{else}}{{#ifCond credited '==' 1}}
+    <td class="confirmed">confirmed</td>
+    {{else}}
+    <td class="confirming">{{confirms}}</td>
+    {{/ifCond}}{{/ifCond}}
+</tr>
+{{/each}}
+{{else}}
+<tr>
+    <td colspan="3" style="text-align: center;">You have no deposits</td>
+</tr>
+{{/if}}
+</table>

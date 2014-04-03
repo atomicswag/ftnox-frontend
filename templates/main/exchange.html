@@ -1,0 +1,123 @@
+<div id="market">
+    <!-- Sidebar with market names -->
+    <div class="sidebar col-md-3">
+        {{#if user}}
+        <div class="">
+            <h4>Account</h4>
+            {{render 'account_balance' balance}}
+        </div>
+        <hr />
+        {{/if}}
+        <div class="">
+            <h4>Markets</h4>
+            <div class="js-exchange-markets">
+                {{!--{{render 'exchange_markets' markets=markets}}--}}
+            </div>
+        </div>
+    </div>
+
+    <!-- The market -->
+    <div class="main col-md-9">
+        <h2 class="row js-marketName coin">{{market.name}}</h2>
+        <div class="row js-chart orderbook-chart" style="margin-bottom: 20px;">
+        </div>
+        {{#if user}}
+        <div class="row enter-order">
+            <div class="col-xs-6">
+                <div class="order-form-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title" style="text-align: center">Buy {{market.coin}}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-buy form-horizontal">
+                            <div class="form-group">
+                                <label for="amount" class="col-xs-3 control-label">Buy</label>
+                                <div class="col-xs-9"><div class="input-group">
+                                    <input name="amount" type="text" class="form-control" placeholder="" required>
+                                    <span class="input-group-addon">{{market.coin}}</span>
+                                </div></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price" class="col-xs-3 control-label">Price</label>
+                                <div class="col-xs-8"><div class="input-group">
+                                    <input buy-price name="price" type="text" class="form-control" placeholder="" required value="{{market.last}}">
+                                    <span class="market-name input-group-addon">{{market.basisCoin}}</span>
+                                </div></div>
+                                <span class="glyphicon glyphicon-question-sign" style="padding-top: 7px;" data-toggle="tooltip"
+                                      title="Price in {{market.basisCoin}} per 1.0 {{market.coin}}"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-3 control-label">Spend</label>
+                                <div class="col-xs-9" style="margin-top: 8px;">{{! HACK }}
+                                    <span class="send_amount">0</span>
+                                    <span class="coin">{{market.basisCoin}}</span> (or less)
+                                </div>
+                            </div>
+                            <button class="btn btn-primary col-xs-offset-0 col-xs-12" type="submit">Buy {{market.coin}}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="order-form-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title" style="text-align: center">Sell {{market.coin}}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-sell form-horizontal">
+                            <div class="form-group">
+                                <label for="amount" class="col-xs-3 control-label">Sell</label>
+                                <div class="col-xs-9"><div class="input-group">
+                                    <input name="amount" type="text" class="form-control" placeholder="" required>
+                                    <span class="input-group-addon">{{market.coin}}</span>
+                                </div></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price" class="col-xs-3 control-label">Price</label>
+                                <div class="col-xs-8"><div class="input-group">
+                                    <input sell-price name="price" type="text" class="form-control" placeholder="" required value="{{market.last}}">
+                                    <span class="market-name input-group-addon">{{market.basisCoin}}</span>
+                                </div></div>
+                                <span class="glyphicon glyphicon-question-sign" style="padding-top: 7px;" data-toggle="tooltip"
+                                      title="Price in {{market.basisCoin}} per 1.0 {{market.coin}}"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-3 control-label">Get</label>
+                                <div class="col-xs-9" style="margin-top: 8px;">{{! HACK }}
+                                    <span class="receive_amount">0</span>
+                                    <span class="coin">{{market.basisCoin}}</span> (or more)
+                                </div>
+                            </div>
+                            <button class="btn btn-primary col-xs-offset-0 col-xs-12" type="submit">Sell {{market.coin}}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{#if user}}
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Open Orders</h4>
+                <div class="js-pending-orders">
+                    {{render 'exchange_pending_orders' orders}}
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        <div class="row">
+            <div class="col-xs-6">
+                <h4>Bids</h4>
+                <div class="js-bids">
+                    {{render 'exchange_orders' bids}}
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <h4>Asks</h4>
+                <div class="js-asks">
+                    {{render 'exchange_orders' asks}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

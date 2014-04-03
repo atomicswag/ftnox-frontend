@@ -1,0 +1,11 @@
+{
+    "name" : "ftnox-templates",
+    "version" : "0.0.0",
+    "main" : "build",
+
+    "dependencies": {
+        "handlebars":   "2.0.0-alpha.1",
+        "sugar":        "1.4.1",
+        "demodule":     "0.0.3"
+    }
+}

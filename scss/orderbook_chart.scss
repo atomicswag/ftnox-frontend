@@ -1,0 +1,60 @@
+.orderbook-chart {
+
+    svg {
+        fill: $gray-light;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #aaa;
+        shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+    .orders>path {
+        &.bids {
+            stroke: #85DDFF;
+        }
+        &.asks {
+            stroke: #FFE574;
+        }
+    }
+
+    .pricelog>path {
+        stroke-width: 1.0px;
+        //shape-rendering: crispEdges;
+
+        &.lows {
+            stroke: #85DDFF;
+            opacity: 0.25;
+        }
+        &.highs {
+            stroke: #FFE574;
+            opacity: 0.25;
+        }
+    }
+
+    .grid {
+        opacity: 1.0;
+        .tick {
+            fill: none;
+            shape-rendering: crispEdges;
+            stroke: $gray-dark;
+        }
+        path {
+            stroke-width: 0;
+        }
+    }
+
+    font-size: 0.85em;
+
+}

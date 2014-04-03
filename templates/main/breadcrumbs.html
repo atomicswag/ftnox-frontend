@@ -1,0 +1,15 @@
+{{#ifCond breadcrumbs.length ">" 1 }}
+<ol class="breadcrumb">
+    {{#each breadcrumbs}}
+    {{#if @last}}
+    <li class="active">
+        {{display}}
+    </li>
+    {{else}}
+    <li>
+        <a data-name="{{name}}" href="{{path}}">{{display}}</a>
+    </li>
+    {{/if}}
+    {{/each}}
+</ol>
+{{/ifCond}}
