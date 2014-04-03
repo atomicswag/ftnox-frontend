@@ -2,12 +2,6 @@
 @import "font-awesome/font-awesome.scss";
 @import "orderbook_chart.scss";
 
-$icon-font-path:          "/fonts/" !default;
-
-
-#main {
-}
-
 .panel-heading {
     padding: 6px 15px;
 }
@@ -40,6 +34,11 @@ table.bordered {
 
 .js-exchange-markets {
     border-bottom: 3px solid $gray-dark;
+}
+
+.orderbook-chart {
+    border: 1px solid $gray-light;
+    margin-bottom: 3em;
 }
 
 

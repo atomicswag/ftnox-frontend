@@ -2356,7 +2356,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </div>\n\n    <!-- The market -->\n    <div class=\"main col-md-9\">\n        <!--<h2 class=\"row js-marketName coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h2>-->\n\n        <div class=\"row js-chart orderbook-chart\" style=\"margin-bottom: 20px;\">\n        </div>\n\n        ";
+    + "</h2>-->\n\n        <div class=\"row js-chart orderbook-chart\">\n        </div>\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        ";

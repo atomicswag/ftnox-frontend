@@ -34,12 +34,8 @@
   @include responsive-visibility('.visible-sm');
 }
 
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+@media (min-width: $screen-md-min) {
   @include responsive-visibility('.visible-md');
-}
-
-@media (min-width: $screen-lg-min) {
-  @include responsive-visibility('.visible-lg');
 }
 
 @media (max-width: $screen-xs-max) {
@@ -50,14 +46,9 @@
   @include responsive-invisibility('.hidden-sm');
 }
 
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+@media (min-width: $screen-md-min) {
   @include responsive-invisibility('.hidden-md');
 }
-
-@media (min-width: $screen-lg-min) {
-  @include responsive-invisibility('.hidden-lg');
-}
-
 
 // Print utilities
 //
