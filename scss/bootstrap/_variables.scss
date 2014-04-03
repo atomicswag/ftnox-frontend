@@ -6,6 +6,8 @@ $bootstrap-sass-asset-helper: (twbs-font-path("") != unquote('twbs-font-path("")
 // Variables
 // --------------------------------------------------
 
+//== Site Wide
+$bg-default-color: #fff;
 
 //== Colors
 //
@@ -30,9 +32,9 @@ $brand-danger:          #d9534f !default;
 // ## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               #111 !default;
+$body-bg:               $bg-default-color !default;
 //** Global text color on `<body>`.
-$text-color:            $gray-light !default;
+$text-color:            $gray-dark !default;
 
 //** Global textual link color.
 $link-color:            $brand-primary !default;
@@ -174,7 +176,7 @@ $btn-link-disabled-color:        $gray-light !default;
 //##
 
 //** `<input>` background color
-$input-bg:                       #111 !default;
+$input-bg:                       $bg-default-color !default;
 //** `<input disabled>` background color
 $input-bg-disabled:              $gray-darker !default;
 
@@ -571,7 +573,7 @@ $modal-title-padding:         15px !default;
 $modal-title-line-height:     $line-height-base !default;
 
 //** Background color of modal content area
-$modal-content-bg:                             #111 !default;
+$modal-content-bg:                             $bg-default-color !default;
 //** Modal content border color
 $modal-content-border-color:                   rgba(255,255,255,.2) !default;
 //** Modal content border color **for IE8**
@@ -666,7 +668,7 @@ $list-group-link-heading-color: #333 !default;
 //
 //##
 
-$panel-bg:                    #111 !default;
+$panel-bg:                    $bg-default-color !default;
 $panel-body-padding:          15px !default;
 $panel-border-radius:         $border-radius-base !default;
 

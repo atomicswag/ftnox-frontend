@@ -8,32 +8,6 @@ body,
     height: 100%;
 }
 
-body {
-    // Dark background:
-    // http://www.lighterra.com/articles/macosxtextaabug/
-    -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    -o-font-smoothing: antialiased;
-}
-
-code {
-//    font-size: 80%;
-}
-
-h1 {
-}
-
-h2 {
-}
-
-h3 {
-}
-
-h4 {
-    font-weight: normal;
-    color: #c8b8a2;
-}
-
 .panel-heading {
     padding: 6px 15px;
 }
@@ -84,27 +58,8 @@ h4.panel-title {
 }
 
 #navbar {
-    background: url('/img/banner_bg.png');
-    background-repeat: repeat-x;
-    height: 65px;
-    border: none;
-    border-radius: 0px;
 
-    .navbar-header {
-        position: relative;
-        width: 200px;
-        .navbar-logo {
-            float: left;
-            position: relative;
-            top: 10px;
-        }
-        .navbar-brand {
-            font-size:28px;
-            font-weight: 600;
-            height: 50px;
-            color: $gray-dark;
-        }
-    }
+
 }
 
 #content {
