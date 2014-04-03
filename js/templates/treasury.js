@@ -2,9 +2,9 @@
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['treasury_dashboard.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<h1>Treasury</h1>\n<hr />\n<div class=\"js-store-privkey\">\n    "
+  return "<div class=\"container\">\n    <h1>Treasury</h1>\n    <hr />\n    <div class=\"js-store-privkey\">\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_store_privkey", {"name":"render","hash":{},"data":data})))
-    + "\n</div>\n<div class=\"js-deposits-list\">\n</div>\n<div class=\"js-withdrawals-list\">\n</div>\n";
+    + "\n    </div>\n    <div class=\"js-deposits-list\">\n    </div>\n    <div class=\"js-withdrawals-list\">\n    </div>\n</container>\n";
 },"useData":true});
 templates['treasury_deposits_list.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
