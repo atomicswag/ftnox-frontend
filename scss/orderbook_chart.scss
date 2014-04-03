@@ -17,7 +17,7 @@
     .line {
         fill: none;
         stroke: steelblue;
-        stroke-width: 2px;
+        stroke-width: 3px;
     }
 
     .orders>path {
@@ -30,7 +30,7 @@
     }
 
     .pricelog>path {
-        stroke-width: 1.0px;
+        stroke-width: 3.0px;
         //shape-rendering: crispEdges;
 
         &.lows {
@@ -44,7 +44,7 @@
     }
 
     .grid {
-        opacity: 0.25;
+        opacity: 0.1;
         .tick {
             fill: none;
             shape-rendering: crispEdges;

@@ -1,12 +1,17 @@
 <div id="market">
 
-    <div class="js-exchange-markets container">
+    <div class="js-exchange-markets">
         {{!--{{render 'exchange_markets' markets=markets}}--}}
     </div>
 
-    <div class="container"><div class="box">
+    <div class="container">
 
         <!--<h2 class="row js-marketName coin">{{market.name}}</h2>-->
+
+        <!-- orderbook chart -->
+        <div class="section clearfix">
+            <div class="js-chart orderbook-chart"></div>
+        </div>
 
         {{#if user}}
         <div class="section clearfix enter-order">
@@ -40,7 +45,7 @@
                                     <span class="coin">{{market.basisCoin}}</span> (or less)
                                 </div>
                             </div>
-                            <button class="btn btn-primary col-xs-offset-0 col-xs-12" type="submit">Buy {{market.coin}}</button>
+                            <button class="btn btn-primary" type="submit">Buy {{market.coin}}</button>
                         </form>
                     </div>
                 </div>
@@ -76,7 +81,7 @@
                                     <span class="coin">{{market.basisCoin}}</span> (or more)
                                 </div>
                             </div>
-                            <button class="btn btn-primary col-xs-offset-0 col-xs-12" type="submit">Sell {{market.coin}}</button>
+                            <button class="btn btn-primary" type="submit">Sell {{market.coin}}</button>
                         </form>
                     </div>
                 </div>
@@ -97,11 +102,9 @@
 
         {{/if}}
 
-        <!-- orderbook chart -->
-        <div class="row js-chart orderbook-chart"></div>
 
         {{#if user}}
-        <div class="row">
+        <div class="section clearfix">
             <div class="col-xs-12">
                 <h4>Open Orders</h4>
                 <div class="js-pending-orders">
@@ -110,7 +113,8 @@
             </div>
         </div>
         {{/if}}
-        <div class="row">
+
+        <div class="section clearfix">
             <div class="col-xs-6">
                 <h4>Bids</h4>
                 <div class="js-bids">
@@ -125,9 +129,6 @@
             </div>
         </div>
 
-    </div><!--.box-->
     </div><!--.container-->
-
-
 
 </div>
