@@ -22,10 +22,10 @@
 
     .orders>path {
         &.bids {
-            stroke: green;
+            stroke: #85DDFF;
         }
         &.asks {
-            stroke: red;
+            stroke: #FFE574;
         }
     }
 

@@ -2,13 +2,6 @@
 @import "font-awesome/font-awesome.scss";
 @import "orderbook_chart.scss";
 
-$black:            #000 !default;
-$txt:              #333 !default;
-$dim:              #666 !default;
-$light:            #999 !default;
-$bc:               #ddd !default;
-$bg:               #eee !default;
-
 
 /* ---------------------------------------------------------------------- */
 // COMMON
@@ -21,7 +14,7 @@ body {
     outline: none !important;
 }
 
-.date, .coin, .amount, .address, .code {
+.date, .amount, .address, .code {
     font-family: $font-family-monospace;
 }
 
@@ -37,20 +30,62 @@ body {
 }
 
 /* ---------------------------------------------------------------------- */
+// FORMS
+/* ---------------------------------------------------------------------- */
+
+.input-group.ig-coin {
+    width: 100%;
+}
+.input-group.ig-coin .input-group-addon {
+    width: 25%;
+}
+
+.btn-custom {
+    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.69);
+    box-shadow: hsl($hue,$sat,99%) 0 1px 0 inset;
+    -webkit-font-smoothing: antialiased;
+    border-color: hsl($hue,$sat,80%);
+
+    &:hover {
+        @include gradient-vertical(hsl($hue,$sat,97%), hsl($hue,$sat,91%));
+        border-color: hsl($hue,$sat,85%);
+    }
+}
+
+/* ---------------------------------------------------------------------- */
 // PANEL
 /* ---------------------------------------------------------------------- */
 
 .panel-default > .panel-heading {
     @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
     border-top: 1px solid #fff;
-    color: hsl($hue,$sat,35%);
     padding: 5px 15px;
 }
 .panel-default > .panel-heading > .panel-title {
     font-size: 14px;
     line-height: 20px;
 }
-.panel-default > .panel-body {
+.panel-default > .panel-dark {
+    padding: 8px 0;
+    background: $bg-dark;
+    background: hsl($hue,25%,85%);
+    border-top: 1px solid hsl($hue,20%,75%);
+    border-bottom: 1px solid hsl($hue,20%,75%);
+    box-shadow: hsl($hue,20%,90%) 0 1px 0 inset;
+    p {
+        margin: 0;
+        line-height: 24px;
+        &.key {
+            color: hsl($hue,$sat,47%);
+            font: bold 11px/20px sans-serif;
+        }
+        &.value {
+            font-weight: bold;
+            color: $navbar-default-link-color;
+            color: $txt;
+        }
+    }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -60,34 +95,52 @@ body {
 #navbar.navbar {
     background: none;
     border: none;
-    height: 4em;
+    border-top: 3px solid hsl($hue,$sat,5%);
+    border-bottom: 1px solid hsl($hue,$sat,30%);
+    height: 64px;
     background: $bg-dark;
     margin: 0;
+
+    .nav > li {
+        font-weight: bold;
+        -webkit-font-smoothing: antialiased;
+        &.dropdown:hover > ul.dropdown-menu {
+            display: block;    
+        }
+        > a {
+            line-height: 4em;
+            padding: 0 2em;
+        }
+    }
+
+    .nav > li.btn-group {
+        margin: 11px 1.5em;
+        > .btn {
+            background: hsl($hue,15%,20%);
+            box-shadow: hsl($hue,$sat,15%) 1px 1px 3px inset;
+            border: 1px solid hsl($hue,$sat,28%);
+            color: $navbar-default-link-color;
+        }
+    }
 }
 
-#navbar.navbar .nav li {
-    font-weight: bold;
-}
-#navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
-    display: block;    
-}
-#navbar .nav > li > a {
-    line-height: 4em;
-    padding: 0 1.5em;
-}
-#navbar .nav > li.btn-group {
-    padding: 11px 1.5em;
-}
 
+/* ---------------------------------------------------------------------- */
+// TABLE
+/* ---------------------------------------------------------------------- */
 
+table.table th {
+    font-size: 13px;
+}
 /* ---------------------------------------------------------------------- */
 // MARKET TABS
 /* ---------------------------------------------------------------------- */
 
 .market-tabs {
     border-bottom: 1px solid #ddd;
-    background: $bg-dark;
-    padding-top: 20px;
+    background: darken($bg-dark, 5%);
+    padding-top: 30px;
+    box-shadow: hsl($hue,$sat,10%) 0 0 3px inset;
 }
 
 .market-tab {
@@ -125,7 +178,7 @@ body {
     &.active {
         color: $txt;
         background: $bg-body;
-        border-top-color: hsl($hue,65%,60%);
+        border-top-color: $link-color;
         span {
             color: $txt;
             &.small {
@@ -140,6 +193,9 @@ body {
 /* ---------------------------------------------------------------------- */
 
 #market {
+    .orderbook-chart {
+        padding-bottom: 15px;
+    }
     .tab-content {
         padding-top: 20px;
     }
