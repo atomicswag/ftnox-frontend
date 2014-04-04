@@ -10,26 +10,13 @@ $bc:               #ddd !default;
 $bg:               #eee !default;
 
 /* ---------------------------------------------------------------------- */
-// LAYOUT
-/* ---------------------------------------------------------------------- */
-
-body {
-}
-
-.section {
-    padding: 1.5em 0;
-}
-
-/* ---------------------------------------------------------------------- */
 // COMMON
 /* ---------------------------------------------------------------------- */
 
 *:focus {
     outline: none !important;
 }
-a:active {
-    color: $txt;
-}
+
 .date, .coin, .amount, .address, .code {
     font-family: $font-family-monospace;
 }
@@ -37,10 +24,6 @@ a:active {
 .address, .code {
     font-weight: bold;
     background: $gray-lighter;
-}
-
-table.bordered {
-    border: 1px solid $bc;
 }
 
 .vertical-table {
@@ -82,13 +65,11 @@ table.bordered {
 /* ---------------------------------------------------------------------- */
 
 #market {
-    .row {
-        padding: 1.5em 0;
+    .tab-content {
+        padding-top: 1.5em;
     }
-    .orderbook-chart {
-        margin: 1.5em 15px 0;
-        padding: 5px 15px 25px;
-        border: 1px solid #ddd;
+    .row {
+        padding: 20px 0 0;
     }
 
     .market-tabs {
@@ -134,22 +115,6 @@ table.bordered {
 
     .enter-order {
         .order-form-panel {
-        }
-        .form-buy button.btn {
-            background-color: hsl(120,100%,35%);
-            border-color: hsl(120,100%,30%);
-            &:hover, &:active {
-                background-color: hsl(120,100%,35%);
-                border-color: hsl(120,100%,30%);
-            }
-        }
-        .form-sell button.btn {
-            background-color: hsl(0,100%,35%);
-            border-color: hsl(0,100%,30%);
-            &:hover, &:active {
-                background-color: darken(#FFE574, 40%);
-                border-color: #FFE574;
-            }
         }
         .form-group {
             &>label {

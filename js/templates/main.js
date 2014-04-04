@@ -181,56 +181,52 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
   var stack1, functionType="function", escapeExpression=this.escapeExpression;
   return "\n        <div class=\"row enter-order\">\n            <div class=\"col-xs-6\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Buy "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        <form class=\"form-buy form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-3 control-label\">Buy</label>\n                                <div class=\"col-xs-9\"><div class=\"input-group\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\">"
+    + "</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        <form class=\"form-buy form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-4 control-label\">Amount</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"price\" class=\"col-xs-3 control-label\">Price</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group\">\n                                    <input buy-price name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"\" required value=\""
+    + "</span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"price\" class=\"col-xs-4 control-label\">Price per "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group\">\n                                    <input buy-price name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"\" required value=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.last)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n                                    <span class=\"market-name input-group-addon\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\n                                </div></div>\n                                <span class=\"glyphicon glyphicon-question-sign\" style=\"padding-top: 7px;\" data-toggle=\"tooltip\"\n                                      title=\"Price in "
+    + "</span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-4 control-label\">Total Cost</label>\n                                <div class=\"col-xs-8\" style=\"margin-top: 6px;\">\n                                    <span class=\"send_amount\">0</span>\n                                    "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " per 1.0 "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\"></span>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-3 control-label\">Spend</label>\n                                <div class=\"col-xs-9\" style=\"margin-top: 8px;\">\n                                    <span class=\"send_amount\">0</span>\n                                    <span class=\"coin\">"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span> (or less)\n                                </div>\n                            </div>\n                            <button class=\"btn btn-primary pull-right\" type=\"submit\">Buy "
+    + " (or less)\n                                </div>\n                            </div>\n                            <button class=\"btn btn-primary pull-right\" type=\"submit\">Buy "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\n                        </form>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"col-xs-6\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Sell "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        <form class=\"form-sell form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-3 control-label\">Sell</label>\n                                <div class=\"col-xs-9\"><div class=\"input-group\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\">"
+    + "</h4>\n                    </div>\n                    <div class=\"panel-body\">\n                        <form class=\"form-sell form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-4 control-label\">Amount</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"price\" class=\"col-xs-3 control-label\">Price</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group\">\n                                    <input sell-price name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"\" required value=\""
+    + "</span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"price\" class=\"col-xs-4 control-label\">Price per "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group\">\n                                    <input sell-price name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"\" required value=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.last)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n                                    <span class=\"market-name input-group-addon\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\n                                </div></div>\n                                <span class=\"glyphicon glyphicon-question-sign\" style=\"padding-top: 7px;\" data-toggle=\"tooltip\"\n                                      title=\"Price in "
+    + "</span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-4 control-label\">Total Credit</label>\n                                <div class=\"col-xs-8\" style=\"margin-top: 6px;\">\n                                    <span class=\"receive_amount\">0</span>\n                                    "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " per 1.0 "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\"></span>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-3 control-label\">Get</label>\n                                <div class=\"col-xs-9\" style=\"margin-top: 8px;\">\n                                    <span class=\"receive_amount\">0</span>\n                                    <span class=\"coin\">"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span> (or more)\n                                </div>\n                            </div>\n                            <button class=\"btn btn-primary pull-right\" type=\"submit\">Sell "
+    + " (or more)\n                                </div>\n                            </div>\n                            <button class=\"btn btn-primary pull-right\" type=\"submit\">Sell "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</button>\n                        </form>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        ";
 },"3":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <h4>Open Orders</h4>\n                <div class=\"js-pending-orders\">\n                    "
+  return "\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Open Orders</h3>\n                    </div>\n                    <div class=\"panel-body js-pending-orders\">\n                        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_pending_orders", (depth0 && depth0.orders), {"name":"render","hash":{},"data":data})))
-    + "\n                </div>\n            </div>\n        </div>\n        ";
+    + "\n                    </div>\n                </div>\n            </div>\n        </div>\n        ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <div class=\"js-exchange-markets\">\n        \n    </div>\n\n    <div class=\"container\">\n\n        <!--<h2 class=\"row js-marketName coin\">"
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <div class=\"js-exchange-markets\">\n        \n    </div>\n\n    <div class=\"tab-content container\">\n\n        <!--<h2 class=\"row js-marketName coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h2>-->\n\n        <!-- orderbook chart -->\n        <div class=\"row\">\n            <div class=\"js-chart orderbook-chart\"></div>\n        </div>\n\n        ";
+    + "</h2>-->\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n\n        ";
+  buffer += "\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <h4>Bids</h4>\n                <div class=\"js-bids\">\n                    "
+  return buffer + "\n\n        <!-- orderbook chart -->\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Orderbook Chart</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-chart orderbook-chart\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Bids</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-bids\">\n                            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.bids), {"name":"render","hash":{},"data":data})))
-    + "\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <h4>Asks</h4>\n                <div class=\"js-asks\">\n                    "
+    + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Asks</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-bids\">\n                            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.asks), {"name":"render","hash":{},"data":data})))
-    + "\n                </div>\n            </div>\n        </div>\n\n    </div><!--.container-->\n\n</div>\n";
+    + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n    </div><!--.container-->\n\n</div>\n";
 },"useData":true});
 templates['exchange_market_button.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -285,50 +281,50 @@ templates['exchange_orders.html'] = template({"1":function(depth0,helpers,partia
 },"4":function(depth0,helpers,partials,data) {
   return "\n        <tr>\n            <td colspan=\"999\" style=\"text-align: center;\">No orders</td>\n        </tr>\n        ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"exchange-orders\">\n    <table class=\"table table-condensed head bordered\">\n    <thead><tr>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"exchange-orders\">\n    <table class=\"table table-condensed head\">\n    <thead><tr>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")</span></th>\n    </tr></thead>\n    </table>\n    <div class=\"js-exchange-orders-body exchange-orders-body\">\n        <table class=\"table table-striped table-condensed body bordered\">\n        ";
+    + ")</span></th>\n    </tr></thead>\n    </table>\n    <div class=\"js-exchange-orders-body exchange-orders-body\">\n        <table class=\"table table-striped table-condensed body\">\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(4, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n        </table>\n    </div>\n</div>\n";
 },"useData":true});
 templates['exchange_pending_orders.html'] = template({"1":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n        ";
+  var stack1, buffer = "\n    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.orders), {"name":"each","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n        ";
+  return buffer + "\n    ";
 },"2":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "\n        <tr data-order-id=\""
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "\n    <tr data-order-id=\""
     + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
-    + "\">\n            ";
+    + "\">\n        ";
   stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.type), "==", "B", {"name":"ifCond","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data}));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n            <td class=\"date\">"
+  return buffer + "\n        <td class=\"date\">"
     + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate) || helperMissing,helper.call(depth0, (depth0 && depth0.time), {"name":"formatDate","hash":{
     'format': ("YYYY-MM-DD hh:mma")
   },"data":data})))
-    + "</td>\n            <td class=\"amount\">"
+    + "</td>\n        <td class=\"amount\">"
     + escapeExpression((helper = helpers.toPrecision || (depth0 && depth0.toPrecision) || helperMissing,helper.call(depth0, (depth0 && depth0.price), 5, {"name":"toPrecision","hash":{},"data":data})))
-    + "</td>\n            <td class=\"amount\">"
+    + "</td>\n        <td class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.amount), {"name":"divide8","hash":{},"data":data})))
-    + "</td>\n            <td class=\"amount\">"
+    + "</td>\n        <td class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.filled), {"name":"divide8","hash":{},"data":data})))
-    + "</td>\n            <td><a href=\"#\" class=\"js-cancel-order btn btn-default btn-xs\" data-order-id=\""
+    + "</td>\n        <td><a href=\"#\" class=\"js-cancel-order btn btn-default btn-xs\" data-order-id=\""
     + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
-    + "\" type=\"submit\">Cancel</a></td>\n        </tr>\n        ";
+    + "\" type=\"submit\">Cancel</a></td>\n    </tr>\n    ";
 },"3":function(depth0,helpers,partials,data) {
-  return "\n            <td>Bid</td>\n            ";
+  return "\n        <td>Bid</td>\n        ";
   },"5":function(depth0,helpers,partials,data) {
-  return "\n            <td>Ask</td>\n            ";
+  return "\n        <td>Ask</td>\n        ";
   },"7":function(depth0,helpers,partials,data) {
-  return "\n        <tr>\n            <td colspan=\"6\" style=\"text-align: center;\">You have no open orders</td>\n        </tr>\n        ";
+  return "\n    <tr>\n        <td colspan=\"6\" style=\"text-align: center;\">You have no open orders</td>\n    </tr>\n    ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"exchange-pending-orders\">\n    <table class=\"table table-striped table-condensed head bordered\">\n    <thead>\n        <tr>\n            <th>Type</th>\n            <th>Date</th>\n            <th>Price</th>\n            <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<table class=\"table table-striped table-condensed head\">\n<thead>\n    <tr>\n        <th>Type</th>\n        <th>Date</th>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")</span></th>\n            <th>Filled</th>\n            <th></th>\n        </tr>\n    </thead>\n    <tbody>\n        ";
+    + ")</span></th>\n        <th>Filled</th>\n        <th></th>\n    </tr>\n</thead>\n<tbody>\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(7, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n    </tbody>\n    </table>\n</div>\n";
+  return buffer + "\n</tbody>\n</table>\n";
 },"useData":true});
 templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) {
   return "\n                    <li name=\"market\"><a class=\"active\" href=\"/#market\">Trade</a></li>\n                ";
