@@ -9,10 +9,14 @@ $light:            #999 !default;
 $bc:               #ddd !default;
 $bg:               #eee !default;
 
+
 /* ---------------------------------------------------------------------- */
 // COMMON
 /* ---------------------------------------------------------------------- */
 
+body {
+    background: $bg-body;
+}
 *:focus {
     outline: none !important;
 }
@@ -32,8 +36,21 @@ $bg:               #eee !default;
     }
 }
 
+/* ---------------------------------------------------------------------- */
+// PANEL
+/* ---------------------------------------------------------------------- */
+
 .panel-default > .panel-heading {
-    background: #fff;
+    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
+    border-top: 1px solid #fff;
+    color: hsl($hue,$sat,35%);
+    padding: 5px 15px;
+}
+.panel-default > .panel-heading > .panel-title {
+    font-size: 14px;
+    line-height: 20px;
+}
+.panel-default > .panel-body {
 }
 
 /* ---------------------------------------------------------------------- */
@@ -44,6 +61,8 @@ $bg:               #eee !default;
     background: none;
     border: none;
     height: 4em;
+    background: $bg-dark;
+    margin: 0;
 }
 
 #navbar.navbar .nav li {
@@ -60,82 +79,85 @@ $bg:               #eee !default;
     padding: 11px 1.5em;
 }
 
+
+/* ---------------------------------------------------------------------- */
+// MARKET TABS
+/* ---------------------------------------------------------------------- */
+
+.market-tabs {
+    border-bottom: 1px solid #ddd;
+    background: $bg-dark;
+    padding-top: 20px;
+}
+
+.market-tab {
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    height: 56px;
+    width: 240px - 8px;
+    padding: 8px;
+    border-top: 4px solid hsl($hue,10%,55%);
+    border-bottom: 1px solid $bg-body;
+    margin-right: 8px;
+    margin-bottom: -1px;
+    background: hsl($hue,10%,45%);
+    img {
+        float: left;
+        margin-right: .75em;
+        width: 36px;
+        height: 36px;
+    }
+    span {
+        display: block;
+        color: hsl($hue,$sat,70%);
+        font-weight: bold;
+        &.small {
+            color: hsl($hue,$sat,60%);
+            font-weight: normal;
+            line-height: 120%;
+        }
+    }
+    &:hover {
+        text-decoration: none;
+        border-top-color: hsl($hue,10%,70%);
+    }
+    &.active {
+        color: $txt;
+        background: $bg-body;
+        border-top-color: hsl($hue,65%,60%);
+        span {
+            color: $txt;
+            &.small {
+                color: $light;
+            }
+        }
+    }
+
+}
 /* ---------------------------------------------------------------------- */
 // EXCHANGE
 /* ---------------------------------------------------------------------- */
 
 #market {
     .tab-content {
-        padding-top: 1.5em;
+        padding-top: 20px;
     }
     .row {
-        padding: 20px 0 0;
-    }
-
-    .market-tabs {
-        border-bottom: 1px solid #ddd;
-    }
-
-    .market-tab {
-        display: block;
-        float: left;
-        box-sizing: border-box;
-        height: 56px;
-        width: 240px - 8px;
-        padding: 8px;
-        border: 1px solid #fff;
-        border-bottom: none;
-        margin-bottom: -1px;
-        margin-right: 8px;
-        img {
-            float: left;
-            margin-right: .75em;
-            width: 36px;
-            height: 36px;
-        }
-        span {
-            display: block;
-            color: $txt;
-            &.small {
-                color: $light;
-                font-weight: normal;
-            }
-        }
-        &:hover {
-            text-decoration: none;
-            border-color: #ddd;
-        }
-        &.active {
-            border-color: #ddd;
-            color: $txt;
-            background: #fff;
-        }
-
+        padding: 10px 0 0;
     }
 
     .enter-order {
-        .order-form-panel {
-        }
         .form-group {
             &>label {
                 padding-right: 0px;
             }
-            &>div {
-            }
-            .input-group-addon.market-name {
-                padding: 6px 6px;
-            }
+
         }
     }
     .exchange-orders {
-        table.head {
-            margin-bottom: 0;
-        }
         table {
             table-layout: fixed;
-        }
-        .exchange-orders-body {
-            margin-bottom: 40px;
         }
     }
 }

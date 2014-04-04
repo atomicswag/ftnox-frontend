@@ -17,7 +17,13 @@ $gray:                   #666 !default;
 $gray-light:             #ddd !default;
 $gray-lighter:           #eee !default;
 
-$brand-primary:         hsl(197,100%,45%) !default;
+$hue: 210 !default;
+$sat: 8% !default;
+$bg-body: hsl($hue,$sat,93%) !default;
+$bg-light: hsl($hue,$sat,98%) !default;
+$bg-dark: hsl($hue,15%,33%) !default;
+
+$brand-primary:         hsl($hue,$sat,45%) !default;
 $brand-success:         #5cb85c !default;
 $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
@@ -339,7 +345,7 @@ $navbar-default-bg:                #f8f8f8 !default;
 $navbar-default-border:            darken($navbar-default-bg, 6.5%) !default;
 
 // Navbar links
-$navbar-default-link-color:                $gray-dark !default;
+$navbar-default-link-color:                hsl($hue,$sat,90%) !default;
 $navbar-default-link-hover-color:          $link-color !default;
 $navbar-default-link-hover-bg:             transparent !default;
 $navbar-default-link-active-color:         #555 !default;

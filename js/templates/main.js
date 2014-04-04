@@ -281,12 +281,12 @@ templates['exchange_orders.html'] = template({"1":function(depth0,helpers,partia
 },"4":function(depth0,helpers,partials,data) {
   return "\n        <tr>\n            <td colspan=\"999\" style=\"text-align: center;\">No orders</td>\n        </tr>\n        ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"exchange-orders\">\n    <table class=\"table table-condensed head\">\n    <thead><tr>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"exchange-orders\">\n    <table class=\"table table-striped table-condensed\">\n    <thead><tr>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")</span></th>\n    </tr></thead>\n    </table>\n    <div class=\"js-exchange-orders-body exchange-orders-body\">\n        <table class=\"table table-striped table-condensed body\">\n        ";
+    + ")</span></th>\n    </tr></thead>\n    <tbody class=\"js-exchange-orders-body exchange-orders-body\">\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(4, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n        </table>\n    </div>\n</div>\n";
+  return buffer + "\n    </tbody>\n    </table>\n</div>\n";
 },"useData":true});
 templates['exchange_pending_orders.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n    ";
@@ -338,7 +338,7 @@ templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) 
   },"6":function(depth0,helpers,partials,data) {
   return "\n                    <li name=\"login\"><a href=\"/#login\">Login</a></li>\n                ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", buffer = "<!-- Fixed navbar -->\n<div id=\"navbar\" class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a class=\"navbar-brand\" href=\"/\">\n                <img src=\"/img/logo.png\" alt=\"FtNox\" height=\"24\"/>\n            </a>\n            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\">\n                <span class=\"sr-only\">Toggle navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n        </div>\n        <div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n            <ul class=\"nav navbar-nav navbar-right\">\n                ";
+  var stack1, helper, functionType="function", buffer = "<!-- Fixed navbar -->\n<div id=\"navbar\" class=\"navbar navbar-default navbar-static-top\" role=\"navigation\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <a class=\"navbar-brand\" href=\"/\">\n                <img src=\"/img/logo.png\" alt=\"FtNox\" height=\"24\"/>\n            </a>\n            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#navbar-collapse\">\n                <span class=\"sr-only\">Toggle navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n        </div>\n        <div class=\"collapse navbar-collapse\" id=\"navbar-collapse\">\n            <ul class=\"nav navbar-nav navbar-right\">\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                    <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                    <li name=\"about\"><a href=\"/#about\">About</a></li>\n\n                ";
