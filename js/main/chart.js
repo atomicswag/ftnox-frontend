@@ -15,8 +15,8 @@ ChartView.init = function() {
     var view = this;
     var el = view.el;
     var margin = view.margin = {top: 20, right: 80, bottom: 40, left: 60};
-    var width  = view.width  = 940 - margin.left - margin.right;
-    var height = view.height = 400 - margin.top - margin.bottom;
+    var width  = view.width  = 910 - margin.left - margin.right;
+    var height = view.height = 360 - margin.top - margin.bottom;
     var x      = view.x      = d3.scale.linear().range([0, width]);
     var y      = view.y      = d3.scale.linear().range([height, 0]);
     var t      = view.t      = d3.time.scale().range([0, height]);

@@ -17,15 +17,15 @@
     .line {
         fill: none;
         stroke: steelblue;
-        stroke-width: 3px;
+        stroke-width: 2px;
     }
 
     .orders>path {
         &.bids {
-            stroke: #85DDFF;
+            stroke: green;
         }
         &.asks {
-            stroke: #FFE574;
+            stroke: red;
         }
     }
 

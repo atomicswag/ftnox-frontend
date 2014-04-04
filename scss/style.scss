@@ -24,6 +24,12 @@ body {
 // COMMON
 /* ---------------------------------------------------------------------- */
 
+*:focus {
+    outline: none !important;
+}
+a:active {
+    color: $txt;
+}
 .date, .coin, .amount, .address, .code {
     font-family: $font-family-monospace;
 }
@@ -43,6 +49,9 @@ table.bordered {
     }
 }
 
+.panel-default > .panel-heading {
+    background: #fff;
+}
 
 /* ---------------------------------------------------------------------- */
 // NAVBAR
@@ -51,9 +60,7 @@ table.bordered {
 #navbar.navbar {
     background: none;
     border: none;
-    border-top: 3px solid #333;
-    margin: 0;
-    height: 64px;
+    height: 4em;
 }
 
 #navbar.navbar .nav li {
@@ -62,35 +69,12 @@ table.bordered {
 #navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: block;    
 }
-#navbar .nav > li > a,
-#navbar .nav > li > span.link {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
 #navbar .nav > li > a {
-    text-transform: uppercase;
-    border-top: 3px solid $txt;
-    margin-top: -3px;
-    &:hover {
-        border-top-color: $link-color;
-    }
+    line-height: 4em;
+    padding: 0 1.5em;
 }
-#navbar .nav > li > span.link {
-    display: block;
-    padding: 15px 30px;
-}
-/* ---------------------------------------------------------------------- */
-// ACCOUNT
-/* ---------------------------------------------------------------------- */
-
-table.deposits-list, table.withdrawals-list {
-    .confirmed {
-        color: #ACBDA5;
-    }
-    .unconfirmed {
-        color: #C9C5B0;
-    }
+#navbar .nav > li.btn-group {
+    padding: 11px 1.5em;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -98,6 +82,14 @@ table.deposits-list, table.withdrawals-list {
 /* ---------------------------------------------------------------------- */
 
 #market {
+    .row {
+        padding: 1.5em 0;
+    }
+    .orderbook-chart {
+        margin: 1.5em 15px 0;
+        padding: 5px 15px 25px;
+        border: 1px solid #ddd;
+    }
 
     .market-tabs {
         border-bottom: 1px solid #ddd;
@@ -108,32 +100,32 @@ table.deposits-list, table.withdrawals-list {
         float: left;
         box-sizing: border-box;
         height: 56px;
-        width: 180px;
+        width: 240px - 8px;
         padding: 8px;
         border: 1px solid #fff;
         border-bottom: none;
         margin-bottom: -1px;
-        margin-right: .5em;
-        font-weight: bold;
-        opacity: 0.75;
+        margin-right: 8px;
         img {
             float: left;
             margin-right: .75em;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
         }
-        .small {
-            color: $dim;
-            font-weight: normal;
+        span {
+            display: block;
+            color: $txt;
+            &.small {
+                color: $light;
+                font-weight: normal;
+            }
         }
         &:hover {
-            opacity: 1;
             text-decoration: none;
             border-color: #ddd;
         }
         &.active {
             border-color: #ddd;
-            opacity: 1;
             color: $txt;
             background: #fff;
         }
@@ -144,16 +136,16 @@ table.deposits-list, table.withdrawals-list {
         .order-form-panel {
         }
         .form-buy button.btn {
-            background-color: darken(#85DDFF, 50%);
-            border-color: darken(#85DDFF, 30%);
+            background-color: hsl(120,100%,35%);
+            border-color: hsl(120,100%,30%);
             &:hover, &:active {
-                background-color: darken(#85DDFF, 40%);
-                border-color: #85DDFF;
+                background-color: hsl(120,100%,35%);
+                border-color: hsl(120,100%,30%);
             }
         }
         .form-sell button.btn {
-            background-color: darken(#FFE574, 50%);
-            border-color: darken(#FFE574, 30%);
+            background-color: hsl(0,100%,35%);
+            border-color: hsl(0,100%,30%);
             &:hover, &:active {
                 background-color: darken(#FFE574, 40%);
                 border-color: #FFE574;
@@ -170,7 +162,6 @@ table.deposits-list, table.withdrawals-list {
             }
         }
     }
-    .exchange-pending-orders {}
     .exchange-orders {
         table.head {
             margin-bottom: 0;
@@ -179,9 +170,20 @@ table.deposits-list, table.withdrawals-list {
             table-layout: fixed;
         }
         .exchange-orders-body {
-            //max-height: 440px;
-            //overflow-y: auto;
             margin-bottom: 40px;
         }
     }
 }
+/* ---------------------------------------------------------------------- */
+// ACCOUNT
+/* ---------------------------------------------------------------------- */
+
+table.deposits-list, table.withdrawals-list {
+    .confirmed {
+        color: #ACBDA5;
+    }
+    .unconfirmed {
+        color: #C9C5B0;
+    }
+}
+

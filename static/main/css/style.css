@@ -6154,11 +6154,11 @@ button.close {
 .orderbook-chart .line {
   fill: none;
   stroke: steelblue;
-  stroke-width: 3px; }
+  stroke-width: 2px; }
 .orderbook-chart .orders > path.bids {
-  stroke: #85DDFF; }
+  stroke: green; }
 .orderbook-chart .orders > path.asks {
-  stroke: #FFE574; }
+  stroke: red; }
 .orderbook-chart .pricelog > path {
   stroke-width: 1.0px; }
   .orderbook-chart .pricelog > path.lows {
@@ -6183,6 +6183,12 @@ button.close {
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
+*:focus {
+  outline: none !important; }
+
+a:active {
+  color: #333333; }
+
 .date, .coin, .amount, .address, .code {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
 
@@ -6196,14 +6202,15 @@ table.bordered {
 .vertical-table label {
   text-align: right; }
 
+.panel-default > .panel-heading {
+  background: #fff; }
+
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
 #navbar.navbar {
   background: none;
   border: none;
-  border-top: 3px solid #333;
-  margin: 0;
-  height: 64px; }
+  height: 4em; }
 
 #navbar.navbar .nav li {
   font-weight: bold; }
@@ -6211,31 +6218,21 @@ table.bordered {
 #navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
   display: block; }
 
-#navbar .nav > li > a,
-#navbar .nav > li > span.link {
-  padding-left: 30px;
-  padding-right: 30px; }
-
 #navbar .nav > li > a {
-  text-transform: uppercase;
-  border-top: 3px solid #333333;
-  margin-top: -3px; }
-  #navbar .nav > li > a:hover {
-    border-top-color: #00aaff; }
+  line-height: 4em;
+  padding: 0 1.5em; }
 
-#navbar .nav > li > span.link {
-  display: block;
-  padding: 15px 30px; }
+#navbar .nav > li.btn-group {
+  padding: 11px 1.5em; }
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
-table.deposits-list .confirmed, table.withdrawals-list .confirmed {
-  color: #ACBDA5; }
-table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
-  color: #C9C5B0; }
-
-/* ---------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------- */
+#market .row {
+  padding: 1.5em 0; }
+#market .orderbook-chart {
+  margin: 1.5em 15px 0;
+  padding: 5px 15px 25px;
+  border: 1px solid #ddd; }
 #market .market-tabs {
   border-bottom: 1px solid #ddd; }
 #market .market-tab {
@@ -6243,40 +6240,39 @@ table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
   float: left;
   box-sizing: border-box;
   height: 56px;
-  width: 180px;
+  width: 232px;
   padding: 8px;
   border: 1px solid #fff;
   border-bottom: none;
   margin-bottom: -1px;
-  margin-right: .5em;
-  font-weight: bold;
-  opacity: 0.75; }
+  margin-right: 8px; }
   #market .market-tab img {
     float: left;
     margin-right: .75em;
-    width: 40px;
-    height: 40px; }
-  #market .market-tab .small {
-    color: #666666;
-    font-weight: normal; }
+    width: 36px;
+    height: 36px; }
+  #market .market-tab span {
+    display: block;
+    color: #333333; }
+    #market .market-tab span.small {
+      color: #999999;
+      font-weight: normal; }
   #market .market-tab:hover {
-    opacity: 1;
     text-decoration: none;
     border-color: #ddd; }
   #market .market-tab.active {
     border-color: #ddd;
-    opacity: 1;
     color: #333333;
     background: #fff; }
 #market .enter-order .form-buy button.btn {
-  background-color: #006085;
-  border-color: #00aaeb; }
+  background-color: #00b300;
+  border-color: #009900; }
   #market .enter-order .form-buy button.btn:hover, #market .enter-order .form-buy button.btn:active {
-    background-color: #0085b8;
-    border-color: #85DDFF; }
+    background-color: #00b300;
+    border-color: #009900; }
 #market .enter-order .form-sell button.btn {
-  background-color: #745e00;
-  border-color: #dab100; }
+  background-color: #b30000;
+  border-color: #990000; }
   #market .enter-order .form-sell button.btn:hover, #market .enter-order .form-sell button.btn:active {
     background-color: #a78800;
     border-color: #FFE574; }
@@ -6290,3 +6286,10 @@ table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
   table-layout: fixed; }
 #market .exchange-orders .exchange-orders-body {
   margin-bottom: 40px; }
+
+/* ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------- */
+table.deposits-list .confirmed, table.withdrawals-list .confirmed {
+  color: #ACBDA5; }
+table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
+  color: #C9C5B0; }

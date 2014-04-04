@@ -9,12 +9,12 @@
         <!--<h2 class="row js-marketName coin">{{market.name}}</h2>-->
 
         <!-- orderbook chart -->
-        <div class="section clearfix">
+        <div class="row">
             <div class="js-chart orderbook-chart"></div>
         </div>
 
         {{#if user}}
-        <div class="section clearfix enter-order">
+        <div class="row enter-order">
             <div class="col-xs-6">
                 <div class="order-form-panel panel panel-default">
                     <div class="panel-heading">
@@ -45,7 +45,7 @@
                                     <span class="coin">{{market.basisCoin}}</span> (or less)
                                 </div>
                             </div>
-                            <button class="btn btn-primary" type="submit">Buy {{market.coin}}</button>
+                            <button class="btn btn-primary pull-right" type="submit">Buy {{market.coin}}</button>
                         </form>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                                     <span class="coin">{{market.basisCoin}}</span> (or more)
                                 </div>
                             </div>
-                            <button class="btn btn-primary" type="submit">Sell {{market.coin}}</button>
+                            <button class="btn btn-primary pull-right" type="submit">Sell {{market.coin}}</button>
                         </form>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
 
 
         {{#if user}}
-        <div class="section clearfix">
+        <div class="row">
             <div class="col-xs-12">
                 <h4>Open Orders</h4>
                 <div class="js-pending-orders">
@@ -102,7 +102,7 @@
         </div>
         {{/if}}
 
-        <div class="section clearfix">
+        <div class="row">
             <div class="col-xs-6">
                 <h4>Bids</h4>
                 <div class="js-bids">
