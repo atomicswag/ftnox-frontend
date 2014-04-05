@@ -6329,7 +6329,8 @@ table.table th {
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
 #market .orderbook-chart {
-  padding-bottom: 15px; }
+  padding: 0 15px 15px;
+  font-size: 13px; }
 #market .tab-content {
   padding-top: 20px; }
 #market .row {

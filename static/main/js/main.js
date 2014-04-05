@@ -887,7 +887,7 @@ ChartView.init = function() {
     var view = this;
     var el = view.el;
     var margin = view.margin = {top: 20, right: 80, bottom: 40, left: 60};
-    var width  = view.width  = 940 - margin.left - margin.right;
+    var width  = view.width  = 900 - margin.left - margin.right;
     var height = view.height = 360 - margin.top - margin.bottom;
     var x      = view.x      = d3.scale.linear().range([0, width]);
     var y      = view.y      = d3.scale.linear().range([height, 0]);
@@ -1009,7 +1009,7 @@ ChartView.drawOrderbook = function(bids, asks) {
       .append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
-        .attr("dy", "1.71em")
+        .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Orderbook Sum ("+view.market.coin+") ➞");
 
@@ -2360,7 +2360,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n\n        <!-- orderbook chart -->\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Orderbook Chart</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-chart orderbook-chart\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Bids</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-bids\">\n                            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.bids), {"name":"render","hash":{},"data":data})))
-    + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Asks</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-bids\">\n                            "
+    + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Asks</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-asks\">\n                            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.asks), {"name":"render","hash":{},"data":data})))
     + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n    </div><!--.container-->\n\n</div>\n";
 },"useData":true});
