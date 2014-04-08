@@ -2133,34 +2133,34 @@ templates['about.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(de
   },"useData":true});
 templates['account.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
-  return "<div class=\"container\">\n\n<div class=\"account\">\n    <h2>Account</h2>\n    <hr />\n\n    <h4>Account Balance</h4>\n    "
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Account</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n<div class=\"row ftnox-tab-container\">\n\n<ul class=\"ftnox-tabs nav nav-pills nav-stacked col-xs-3\">\n  <li class=\"active\"><a href=\"#balance\" data-toggle=\"tab\">Balance</a></li>\n  <li><a href=\"#history\" data-toggle=\"tab\">Transactions</a></li>\n  <li><a href=\"#security\" data-toggle=\"tab\">Security</a></li>\n  <li><a href=\"#api\" data-toggle=\"tab\">API Credentials</a></li>\n</ul>\n\n<div class=\"ftnox-tab-content tab-content col-xs-9\">\n    <div class=\"tab-pane active panel panel-default\" id=\"balance\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\">Balance</h4>\n        </div>\n        <div class=\"panel-body\">\n            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "account_balance", (depth0 && depth0.balance), {"name":"render","hash":{},"data":data})))
-    + "\n    <br />\n\n    \n\n    <h4>API Credentials</h4>\n    <p>\n        Your API Key: <span class=\"code js-api-key\">"
+    + "\n        </div>\n    </div>\n\n    <div class=\"tab-pane panel panel-default\" id=\"history\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\">Transactions</h4>\n            <ul class=\"pagination\">\n                <li class=\"disabled\"><a href=\"#\">&larr;</a></li>\n                <li class=\"active\"><a href=\"#\">1 <span class=\"sr-only\">(current)</span></a></li>\n                <li><a href=\"#\">2</a></li>\n                <li><a href=\"#\">3</a></li>\n                <li><a href=\"#\">4</a></li>\n                <li><a href=\"#\">5</a></li>\n                <li><a href=\"#\">&rarr;</a></li>\n            </ul>\n        </div>\n        <div class=\"panel-body\">\n            "
+    + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "account_transactions", {"name":"render","hash":{},"data":data})))
+    + "\n\n        </div>\n    </div>\n\n    <div class=\"tab-pane panel panel-default\" id=\"security\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\">Security</h4>\n        </div>\n        <div class=\"panel-body\">\n            <p>Stuff goes here.</p>\n        </div>\n    </div>\n\n    <div class=\"tab-pane panel panel-default\" id=\"api\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\">API Credentials</h4>\n        </div>\n        <div class=\"panel-body\">\n            <p>Your API Key: <span class=\"code js-api-key\">"
     + escapeExpression(((helper = helpers.apiKey || (depth0 && depth0.apiKey)),(typeof helper === functionType ? helper.call(depth0, {"name":"apiKey","hash":{},"data":data}) : helper)))
-    + "</span>\n    </p>\n    <p>\n        Example request:\n    </p>\n    <pre>\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=<span class=\"js-api-key\">"
+    + "</span></p>\n\n            <p>Example request:</p>\n\n            <pre>\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=<span class=\"js-api-key\">"
     + escapeExpression(((helper = helpers.apiKey || (depth0 && depth0.apiKey)),(typeof helper === functionType ? helper.call(depth0, {"name":"apiKey","hash":{},"data":data}) : helper)))
-    + "</span>\n</pre>\n    <br style=\"clear: both;\"/>\n    <p>\n        Please visit the <a href=\"/#api\">API docs</a> for more information.\n    </p>\n    \n</div>\n\n</div><!--.container-->\n";
+    + "</span></pre>\n\n\n            <hr />\n            <h5>More Information</h5>\n            <p>Please visit the <a href=\"/#api\">API docs</a> for more information.</p>\n        </div>\n    </div>\n</div>\n\n</div><!--.row-->\n</div><!--.container-->\n";
 },"useData":true});
 templates['account_balance.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
-  return "\n<tr data-coin=\""
+  return "\n    <div class=\"well clearfix\" data-coin=\""
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n    <td class=\"coin\">"
-    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</td>\n    <td class=\"amount\">"
+    + "\">\n        <div class=\"row\">\n        <div class=\"col-xs-5\">\n            <h4><span class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, depth0, {"name":"divide8","hash":{},"data":data})))
-    + "</td>\n    <td class=\"\">\n        <div name=\"coin-settings\" class=\"dropdown dropdown-menu-right\" style=\"float: right; position: relative;\">\n            <a href=\"#\" class=\"dropdown-toggle btn btn-default btn-xs\" data-toggle=\"dropdown\" data-order-id=\""
-    + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
-    + "\">\n                <span class=\"glyphicon glyphicon-cog\"></span>\n            </a>\n            <ul class=\"dropdown-menu dropdown-menu-right\">\n                <li><a href=\"#\" class=\"js-deposit\">Deposit "
+    + "</span> "
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></li>\n                <li><a href=\"#\" class=\"js-withdraw\">Withdraw "
+    + "</h4>\n        </div>\n            <a href=\"#\" class=\"btn btn-custom js-withdraw col-xs-3\">\n                <span class=\"glyphicon glyphicon-circle-arrow-up\"></span>\n                Withdraw <strong>"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></li>\n            </ul>\n        </div>\n    </td>\n</tr>\n";
+    + "</strong>\n            </a>\n            <a href=\"#\" class=\"btn btn-custom js-deposit col-xs-3\">\n                <span class=\"glyphicon glyphicon-circle-arrow-down\"></span>\n                Deposit <strong>"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</strong>\n            </a>\n        </div>\n    </div>\n";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<table class=\"js-account-balance table table-striped table-condensed bordered\">\n<thead><tr>\n    <th>Coin</th>\n    <th>Amount</th>\n    <th></th>\n</tr></thead>\n";
+  var stack1, buffer = "<div class=\"js-account-balance account-balance\">\n";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.balance), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n</table>\n";
+  return buffer + "\n</div>\n";
 },"useData":true});
 templates['account_deposit.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -2210,6 +2210,9 @@ templates['account_deposits_list.html'] = template({"1":function(depth0,helpers,
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</table>\n";
 },"useData":true});
+templates['account_transactions.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+  return "<table class=\"table table-striped\">\n    <thead>\n        <tr>\n            <th>Date</th>\n            <th>Transaction</th>\n            <th></th>\n            <th>Amount</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td class=\"date\">04/07/2014</td>\n            <td class=\"comment\">You sold DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-time\"></span></td>\n            <td class=\"amount red\">-974.32 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/07/2014</td>\n            <td class=\"comment\">You sold DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-time\"></span></td>\n            <td class=\"amount red\">-2000.0 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/07/2014</td>\n            <td class=\"comment\">You sold DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-time\"></span></td>\n            <td class=\"amount red\">-2000.0 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/02/2014</td>\n            <td class=\"comment\">You purchased DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+31.337 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/01/2014</td>\n            <td class=\"comment\">You received BTC from an external account</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">03/31/2014</td>\n            <td class=\"comment\">You sold LTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount red\">-43.3432 LTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">03/17/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+10.74331 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">03/03/2014</td>\n            <td class=\"comment\">You received LTC from an external account</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+373.40 LTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/25/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/21/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/18/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/12/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/04/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/30/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/23/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/14/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/02/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n    </tbody>\n</table>\n";
+  },"useData":true});
 templates['account_withdraw.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
   return "<div class=\"modal fade\">\n    <div class=\"modal-dialog\" style=\"width: 700px;\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>\n                <h4 class=\"modal-title\">Withdraw "
@@ -2350,7 +2353,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_pending_orders", (depth0 && depth0.orders), {"name":"render","hash":{},"data":data})))
     + "\n                    </div>\n                </div>\n            </div>\n        </div>\n        ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <div class=\"js-exchange-markets\">\n        \n    </div>\n\n    <div class=\"tab-content container\">\n\n        <!--<h2 class=\"row js-marketName coin\">"
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <div class=\"js-exchange-markets ftnox-page-header\">\n        \n    </div>\n\n    <div class=\"container\">\n\n        <!--<h2 class=\"row js-marketName coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h2>-->\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
@@ -2393,14 +2396,14 @@ templates['exchange_market_button.html'] = template({"1":function(depth0,helpers
 },"useData":true});
 templates['exchange_markets.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "\n            "
+  return "\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_market_button", depth0, {"name":"render","hash":{},"data":data})))
     + "\n        ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<div class=\"market-tabs clearfix\">\n    <div class=\"container\">\n        ";
+  var stack1, buffer = "<div class=\"container\">\n    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.markets), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n    </div>\n</div>\n";
+  return buffer + "\n</div>\n";
 },"useData":true});
 templates['exchange_orders.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n            ";
@@ -2483,7 +2486,7 @@ templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) 
   buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<!-- Begin page content -->\n<div id=\"content\">";
   stack1 = ((helper = helpers.content || (depth0 && depth0.content)),(typeof helper === functionType ? helper.call(depth0, {"name":"content","hash":{},"data":data}) : helper));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "</div>\n\n<div id=\"footer\">\n    <div class=\"container\">\n        <p class=\"credit\">AllInBits, Inc. 2014</p>\n    </div>\n</div>\n";
+  return buffer + "</div>\n\n<div id=\"footer\">\n    <div class=\"container\">\n        <div class=\"col-xs-4\">\n            <h5>About</h5>\n            <ul>\n                <li><a href=\"#about\">About</a></li>\n                <li><a href=\"#\">Legal</a></li>\n            </ul>\n        </div>\n        <div class=\"col-xs-4\">\n            <h5>Resources</h5>\n            <ul>\n                <li><a href=\"#api\">API</a></li>\n            </ul>\n        </div>\n        <div class=\"col-xs-3\">\n            <h5>Elsewhere</h5>\n            <ul>\n                <li><a href=\"#\">Facebook</a></li>\n                <li><a href=\"#\">Twitter</a></li>\n                <li>&copy; 2014 AllInBits, Inc.</li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
 templates['loggedout.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   return "<div class=\"alert alert-success\">You have logged out successfully</div>\n";

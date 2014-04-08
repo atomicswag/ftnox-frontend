@@ -6186,6 +6186,12 @@ body {
 
 .date, .amount, .address, .code {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
+  .date.red, .date.green, .amount.red, .amount.green, .address.red, .address.green, .code.red, .code.green {
+    font-weight: bold; }
+  .date.red, .amount.red, .address.red, .code.red {
+    color: #a80000; }
+  .date.green, .amount.green, .address.green, .code.green {
+    color: #00a800; }
 
 .address, .code {
   font-weight: bold;
@@ -6194,61 +6200,69 @@ body {
 .vertical-table label {
   text-align: right; }
 
-/* ---------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------- */
-.input-group.ig-coin {
-  width: 100%; }
-
-.input-group.ig-coin .input-group-addon {
-  width: 25%; }
-
-.btn-custom {
-  background-image: -webkit-linear-gradient(top, #f4f5f6 0%, #e3e6e8 100%);
-  background-image: linear-gradient(to bottom, #f4f5f6 0%, #e3e6e8 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF4F5F6', endColorstr='#FFE3E6E8', GradientType=0);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.69);
-  box-shadow: #fcfcfd 0 1px 0 inset;
-  -webkit-font-smoothing: antialiased;
-  border-color: #c8ccd0; }
-  .btn-custom:hover {
-    background-image: -webkit-linear-gradient(top, #f7f7f8 0%, #e6e8ea 100%);
-    background-image: linear-gradient(to bottom, #f7f7f8 0%, #e6e8ea 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF7F7F8', endColorstr='#FFE6E8EA', GradientType=0);
-    border-color: #d6d9dc; }
+.dim {
+  color: #999999; }
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
-.panel-default > .panel-heading {
-  background-image: -webkit-linear-gradient(top, #f4f5f6 0%, #e3e6e8 100%);
-  background-image: linear-gradient(to bottom, #f4f5f6 0%, #e3e6e8 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF4F5F6', endColorstr='#FFE3E6E8', GradientType=0);
-  border-top: 1px solid #fff;
-  padding: 5px 15px; }
+.ftnox-page-header {
+  border-bottom: 1px solid #ddd;
+  background: #2b333b;
+  padding-top: 40px;
+  box-shadow: #171a1c 0 0 3px inset;
+  margin: 0 0 20px; }
+  .ftnox-page-header h2 {
+    color: #babfc4;
+    line-height: 1em;
+    padding: 10px 0 15px;
+    margin: 0; }
 
-.panel-default > .panel-heading > .panel-title {
-  font-size: 14px;
-  line-height: 20px; }
+/* ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------- */
+.ftnox-tab-container {
+  margin-top: -70px; }
 
-.panel-default > .panel-dark {
-  padding: 8px 0;
-  background: #364049;
-  background: #cfd9e2;
-  border-top: 1px solid #b3bfcc;
-  border-bottom: 1px solid #b3bfcc;
-  box-shadow: #e0e6eb 0 1px 0 inset; }
-  .panel-default > .panel-dark p {
-    margin: 0;
-    line-height: 24px; }
-    .panel-default > .panel-dark p.key {
-      color: #6e7881;
-      font: bold 11px/20px sans-serif; }
-    .panel-default > .panel-dark p.value {
+.ftnox-tabs.nav-pills {
+  margin-top: 49px; }
+  .ftnox-tabs.nav-pills > li {
+    margin: 0 0 2px;
+    border-left: 4px solid #ecedef; }
+    .ftnox-tabs.nav-pills > li > a {
+      border-top: 1px solid #ecedef;
+      border-bottom: 1px solid #ecedef;
+      margin-right: -31px; }
+    .ftnox-tabs.nav-pills > li:hover {
+      border-color: #d0d4d7; }
+      .ftnox-tabs.nav-pills > li:hover > a {
+        border-color: #d6d9dc;
+        background: #f1f2f3; }
+  .ftnox-tabs.nav-pills > li.active {
+    border-left-color: #166ec5; }
+    .ftnox-tabs.nav-pills > li.active > a {
+      background: #fff;
+      color: #333333;
+      z-index: 2;
       font-weight: bold;
-      color: #d0d4d7;
-      color: #333333; }
+      border-color: #ddd; }
+      .ftnox-tabs.nav-pills > li.active > a:hover {
+        background: #fff;
+        color: #333333;
+        cursor: default; }
+
+.ftnox-tab-content .panel {
+  min-height: 360px; }
+  .ftnox-tab-content .panel .panel-heading {
+    height: 48px; }
+    .ftnox-tab-content .panel .panel-heading h4.panel-title {
+      float: left;
+      font-size: 1.33em;
+      line-height: 38px;
+      font-weight: normal; }
+    .ftnox-tab-content .panel .panel-heading .pagination {
+      float: right;
+      margin: 1px 0; }
+      .ftnox-tab-content .panel .panel-heading .pagination > .active > a {
+        background: #166ec5; }
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
@@ -6278,17 +6292,67 @@ body {
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
+.input-group.ig-coin {
+  width: 100%; }
+
+.input-group.ig-coin .input-group-addon {
+  width: 25%; }
+
+.btn-custom {
+  background-image: -webkit-linear-gradient(top, #f4f5f6 0%, #e3e6e8 100%);
+  background-image: linear-gradient(to bottom, #f4f5f6 0%, #e3e6e8 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF4F5F6', endColorstr='#FFE3E6E8', GradientType=0);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.69);
+  box-shadow: #fcfcfd 0 1px 0 inset;
+  -webkit-font-smoothing: antialiased;
+  border-color: #c8ccd0;
+  color: #333333; }
+  .btn-custom:hover {
+    background-image: -webkit-linear-gradient(top, #f7f7f8 0%, #e6e8ea 100%);
+    background-image: linear-gradient(to bottom, #f7f7f8 0%, #e6e8ea 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF7F7F8', endColorstr='#FFE6E8EA', GradientType=0);
+    border-color: #d6d9dc; }
+
+/* ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------- */
+.panel-default > .panel-heading {
+  background-image: -webkit-linear-gradient(top, #f4f5f6 0%, #e3e6e8 100%);
+  background-image: linear-gradient(to bottom, #f4f5f6 0%, #e3e6e8 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF4F5F6', endColorstr='#FFE3E6E8', GradientType=0);
+  border-top: 1px solid #fff;
+  padding: 5px 15px; }
+
+.panel-default > .panel-heading > .panel-title {
+  font-size: 14px;
+  line-height: 20px; }
+
+.panel-default > .panel-dark {
+  padding: 8px 0;
+  background: #cfd9e2;
+  border-top: 1px solid #b3bfcc;
+  border-bottom: 1px solid #b3bfcc;
+  box-shadow: #e0e6eb 0 1px 0 inset; }
+  .panel-default > .panel-dark p {
+    margin: 0;
+    line-height: 24px; }
+    .panel-default > .panel-dark p.key {
+      color: #6e7881;
+      font: bold 11px/20px sans-serif; }
+    .panel-default > .panel-dark p.value {
+      font-weight: bold;
+      color: #d0d4d7;
+      color: #333333; }
+
+/* ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------- */
 table.table th {
   font-size: 13px; }
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
-.market-tabs {
-  border-bottom: 1px solid #ddd;
-  background: #2b333b;
-  padding-top: 30px;
-  box-shadow: #171a1c 0 0 3px inset; }
-
 .market-tab {
   display: block;
   float: left;
@@ -6331,8 +6395,6 @@ table.table th {
 #market .orderbook-chart {
   padding: 0 15px 15px;
   font-size: 13px; }
-#market .tab-content {
-  padding-top: 20px; }
 #market .row {
   padding: 10px 0 0; }
 #market .enter-order .form-group > label {
@@ -6346,3 +6408,24 @@ table.deposits-list .confirmed, table.withdrawals-list .confirmed {
   color: #ACBDA5; }
 table.deposits-list .unconfirmed, table.withdrawals-list .unconfirmed {
   color: #C9C5B0; }
+
+.account-balance h4 {
+  margin: 8px 0; }
+.account-balance .btn {
+  margin-left: 15px; }
+
+/* ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------- */
+#footer {
+  clear: both;
+  border-top: 1px solid #dddddd;
+  margin-top: 20px; }
+  #footer .container {
+    padding: 20px 0; }
+    #footer .container h5 {
+      color: #666666; }
+    #footer .container ul {
+      list-style: none;
+      padding: 0; }
+      #footer .container ul li {
+        line-height: 1.8em; }

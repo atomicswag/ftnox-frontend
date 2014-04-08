@@ -1,38 +1,79 @@
-<div class="container">
-
-<div class="account">
-    <h2>Account</h2>
-    <hr />
-
-    <h4>Account Balance</h4>
-    {{render 'account_balance' balance}}
-    <br />
-
-    {{!
-    <h4>Security</h4>
-    <div>
+<div class="ftnox-page-header">
+    <div class="container">
+        <h2>Account</h2>
     </div>
-    <br />
-    }}
+</div>
 
-    <h4>API Credentials</h4>
-    <p>
-        Your API Key: <span class="code js-api-key">{{apiKey}}</span>
-    </p>
-    <p>
-        Example request:
-    </p>
-    <pre>
+<div class="container">
+<div class="row ftnox-tab-container">
+
+<ul class="ftnox-tabs nav nav-pills nav-stacked col-xs-3">
+  <li class="active"><a href="#balance" data-toggle="tab">Balance</a></li>
+  <li><a href="#history" data-toggle="tab">Transactions</a></li>
+  <li><a href="#security" data-toggle="tab">Security</a></li>
+  <li><a href="#api" data-toggle="tab">API Credentials</a></li>
+</ul>
+
+<div class="ftnox-tab-content tab-content col-xs-9">
+    <div class="tab-pane active panel panel-default" id="balance">
+        <div class="panel-heading">
+            <h4 class="panel-title">Balance</h4>
+        </div>
+        <div class="panel-body">
+            {{render 'account_balance' balance}}
+        </div>
+    </div>
+
+    <div class="tab-pane panel panel-default" id="history">
+        <div class="panel-heading">
+            <h4 class="panel-title">Transactions</h4>
+            <ul class="pagination">
+                <li class="disabled"><a href="#">&larr;</a></li>
+                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">&rarr;</a></li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            {{render 'account_transactions'}}
+
+        </div>
+    </div>
+
+    <div class="tab-pane panel panel-default" id="security">
+        <div class="panel-heading">
+            <h4 class="panel-title">Security</h4>
+        </div>
+        <div class="panel-body">
+            <p>Stuff goes here.</p>
+        </div>
+    </div>
+
+    <div class="tab-pane panel panel-default" id="api">
+        <div class="panel-heading">
+            <h4 class="panel-title">API Credentials</h4>
+        </div>
+        <div class="panel-body">
+            <p>Your API Key: <span class="code js-api-key">{{apiKey}}</span></p>
+
+            <p>Example request:</p>
+
+            <pre>
 POST https://ftnox.com/account/balance
 Content-Type: application/x-www-form-urlencoded
 
-api_key=<span class="js-api-key">{{apiKey}}</span>
-</pre>
-    <br style="clear: both;"/>
-    <p>
-        Please visit the <a href="/#api">API docs</a> for more information.
-    </p>
-    
+api_key=<span class="js-api-key">{{apiKey}}</span></pre>
+
+
+            <hr />
+            <h5>More Information</h5>
+            <p>Please visit the <a href="/#api">API docs</a> for more information.</p>
+        </div>
+    </div>
 </div>
 
+</div><!--.row-->
 </div><!--.container-->

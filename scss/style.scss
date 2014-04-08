@@ -10,12 +10,22 @@
 body {
     background: $bg-body;
 }
+
 *:focus {
     outline: none !important;
 }
 
 .date, .amount, .address, .code {
     font-family: $font-family-monospace;
+    &.red, &.green {
+        font-weight: bold;
+    }
+    &.red {
+        color: hsl(0,100%,33%);
+    }
+    &.green {
+        color: hsl(120,100%,33%);
+    }
 }
 
 .address, .code {
@@ -28,62 +38,87 @@ body {
         text-align: right;
     }
 }
-
-/* ---------------------------------------------------------------------- */
-// FORMS
-/* ---------------------------------------------------------------------- */
-
-.input-group.ig-coin {
-    width: 100%;
-}
-.input-group.ig-coin .input-group-addon {
-    width: 25%;
+.dim {
+    color: $light;
 }
 
-.btn-custom {
-    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.69);
-    box-shadow: hsl($hue,$sat,99%) 0 1px 0 inset;
-    -webkit-font-smoothing: antialiased;
-    border-color: hsl($hue,$sat,80%);
+/* ---------------------------------------------------------------------- */
+// ftnox-page-header
+/* ---------------------------------------------------------------------- */
 
-    &:hover {
-        @include gradient-vertical(hsl($hue,$sat,97%), hsl($hue,$sat,91%));
-        border-color: hsl($hue,$sat,85%);
+.ftnox-page-header {
+    border-bottom: 1px solid #ddd;
+    background: darken($bg-dark, 5%);
+    padding-top: 40px;
+    box-shadow: hsl($hue,$sat,10%) 0 0 3px inset;
+    margin: 0 0 20px;
+    h2  {
+        color: hsl($hue,$sat,75%);
+        line-height: 1em;
+        padding: 10px 0 15px;
+        margin: 0;
     }
 }
 
 /* ---------------------------------------------------------------------- */
-// PANEL
+// ftnox-tabs
 /* ---------------------------------------------------------------------- */
 
-.panel-default > .panel-heading {
-    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
-    border-top: 1px solid #fff;
-    padding: 5px 15px;
+.ftnox-tab-container {
+    margin-top: -48px - 22px;
 }
-.panel-default > .panel-heading > .panel-title {
-    font-size: 14px;
-    line-height: 20px;
-}
-.panel-default > .panel-dark {
-    padding: 8px 0;
-    background: $bg-dark;
-    background: hsl($hue,25%,85%);
-    border-top: 1px solid hsl($hue,20%,75%);
-    border-bottom: 1px solid hsl($hue,20%,75%);
-    box-shadow: hsl($hue,20%,90%) 0 1px 0 inset;
-    p {
-        margin: 0;
-        line-height: 24px;
-        &.key {
-            color: hsl($hue,$sat,47%);
-            font: bold 11px/20px sans-serif;
+.ftnox-tabs.nav-pills {
+    margin-top: 49px;
+    > li {
+        margin: 0 0 2px;
+        border-left: 4px solid $bg-body;
+        > a {
+            border-top: 1px solid $bg-body;
+            border-bottom: 1px solid $bg-body;
+            margin-right: -31px;
         }
-        &.value {
-            font-weight: bold;
-            color: $navbar-default-link-color;
+        &:hover {
+            border-color: darken($bg-light,15%);
+            > a {
+                border-color: darken($bg-body,8%);
+                background: lighten($bg-body,2%);
+            }
+        }
+
+    }
+    > li.active {
+        border-left-color: $link-color;
+        > a {
+            background: #fff;
             color: $txt;
+            z-index: 2;
+            font-weight: bold;
+            border-color: #ddd;
+            &:hover {
+                background: #fff;
+                color: $txt;
+                cursor: default;
+            }
+        }
+    }
+
+}
+.ftnox-tab-content .panel {
+    min-height: 360px;
+    .panel-heading {
+        height: 48px;
+        h4.panel-title {
+            float: left;
+            font-size: 1.33em;
+            line-height: 38px;
+            font-weight: normal;
+        }
+        .pagination {
+            float: right;
+            margin: 1px 0;
+            > .active > a {
+                background: $link-color;
+            }
         }
     }
 }
@@ -124,6 +159,64 @@ body {
     }
 }
 
+/* ---------------------------------------------------------------------- */
+// FORMS
+/* ---------------------------------------------------------------------- */
+
+.input-group.ig-coin {
+    width: 100%;
+}
+.input-group.ig-coin .input-group-addon {
+    width: 25%;
+}
+
+.btn-custom {
+    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.69);
+    box-shadow: hsl($hue,$sat,99%) 0 1px 0 inset;
+    -webkit-font-smoothing: antialiased;
+    border-color: hsl($hue,$sat,80%);
+    color: $txt;
+
+    &:hover {
+        @include gradient-vertical(hsl($hue,$sat,97%), hsl($hue,$sat,91%));
+        border-color: hsl($hue,$sat,85%);
+    }
+}
+
+/* ---------------------------------------------------------------------- */
+// PANEL
+/* ---------------------------------------------------------------------- */
+
+.panel-default > .panel-heading {
+    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
+    border-top: 1px solid #fff;
+    padding: 5px 15px;
+}
+.panel-default > .panel-heading > .panel-title {
+    font-size: 14px;
+    line-height: 20px;
+}
+.panel-default > .panel-dark {
+    padding: 8px 0;
+    background: hsl($hue,25%,85%);
+    border-top: 1px solid hsl($hue,20%,75%);
+    border-bottom: 1px solid hsl($hue,20%,75%);
+    box-shadow: hsl($hue,20%,90%) 0 1px 0 inset;
+    p {
+        margin: 0;
+        line-height: 24px;
+        &.key {
+            color: hsl($hue,$sat,47%);
+            font: bold 11px/20px sans-serif;
+        }
+        &.value {
+            font-weight: bold;
+            color: $navbar-default-link-color;
+            color: $txt;
+        }
+    }
+}
 
 /* ---------------------------------------------------------------------- */
 // TABLE
@@ -132,16 +225,10 @@ body {
 table.table th {
     font-size: 13px;
 }
+
 /* ---------------------------------------------------------------------- */
 // MARKET TABS
 /* ---------------------------------------------------------------------- */
-
-.market-tabs {
-    border-bottom: 1px solid #ddd;
-    background: darken($bg-dark, 5%);
-    padding-top: 30px;
-    box-shadow: hsl($hue,$sat,10%) 0 0 3px inset;
-}
 
 .market-tab {
     display: block;
@@ -186,8 +273,8 @@ table.table th {
             }
         }
     }
-
 }
+
 /* ---------------------------------------------------------------------- */
 // EXCHANGE
 /* ---------------------------------------------------------------------- */
@@ -196,9 +283,6 @@ table.table th {
     .orderbook-chart {
         padding: 0 15px 15px;
         font-size: 13px;
-    }
-    .tab-content {
-        padding-top: 20px;
     }
     .row {
         padding: 10px 0 0;
@@ -218,6 +302,7 @@ table.table th {
         }
     }
 }
+
 /* ---------------------------------------------------------------------- */
 // ACCOUNT
 /* ---------------------------------------------------------------------- */
@@ -231,3 +316,34 @@ table.deposits-list, table.withdrawals-list {
     }
 }
 
+.account-balance {
+    h4 {
+        margin: 8px 0;
+    }
+    .btn {
+        margin-left: 15px;
+    }
+}
+
+/* ---------------------------------------------------------------------- */
+// FOOTER
+/* ---------------------------------------------------------------------- */
+
+#footer {
+    clear: both;
+    border-top: 1px solid $bc;
+    margin-top: 20px;
+    .container {
+        padding: 20px 0;
+        h5 {
+            color: $dim;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            li {
+                line-height: 1.8em;
+            }
+        }
+    }
+}

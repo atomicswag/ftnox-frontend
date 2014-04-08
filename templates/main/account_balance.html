@@ -1,24 +1,19 @@
-<table class="js-account-balance table table-striped table-condensed bordered">
-<thead><tr>
-    <th>Coin</th>
-    <th>Amount</th>
-    <th></th>
-</tr></thead>
+<div class="js-account-balance account-balance">
 {{#each balance}}
-<tr data-coin="{{@key}}">
-    <td class="coin">{{@key}}</td>
-    <td class="amount">{{divide8 this}}</td>
-    <td class="">
-        <div name="coin-settings" class="dropdown dropdown-menu-right" style="float: right; position: relative;">
-            <a href="#" class="dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" data-order-id="{{id}}">
-                <span class="glyphicon glyphicon-cog"></span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="#" class="js-deposit">Deposit {{@key}}</a></li>
-                <li><a href="#" class="js-withdraw">Withdraw {{@key}}</a></li>
-            </ul>
+    <div class="well clearfix" data-coin="{{@key}}">
+        <div class="row">
+        <div class="col-xs-5">
+            <h4><span class="amount">{{divide8 this}}</span> {{@key}}</h4>
         </div>
-    </td>
-</tr>
+            <a href="#" class="btn btn-custom js-withdraw col-xs-3">
+                <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                Withdraw <strong>{{@key}}</strong>
+            </a>
+            <a href="#" class="btn btn-custom js-deposit col-xs-3">
+                <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                Deposit <strong>{{@key}}</strong>
+            </a>
+        </div>
+    </div>
 {{/each}}
-</table>
+</div>
