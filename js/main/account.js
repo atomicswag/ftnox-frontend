@@ -53,20 +53,18 @@ BalanceView.render = function() {
 
 BalanceView.bindEvents = function() {
     var view = this;
-    view.el.on("click", "tr[data-coin] .js-deposit", function(e) {
+    view.el.on("click", "[data-coin] .js-deposit", function(e) {
         // show modal for depositing
         e.preventDefault();
-        var row = $(this).closest("tr");
-        var coin = row.data("coin");
+        var coin = $(this).closest("[data-coin]").data("coin");
         var modal = DepositView(coin);
         modal.showModal();
     });
 
-    view.el.on("click", "tr[data-coin] .js-withdraw", function(e) {
+    view.el.on("click", "[data-coin] .js-withdraw", function(e) {
         // show modal for withdrawing
         e.preventDefault();
-        var row = $(this).closest("tr");
-        var coin = row.data("coin");
+        var coin = $(this).closest("[data-coin]").data("coin");
         var modal = WithdrawView(coin);
         modal.showModal();
     });
