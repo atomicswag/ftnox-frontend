@@ -6203,6 +6203,13 @@ body {
 .dim {
   color: #999999; }
 
+.todo {
+  color: red;
+  text-transform: uppercase;
+  font-weight: bold !important;
+  display: inline-block;
+  font: 14px/20px sans-serif; }
+
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
 .ftnox-page-header {
@@ -6389,6 +6396,82 @@ table.table th {
       color: #333333; }
       .market-tab.active span.small {
         color: #999999; }
+
+/* ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------- */
+#site-index {
+  margin-bottom: -20px; }
+  #site-index .section {
+    background: #fff;
+    border-top: 1px solid #dddddd;
+    padding: 3em 0;
+    position: relative;
+    z-index: 1; }
+    #site-index .section.section-horizontal h2 {
+      margin: 0; }
+    #site-index .section.section-top {
+      border-top: none;
+      background: #2b333b;
+      padding: 5em 0 6em;
+      box-shadow: #171a1c 0 0 3px inset; }
+      #site-index .section.section-top .container {
+        text-align: center;
+        position: relative; }
+        #site-index .section.section-top .container .glyphicon {
+          color: #323b43;
+          color: rgba(159, 191, 223, 0.05);
+          font-size: 600px;
+          position: absolute;
+          top: -180px;
+          left: 180px;
+          z-index: 0; }
+        #site-index .section.section-top .container .on-top {
+          position: relative;
+          z-index: 10; }
+        #site-index .section.section-top .container h1 {
+          font-weight: bold;
+          color: #63a6e9; }
+        #site-index .section.section-top .container p {
+          color: #9199a1;
+          font-size: 18px;
+          margin-bottom: 2em; }
+        #site-index .section.section-top .container .btn {
+          width: 200px; }
+    #site-index .section .section-header {
+      margin: 0 0 3em; }
+    #site-index .section .section-body h3 {
+      margin-top: 0;
+      font-weight: normal; }
+  #site-index h1, #site-index h2 {
+    font-weight: normal;
+    color: #3d668f;
+    text-transform: uppercase; }
+  #site-index h1 {
+    font-size: 36px;
+    text-align: center; }
+  #site-index h2 {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 15px; }
+  #site-index ul {
+    list-style: square;
+    padding-left: 1.5em; }
+  #site-index .col-xs-4 p {
+    padding-right: 1.5em; }
+  #site-index .input-group {
+    width: 100%; }
+  #site-index .portrait img {
+    margin: 0 0 20px; }
+  #site-index ul.horizontal-list {
+    list-style: none;
+    padding: 0; }
+    #site-index ul.horizontal-list li {
+      float: left;
+      border: 1px solid #dddddd;
+      padding: .5em 0.8em;
+      margin-right: 0.8em;
+      margin-bottom: 0;
+      text-transform: uppercase; }
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------- */
