@@ -6191,9 +6191,11 @@ button.close {
 body {
   background: #ecedef; }
 
+/*
 *:focus {
-  outline: none !important; }
-
+    outline: none !important;
+}
+*/
 .date, .amount, .address, .code {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
   .date.red, .date.green, .amount.red, .amount.green, .address.red, .address.green, .code.red, .code.green {

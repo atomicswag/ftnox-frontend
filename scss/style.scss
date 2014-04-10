@@ -11,9 +11,11 @@ body {
     background: $bg-body;
 }
 
+/* TODO consider
 *:focus {
     outline: none !important;
 }
+*/
 
 .date, .amount, .address, .code {
     font-family: $font-family-monospace;
