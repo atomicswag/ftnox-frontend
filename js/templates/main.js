@@ -64,28 +64,18 @@ templates['account_deposits_list.html'] = template({"1":function(depth0,helpers,
     + "</td>\n    <td class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.amount), {"name":"divide8","hash":{},"data":data})))
     + "</td>\n    ";
-  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.confirms), "==", 0, {"name":"ifCond","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data}));
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.status), "==", 0, {"name":"ifCond","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data}));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</tr>\n";
 },"3":function(depth0,helpers,partials,data) {
   return "\n    <td class=\"unconfirmed\">unconfirmed</td>\n    ";
   },"5":function(depth0,helpers,partials,data) {
-  var stack1, helper, helperMissing=helpers.helperMissing;
-  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.credited), "==", 1, {"name":"ifCond","hash":{},"fn":this.program(6, data),"inverse":this.program(8, data),"data":data}));
-  if(stack1 || stack1 === 0) { return stack1; }
-  else { return ''; }
-  },"6":function(depth0,helpers,partials,data) {
   return "\n    <td class=\"confirmed\">confirmed</td>\n    ";
-  },"8":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", escapeExpression=this.escapeExpression;
-  return "\n    <td class=\"confirming\">"
-    + escapeExpression(((helper = helpers.confirms || (depth0 && depth0.confirms)),(typeof helper === functionType ? helper.call(depth0, {"name":"confirms","hash":{},"data":data}) : helper)))
-    + "</td>\n    ";
-},"10":function(depth0,helpers,partials,data) {
+  },"7":function(depth0,helpers,partials,data) {
   return "\n<tr>\n    <td colspan=\"3\" style=\"text-align: center;\">You have no deposits</td>\n</tr>\n";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var stack1, buffer = "<table class=\"deposits-list table table-striped table-condensed bordered\">\n<thead><tr>\n    <th>Date</th>\n    <th>Amount</th>\n    <th>Confirmations</th>\n</tr></thead>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deposits), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(10, data),"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deposits), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(7, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</table>\n";
 },"useData":true});
@@ -363,7 +353,7 @@ templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) 
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n                        <li class=\"divider\"></li>\n                        <li><a href=\"/#logout\">Logout</a></li>\n                      </ul>\n                    </li>\n\n                ";
 },"4":function(depth0,helpers,partials,data) {
-  return "\n                            <li class=\"divider\"></li>\n                            <li name=\"treasury\"><a href=\"/treasury/\">Treasury</a></li>\n                        ";
+  return "\n                            <li class=\"divider\"></li>\n                            <li name=\"treasury\"><a href=\"/treasury/\">Admin</a></li>\n                        ";
   },"6":function(depth0,helpers,partials,data) {
   return "\n                    <li name=\"login\"><a href=\"/#login\">Login</a></li>\n                ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {

@@ -5,7 +5,7 @@ templates['treasury_credit_user.html'] = template({"compiler":[5,">= 2.0.0"],"ma
 },"useData":true});
 templates['treasury_dashboard.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Treasury</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n    <div class=\"js-store-privkey\">\n        "
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Admin</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n    <div class=\"js-store-privkey\">\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_store_privkey", {"name":"render","hash":{},"data":data})))
     + "\n    </div>\n    <div class=\"js-deposits-list\">\n    </div>\n    <div class=\"js-withdrawals-list\">\n    </div>\n    <div class=\"js-credit-user\">\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_credit_user", {"name":"render","hash":{},"data":data})))

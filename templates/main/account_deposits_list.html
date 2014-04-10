@@ -9,13 +9,11 @@
 <tr>
     <td class="date">{{formatDate time format="YYYY-MM-DD hh:mma"}}</td>
     <td class="amount">{{divide8 amount}}</td>
-    {{#ifCond confirms '==' 0}}
+    {{#ifCond status '==' 0}}
     <td class="unconfirmed">unconfirmed</td>
-    {{else}}{{#ifCond credited '==' 1}}
-    <td class="confirmed">confirmed</td>
     {{else}}
-    <td class="confirming">{{confirms}}</td>
-    {{/ifCond}}{{/ifCond}}
+    <td class="confirmed">confirmed</td>
+    {{/ifCond}}
 </tr>
 {{/each}}
 {{else}}
