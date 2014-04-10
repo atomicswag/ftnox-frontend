@@ -596,7 +596,7 @@ App.api = function(path, params, cb) {
             success:    onSuccess,
             error:      onFailure,
         });
-    }, 1000);
+    }, 100);
 }
 
 //////////// VIEW
