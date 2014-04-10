@@ -12,7 +12,7 @@
 <tbody>
     {{#if orders}}
     {{#each orders}}
-    <tr data-order-id="{{id}}">
+    <tr data-order-id="{{id}}" {{#if isNew}}class="info"{{/if}}>
         {{#ifCond type "==" "B"}}
         <td>Buy</td>
         {{else}}

@@ -72,6 +72,7 @@ function Market(data) {
     market.pendingOrders = [];
     market.pricelogs = [];
     market.canceledOrders = {};
+    market.seenOrders = {};
     return market;
 }
 
@@ -167,7 +168,18 @@ Market.updatePendingOrders = function(cb) {
         function(err, res) {
             if (err) { cb(err); return; }
             var orders = res.data;
-            orders = orders.filter(function(order) { return !(market.canceledOrders[order.id]); });
+            orders = orders.filter(function(order) { return !(market.canceledOrders[order.id]); }); // HACK
+            // HACK
+            for (var i=0; i<orders.length; i++) {
+                var order = orders[i];
+                if (!market.seenOrders[order.id]) {
+                    market.seenOrders[order.id] = true;
+                    if (market.seenOrdersSet == true) {
+                        order.isNew = true;
+                    }
+                }
+            }
+            market.seenOrdersSet = true;
             market.pendingOrders = orders;
             cb(null, orders);
         }
@@ -384,7 +396,8 @@ MarketView.updatePendingOrders = function() {
             app.alert("Network error while loading pending orders.");
             return;
         }
-        view.el.find(".js-pending-orders").empty().append($(tmpl.render("exchange_pending_orders", {orders:orders, market:view.market})));
+        view.el.find(".js-pending-orders").empty().append(
+            $(tmpl.render("exchange_pending_orders", {orders:orders, market:view.market})));
     });
 }
 

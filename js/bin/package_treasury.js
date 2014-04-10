@@ -18,7 +18,7 @@ var code = demodule(
         {name:"handlebars",     path:"node_modules/handlebars/dist/handlebars.js"},
     ],
     '('+main+')();',
-    {minify:false}
+    {minify:true}
 );
 
 console.log(code);

@@ -311,8 +311,11 @@ templates['exchange_pending_orders.html'] = template({"1":function(depth0,helper
 },"2":function(depth0,helpers,partials,data,depth1) {
   var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "\n    <tr data-order-id=\""
     + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
-    + "\">\n        ";
-  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.type), "==", "B", {"name":"ifCond","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data}));
+    + "\" ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isNew), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n        ";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.type), "==", "B", {"name":"ifCond","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data}));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n        <td class=\"date\">"
     + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate) || helperMissing,helper.call(depth0, (depth0 && depth0.time), {"name":"formatDate","hash":{
@@ -332,14 +335,16 @@ templates['exchange_pending_orders.html'] = template({"1":function(depth0,helper
     + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
     + "\" type=\"submit\">Cancel</a></td>\n    </tr>\n    ";
 },"3":function(depth0,helpers,partials,data) {
-  return "\n        <td>Buy</td>\n        ";
+  return "class=\"info\"";
   },"5":function(depth0,helpers,partials,data) {
-  return "\n        <td>Sell</td>\n        ";
+  return "\n        <td>Buy</td>\n        ";
   },"7":function(depth0,helpers,partials,data) {
+  return "\n        <td>Sell</td>\n        ";
+  },"9":function(depth0,helpers,partials,data) {
   return "\n    <tr>\n        <td colspan=\"6\" style=\"text-align: center;\">You have no open orders</td>\n    </tr>\n    ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var stack1, buffer = "<table class=\"table table-striped table-condensed head\">\n<thead>\n    <tr>\n        <th>Type</th>\n        <th>Date</th>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount</th>\n        <th>Filled</th>\n        <th></th>\n    </tr>\n</thead>\n<tbody>\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(7, data),"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(9, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</tbody>\n</table>\n";
 },"useData":true});
