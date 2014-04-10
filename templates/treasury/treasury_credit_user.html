@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">Credit User</h4>
+    </div>
+    <div class="panel-body">
+        <form class="form-credit-user form-horizontal" action="mpk" method="POST">
+            <input type="hidden" name="coin" value="USD"/> {{! HACK }}
+            <div class="form-group">
+                <label for="email" class="col-xs-2 control-label">User Email</label>
+                <div class="col-xs-8">
+                    <input type="text" name="email" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="amountFloat" class="col-xs-2 control-label">Amount</label>
+                <div class="col-xs-8">
+                    <input type="text" name="amountFloat" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group"><div class="col-xs-8 col-xs-offset-2">
+                <button class="btn btn-custom col-xs-12" type="submit">Credit USD</button>
+            </div></div>
+        </form>
+    </div>
+</div>

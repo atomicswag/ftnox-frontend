@@ -43,7 +43,6 @@ function treasuryHandler(path) {
 
     // Bind events
     el.findAndSelf("form.form-store-privkey").submit(function(e) {
-        console.log("Logging in");
         e.preventDefault();
         var pubKey  = el.findAndSelf("[name='pubKey']").val();
         var privKey = el.findAndSelf("[name='privKey']").val();
@@ -52,6 +51,20 @@ function treasuryHandler(path) {
             function(err, res) {
                 if (err) { app.alert(err.message); return; }
                 alert("OK");
+            }
+        );
+        return false;
+    });
+    el.findAndSelf("form.form-credit-user").submit(function(e) {
+        e.preventDefault();
+        var email = el.findAndSelf("[name='email']").val();
+        var amountFloat = el.findAndSelf("[name='amountFloat']").val();
+        if (amountFloat > 1000000) { alert("TODO: handle accidental large credits"); } // HACK
+        app.api("/treasury/credit_user",
+            {'email':email, 'amountFloat':amountFloat, 'coin':'USD'}, // HACK
+            function(err, res) {
+                if (err) { app.alert(err.message); return; }
+                alert("User successfully credited");
             }
         );
         return false;

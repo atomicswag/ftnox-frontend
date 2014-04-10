@@ -1125,13 +1125,17 @@ module.exports = {
 
 // CODE main/coin
 var coins = {};
-coins["DOGE"] = {
-    code:   "DOGE",
-    name:   "Dogecoin",
+coins["LTC"] = {
+    code:   "LTC",
+    name:   "Litecoin",
 };
 coins["BTC"] = {
     code:   "BTC",
     name:   "Bitcoin",
+};
+coins["USD"] = {
+    code:   "USD",
+    name:   "US Dollar",
 };
 
 module.exports = coins;
@@ -2253,15 +2257,22 @@ templates['account_balance.html'] = template({"1":function(depth0,helpers,partia
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</div>\n";
 },"useData":true});
-templates['account_deposit.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+templates['account_deposit.html'] = template({"1":function(depth0,helpers,partials,data) {
+  return "\n            <div class=\"modal-body\">\n                TODO\n            </div>\n            ";
+},"3":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
-  return "<div class=\"modal fade\">\n    <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>\n                <h4 class=\"modal-title\">Deposit "
-    + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
-    + "</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div class=\"modal-alerts\"></div>\n                <p>Deposit address for "
+  return "\n            <div class=\"modal-body\">\n                <div class=\"modal-alerts\"></div>\n                <p>Deposit address for "
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
     + ": <span class=\"js-deposit-address address\">"
     + escapeExpression(((helper = helpers.depositAddress || (depth0 && depth0.depositAddress)),(typeof helper === functionType ? helper.call(depth0, {"name":"depositAddress","hash":{},"data":data}) : helper)))
-    + "</span></p>\n                <div class=\"alert alert-warning\">\n                    <strong>Warning!</strong>\n                    Do NOT deposit coins directly from your miner.\n                </div>\n                <hr />\n                <h4>All your deposits:</h4>\n                <div class=\"js-deposits\">\n                </div>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-custom\" data-dismiss=\"modal\">Close</button>\n            </div>\n        </div>\n    </div>\n</div>\n";
+    + "</span></p>\n                <div class=\"alert alert-warning\">\n                    <strong>Warning!</strong>\n                    Do NOT deposit coins directly from your miner.\n                </div>\n                <hr />\n                <h4>All your deposits:</h4>\n                <div class=\"js-deposits\">\n                </div>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-custom\" data-dismiss=\"modal\">Close</button>\n            </div>\n            ";
+},"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div class=\"modal fade\">\n    <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>\n                <h4 class=\"modal-title\">Deposit "
+    + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
+    + "</h4>\n            </div>\n            ";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.coin), "==", "USD", {"name":"ifCond","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data}));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer + "\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
 templates['account_deposits_list.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n";
@@ -2304,11 +2315,11 @@ templates['account_deposits_list.html'] = template({"1":function(depth0,helpers,
 templates['account_transactions.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   return "<table class=\"table table-striped\">\n    <thead>\n        <tr>\n            <th>Date</th>\n            <th>Transaction</th>\n            <th></th>\n            <th>Amount</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td class=\"date\">04/07/2014</td>\n            <td class=\"comment\">You sold DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-time\"></span></td>\n            <td class=\"amount red\">-974.32 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/07/2014</td>\n            <td class=\"comment\">You sold DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-time\"></span></td>\n            <td class=\"amount red\">-2000.0 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/07/2014</td>\n            <td class=\"comment\">You sold DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-time\"></span></td>\n            <td class=\"amount red\">-2000.0 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/02/2014</td>\n            <td class=\"comment\">You purchased DOGE</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+31.337 DOGE</td>\n        </tr>\n        <tr>\n            <td class=\"date\">04/01/2014</td>\n            <td class=\"comment\">You received BTC from an external account</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">03/31/2014</td>\n            <td class=\"comment\">You sold LTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount red\">-43.3432 LTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">03/17/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+10.74331 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">03/03/2014</td>\n            <td class=\"comment\">You received LTC from an external account</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+373.40 LTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/25/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/21/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/18/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/12/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">02/04/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/30/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/23/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/14/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n        <tr>\n            <td class=\"date\">01/02/2014</td>\n            <td class=\"comment\">You purchased BTC</td>\n            <td class=\"status\"><span class=\"glyphicon glyphicon-ok\"></span></td>\n            <td class=\"amount green\">+1.0 BTC</td>\n        </tr>\n    </tbody>\n</table>\n";
   },"useData":true});
-templates['account_withdraw.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+templates['account_withdraw.html'] = template({"1":function(depth0,helpers,partials,data) {
+  return "\n            <div class=\"modal-body\">\n                TODO\n            </div>\n            ";
+},"3":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
-  return "<div class=\"modal fade\">\n    <div class=\"modal-dialog\" style=\"width: 700px;\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>\n                <h4 class=\"modal-title\">Withdraw "
-    + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
-    + "</h4>\n            </div>\n            <form class=\"form-withdraw form-horizontal\">\n                <input name=\"coin\" type=\"hidden\" value=\""
+  return "\n            <form class=\"form-withdraw form-horizontal\">\n                <input name=\"coin\" type=\"hidden\" value=\""
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
     + "\"/>\n                <div class=\"modal-body\">\n                    <div class=\"modal-alerts\"></div>\n                    <div class=\"form-group\">\n                        <label for=\"\" class=\"col-xs-3 control-label\">Balance:</label>\n                        <div class=\"col-xs-8\">\n                            <span class=\"js-amount amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.amount), {"name":"divide8","hash":{},"data":data})))
@@ -2318,7 +2329,14 @@ templates['account_withdraw.html'] = template({"compiler":[5,">= 2.0.0"],"main":
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
     + "</small></span>\n                            </div>\n                        </div>\n                    </div>\n                    <hr />\n                    <div class=\"js-my-withdrawals\">\n                        <h4>"
     + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
-    + " withdrawals:</h4>\n                        <div class=\"js-withdrawals\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"modal-footer\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n                    <button class=\"btn btn-custom\" type=\"submit\">Withdraw</button>\n                </div>\n            </form>\n        </div>\n    </div>\n</div>\n";
+    + " withdrawals:</h4>\n                        <div class=\"js-withdrawals\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"modal-footer\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n                    <button class=\"btn btn-custom\" type=\"submit\">Withdraw</button>\n                </div>\n            </form>\n            ";
+},"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div class=\"modal fade\">\n    <div class=\"modal-dialog\" style=\"width: 700px;\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>\n                <h4 class=\"modal-title\">Withdraw "
+    + escapeExpression(((helper = helpers.coin || (depth0 && depth0.coin)),(typeof helper === functionType ? helper.call(depth0, {"name":"coin","hash":{},"data":data}) : helper)))
+    + "</h4>\n            </div>\n            ";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing,helper.call(depth0, (depth0 && depth0.coin), "==", "USD", {"name":"ifCond","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data}));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer + "\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
 templates['account_withdrawals_list.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n";
@@ -2630,11 +2648,16 @@ templates['totp_confirm.html'] = template({"compiler":[5,">= 2.0.0"],"main":func
 // CODE templates/treasury
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['treasury_credit_user.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+  return "<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h4 class=\"panel-title\">Credit User</h4>\n    </div>\n    <div class=\"panel-body\">\n        <form class=\"form-credit-user form-horizontal\" action=\"mpk\" method=\"POST\">\n            <input type=\"hidden\" name=\"coin\" value=\"USD\"/> \n            <div class=\"form-group\">\n                <label for=\"email\" class=\"col-xs-2 control-label\">User Email</label>\n                <div class=\"col-xs-8\">\n                    <input type=\"text\" name=\"email\" class=\"form-control\"/>\n                </div>\n            </div>\n            <div class=\"form-group\">\n                <label for=\"amountFloat\" class=\"col-xs-2 control-label\">Amount</label>\n                <div class=\"col-xs-8\">\n                    <input type=\"text\" name=\"amountFloat\" class=\"form-control\"/>\n                </div>\n            </div>\n            <div class=\"form-group\"><div class=\"col-xs-8 col-xs-offset-2\">\n                <button class=\"btn btn-custom col-xs-12\" type=\"submit\">Credit USD</button>\n            </div></div>\n        </form>\n    </div>\n</div>\n";
+},"useData":true});
 templates['treasury_dashboard.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Treasury</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n    <div class=\"js-store-privkey\">\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_store_privkey", {"name":"render","hash":{},"data":data})))
-    + "\n    </div>\n    <div class=\"js-deposits-list\">\n    </div>\n    <div class=\"js-withdrawals-list\">\n    </div>\n</container>\n";
+    + "\n    </div>\n    <div class=\"js-deposits-list\">\n    </div>\n    <div class=\"js-withdrawals-list\">\n    </div>\n    <div class=\"js-credit-user\">\n        "
+    + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_credit_user", {"name":"render","hash":{},"data":data})))
+    + "\n    </div>\n</div>\n";
 },"useData":true});
 templates['treasury_deposits_list.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
@@ -2760,7 +2783,6 @@ function treasuryHandler(path) {
 
     // Bind events
     el.findAndSelf("form.form-store-privkey").submit(function(e) {
-        console.log("Logging in");
         e.preventDefault();
         var pubKey  = el.findAndSelf("[name='pubKey']").val();
         var privKey = el.findAndSelf("[name='privKey']").val();
@@ -2769,6 +2791,20 @@ function treasuryHandler(path) {
             function(err, res) {
                 if (err) { app.alert(err.message); return; }
                 alert("OK");
+            }
+        );
+        return false;
+    });
+    el.findAndSelf("form.form-credit-user").submit(function(e) {
+        e.preventDefault();
+        var email = el.findAndSelf("[name='email']").val();
+        var amountFloat = el.findAndSelf("[name='amountFloat']").val();
+        if (amountFloat > 1000000) { alert("TODO: handle accidental large credits"); } // HACK
+        app.api("/treasury/credit_user",
+            {'email':email, 'amountFloat':amountFloat, 'coin':'USD'}, // HACK
+            function(err, res) {
+                if (err) { app.alert(err.message); return; }
+                alert("User successfully credited");
             }
         );
         return false;

@@ -1,10 +1,15 @@
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['treasury_credit_user.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
+  return "<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h4 class=\"panel-title\">Credit User</h4>\n    </div>\n    <div class=\"panel-body\">\n        <form class=\"form-credit-user form-horizontal\" action=\"mpk\" method=\"POST\">\n            <input type=\"hidden\" name=\"coin\" value=\"USD\"/> \n            <div class=\"form-group\">\n                <label for=\"email\" class=\"col-xs-2 control-label\">User Email</label>\n                <div class=\"col-xs-8\">\n                    <input type=\"text\" name=\"email\" class=\"form-control\"/>\n                </div>\n            </div>\n            <div class=\"form-group\">\n                <label for=\"amountFloat\" class=\"col-xs-2 control-label\">Amount</label>\n                <div class=\"col-xs-8\">\n                    <input type=\"text\" name=\"amountFloat\" class=\"form-control\"/>\n                </div>\n            </div>\n            <div class=\"form-group\"><div class=\"col-xs-8 col-xs-offset-2\">\n                <button class=\"btn btn-custom col-xs-12\" type=\"submit\">Credit USD</button>\n            </div></div>\n        </form>\n    </div>\n</div>\n";
+},"useData":true});
 templates['treasury_dashboard.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Treasury</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n    <div class=\"js-store-privkey\">\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_store_privkey", {"name":"render","hash":{},"data":data})))
-    + "\n    </div>\n    <div class=\"js-deposits-list\">\n    </div>\n    <div class=\"js-withdrawals-list\">\n    </div>\n</container>\n";
+    + "\n    </div>\n    <div class=\"js-deposits-list\">\n    </div>\n    <div class=\"js-withdrawals-list\">\n    </div>\n    <div class=\"js-credit-user\">\n        "
+    + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "treasury_credit_user", {"name":"render","hash":{},"data":data})))
+    + "\n    </div>\n</div>\n";
 },"useData":true});
 templates['treasury_deposits_list.html'] = template({"1":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";

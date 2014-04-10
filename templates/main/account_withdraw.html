@@ -5,6 +5,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Withdraw {{coin}}</h4>
             </div>
+            {{#ifCond coin "==" "USD"}}{{! HACK }}
+            <div class="modal-body">
+                TODO
+            </div>
+            {{else}}
             <form class="form-withdraw form-horizontal">
                 <input name="coin" type="hidden" value="{{coin}}"/>
                 <div class="modal-body">
@@ -42,6 +47,7 @@
                     <button class="btn btn-custom" type="submit">Withdraw</button>
                 </div>
             </form>
+            {{/ifCond}}
         </div>
     </div>
 </div>
