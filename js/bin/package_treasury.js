@@ -14,8 +14,8 @@ var code = demodule(
         {name:"templates/main", path:"js/templates/main.js"},
         {name:"templates/treasury", path:"js/templates/treasury.js"},
         {name:"treasury",       path:"js/treasury"},
-        {name:"sugar",          path:"js/node_modules/sugar/release/sugar-full.development.js"},
-        {name:"handlebars",     path:"js/node_modules/handlebars/dist/handlebars.js"},
+        {name:"sugar",          path:"node_modules/sugar/release/sugar-full.development.js"},
+        {name:"handlebars",     path:"node_modules/handlebars/dist/handlebars.js"},
     ],
     '('+main+')();',
     {minify:false}

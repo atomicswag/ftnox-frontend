@@ -182,11 +182,17 @@ App.api = function(path, params, cb) {
         console.log("API error:", err);
         if (cb) { cb(err); }
     }
-    //$.post("https://ftnox.com"+path, params, onSuccess, "json").fail(onFailure);
+
+    // XXX
+    var url = "https://ftnox.com"+path;
+    if (window.location.host == "local.ftnox.com:8889") {
+        url = "http://local.ftnox.com:8888"+path;
+    }
+
     $.ajax({
         type:       "POST",
         dataType:   "json",
-        url:        "https://ftnox.com"+path,
+        url:        url,
         data:       params,
         xhrFields:  {withCredentials: true},
         success:    onSuccess,
