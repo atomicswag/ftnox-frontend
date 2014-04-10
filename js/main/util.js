@@ -159,15 +159,23 @@ function padZeros(n, width) {
 
 // "1212345678", 8 -> "12.12345678"
 // "1212345600", 8 -> "12.123456"
-// "123", 8 -> "0.00000123"
-// "1200000000", 8 -> "123.0"
+// "1200000000", 8 -> "12.0"
+// "1200",       2 -> "12.0"
+// "123",        8 -> "0.00000123"
+// "0",          * -> "0.0"
+// "1",          0 -> "1.0"
+// "1",          1 -> "0.1"
 function exactDivide(n, decs) {
     var ns = Number(n).toFixed(0);
     if (!ns.match(validate.RE_INTEGER)) { return ns }
     if (ns.length > decs) {
-        return ns.substring(0, ns.length-decs)+"."+ns.substring(ns.length-decs).replace(/0{1,7}$/, '');;
+        return ns.substring(0, ns.length-decs)+"."+
+            (ns.substring(ns.length-decs, ns.length-decs+1) || '0')+
+            (ns.substring(ns.length-decs+1).replace(/0{1,}$/, ''));
     } else {
-        return "0."+padZeros(ns, decs).replace(/0{1,7}$/, '');;
+        return "0."+
+            (padZeros(ns, decs).substring(0,1) || '0')+
+            (padZeros(ns, decs).substring(1).replace(/0{1,}$/, ''));
     }
 }
 
@@ -185,10 +193,12 @@ function exactMultiply(n, decs) {
     return ns;
 }
 
-// Trim floating point into at most 8 decimal places
+// Trim floating point into at most 'decs' decimal places
 // The result is an estimate, a string
-// 0.12345678901 -> "0.12345678"
-// 0.12 -> "0.12"
+// 0.12345678101, 8 -> "0.12345679"
+// 0.12345678901, 8 -> "0.12345679"
+// 0.12,          2 -> "0.12"
+// 1234.0,        2 -> "1234.0"
 function trimToDecs(n, decs) {
     var ns = Math.round(n * Math.pow(10, decs));
     return exactDivide(ns, decs);

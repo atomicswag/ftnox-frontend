@@ -42,10 +42,9 @@ http.createServer(function(request, response) {
             }
  
             var mimeType = mime.lookup(fileName);
-            var charset =  mime.charsets.lookup(mimeType);
+            var mimeType = mimeType + ";charset=" + mime.charsets.lookup(mimeType);
             response.writeHead(200, {
                 "Content-Type":     mimeType,
-                "Content-Encoding": charset
             });
             response.write(file, "binary");
             response.end();

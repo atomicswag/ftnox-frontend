@@ -20,7 +20,7 @@ ChartView.init = function() {
     var x      = view.x      = d3.scale.linear().range([0, width]);
     var y      = view.y      = d3.scale.linear().range([height, 0]);
     var t      = view.t      = d3.time.scale().range([0, height]);
-    var xAxis  = view.xAxis  = d3.svg.axis().scale(x).orient("bottom");
+    var xAxis  = view.xAxis  = d3.svg.axis().scale(x).orient("bottom").tickFormat(function(d) { return "$" + d; }); // HACK
     var yAxis  = view.yAxis  = d3.svg.axis().scale(y).orient("left");
     var xAxisG = view.xAxisG = d3.svg.axis().scale(x).orient("bottom");
     var yAxisG = view.yAxisG = d3.svg.axis().scale(y).orient("left");

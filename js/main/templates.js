@@ -32,6 +32,11 @@ Handlebars.registerHelper('divide8', function(n) {
     return util.exactDivide(n, 8);
 });
 
+// Usage: {{toFixed dollars 2}}
+Handlebars.registerHelper('toFixed', function(n, decs) {
+    return (n/100000000.0).toFixed(decs);
+});
+
 // Usage: {{toPrecision amount}}
 Handlebars.registerHelper('toPrecision', function(n, sig) {
     return util.toPrecision(n, sig);

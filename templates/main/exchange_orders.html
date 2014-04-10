@@ -2,20 +2,20 @@
     <table class="table table-striped table-condensed">
         <thead><tr>
             <th>Price</th>
-            <th>Amount <span class="coin">({{market.coin}})</span></th>
+            <th>Amount</th>
         </tr></thead>
         <tbody class="js-exchange-orders-body exchange-orders-body">
             {{#if orders}}
             {{#each orders}}
             <tr>
-                <td class="amount">{{toPrecision fp 5}}</td>
-                <td class="amount">{{divide8 a}}</td>
+                <td class="amount">${{toPrecision fp 5}}</td>
+                <td class="amount">{{divide8 a}} {{market.coin}}</td>
                 {{!<td class="amount">divide8 ca</td>}}
             </tr>
             {{/each}}
             {{else}}
             <tr>
-                <td colspan="999" style="text-align: center;">No orders</td>
+                <td colspan="2" style="text-align: center;">No orders</td>
             </tr>
             {{/if}}
         </tbody>

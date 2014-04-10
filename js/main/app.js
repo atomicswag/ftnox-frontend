@@ -103,6 +103,7 @@ App.removeListenersByGroup = function(group) {
 App.emit = function() {
     var app = this;
     var eventName = arguments[0];
+    console.log("EVENT:", eventName);
     var args = Array.prototype.slice.call(arguments, 1, arguments.length);
     var listeners = app.eventListeners[eventName];
     // Call all the listeners
@@ -189,15 +190,19 @@ App.api = function(path, params, cb) {
         url = "http://local.ftnox.com:8888"+path;
     }
 
-    $.ajax({
-        type:       "POST",
-        dataType:   "json",
-        url:        url,
-        data:       params,
-        xhrFields:  {withCredentials: true},
-        success:    onSuccess,
-        error:      onFailure,
-    });
+    // XXX
+    // HACK to test network slowness
+    setTimeout(function() {
+        $.ajax({
+            type:       "POST",
+            dataType:   "json",
+            url:        url,
+            data:       params,
+            xhrFields:  {withCredentials: true},
+            success:    onSuccess,
+            error:      onFailure,
+        });
+    }, 1000);
 }
 
 //////////// VIEW

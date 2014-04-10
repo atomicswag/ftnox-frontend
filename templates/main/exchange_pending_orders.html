@@ -4,7 +4,7 @@
         <th>Type</th>
         <th>Date</th>
         <th>Price</th>
-        <th style="vertical-align: middle;">Amount <span class="coin" style="font-weight: normal">({{market.coin}})</span></th>
+        <th style="vertical-align: middle;">Amount</th>
         <th>Filled</th>
         <th></th>
     </tr>
@@ -14,14 +14,14 @@
     {{#each orders}}
     <tr data-order-id="{{id}}">
         {{#ifCond type "==" "B"}}
-        <td>Bid</td>
+        <td>Buy</td>
         {{else}}
-        <td>Ask</td>
+        <td>Sell</td>
         {{/ifCond}}
         <td class="date">{{formatDate time format="YYYY-MM-DD hh:mma"}}</td>
-        <td class="amount">{{toPrecision price 5}}</td>
-        <td class="amount">{{divide8 amount}}</td>
-        <td class="amount">{{divide8 filled}}</td>
+        <td class="amount">${{toPrecision price 5}}</td>
+        <td class="amount">{{divide8 amount}} {{../market.coin}}</td>
+        <td class="amount">{{divide8 filled}} {{../market.coin}}</td>
         <td><a href="#" class="js-cancel-order btn btn-default btn-xs" data-order-id="{{id}}" type="submit">Cancel</a></td>
     </tr>
     {{/each}}

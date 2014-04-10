@@ -308,7 +308,7 @@ WithdrawView.bindEvents = function() {
             function(err, res) {
                 form.enableInput();
                 if (err) {
-                    view.alert(res.data);
+                    view.alert(err.message);
                     return;
                 }
                 view.updateWithdrawals();
@@ -497,6 +497,7 @@ App.removeListenersByGroup = function(group) {
 App.emit = function() {
     var app = this;
     var eventName = arguments[0];
+    console.log("EVENT:", eventName);
     var args = Array.prototype.slice.call(arguments, 1, arguments.length);
     var listeners = app.eventListeners[eventName];
     // Call all the listeners
@@ -583,15 +584,19 @@ App.api = function(path, params, cb) {
         url = "http://local.ftnox.com:8888"+path;
     }
 
-    $.ajax({
-        type:       "POST",
-        dataType:   "json",
-        url:        url,
-        data:       params,
-        xhrFields:  {withCredentials: true},
-        success:    onSuccess,
-        error:      onFailure,
-    });
+    // XXX
+    // HACK to test network slowness
+    setTimeout(function() {
+        $.ajax({
+            type:       "POST",
+            dataType:   "json",
+            url:        url,
+            data:       params,
+            xhrFields:  {withCredentials: true},
+            success:    onSuccess,
+            error:      onFailure,
+        });
+    }, 1000);
 }
 
 //////////// VIEW
@@ -908,7 +913,7 @@ ChartView.init = function() {
     var x      = view.x      = d3.scale.linear().range([0, width]);
     var y      = view.y      = d3.scale.linear().range([height, 0]);
     var t      = view.t      = d3.time.scale().range([0, height]);
-    var xAxis  = view.xAxis  = d3.svg.axis().scale(x).orient("bottom");
+    var xAxis  = view.xAxis  = d3.svg.axis().scale(x).orient("bottom").tickFormat(function(d) { return "$" + d; }); // HACK
     var yAxis  = view.yAxis  = d3.svg.axis().scale(y).orient("left");
     var xAxisG = view.xAxisG = d3.svg.axis().scale(x).orient("bottom");
     var yAxisG = view.yAxisG = d3.svg.axis().scale(y).orient("left");
@@ -1159,8 +1164,9 @@ app.exchange = {
 };
 
 app.addListener("DID_APP_INIT", function() {
-    addMarketInfo({coin:"DOGE", basisCoin:"BTC", last:0.0000040000}); // HACK
-    addMarketInfo({coin:"LTC", basisCoin:"BTC", last:0.026});         // HACK
+    // TODO: load this dynamically from the server.
+    addMarketInfo({coin:"BTC", basisCoin:"USD"});
+    addMarketInfo({coin:"LTC", basisCoin:"USD"});
     //updateMarkets();
 });
 
@@ -1168,12 +1174,18 @@ function addMarketInfo(marketInfo) {
     var name = marketInfo.coin+"/"+marketInfo.basisCoin;
     var market = app.exchange.marketsByName[name];
     if (market) {
-        market.last = Number(marketInfo.last);
+        // Market exists, update data.
+        market.last =       Number(marketInfo.last || 0);
+        market.bestBid =    Number(marketInfo.bestBid || 0) || undefined;
+        market.bestAsk =    Number(marketInfo.bestAsk || 0) || undefined;
     } else {
+        // Create new market.
         market = Market({
             basisCoin:  marketInfo.basisCoin,
             coin:       marketInfo.coin,
-            last:       Number(marketInfo.last),
+            last:       Number(marketInfo.last || 0),
+            bestBid:    Number(marketInfo.bestBid || 0),
+            bestAsk:    Number(marketInfo.bestAsk || 0),
         });
         app.exchange.marketsByName[name] = market;
     }
@@ -1322,6 +1334,9 @@ function MarketView(market) {
     var view = util.newObject(MarketView);
     view.market = market;
     view.chartView = chart.ChartView(market);
+    // TODO: don't require balanceView, it's not shown.
+    // but, do request the balance.
+    // Looks like we should create a Balance object to manage that.
     view.balanceView = undefined;
     view.updateTask = undefined;
     view.render();
@@ -1342,12 +1357,26 @@ MarketView.render = function() {
         user:       app.user,
     }));
     view.renderMarkets(app.exchange.markets);
+    view.renderBalances();
     view.el.find("[data-toggle='tooltip']").tooltip();
     //view.el.find(".js-marketName").text(view.market.name);
     view.el.find(".js-chart").empty().append(view.chartView.el);
     if (app.user) {
         view.balanceView = account.BalanceView();
         view.el.find(".js-account-balance").replaceWith(view.balanceView.el);
+    }
+}
+
+MarketView.renderBalances = function() {
+    var view = this;
+    if (app.account.balance[view.market.coin] !== undefined) {
+        view.el.find(".js-balance[data-coin='"+view.market.coin+"']").
+            text(util.exactDivide(app.account.balance[view.market.coin], 8));
+    }
+    if (app.account.balance[view.market.basisCoin] !== undefined) {
+        // HACK
+        view.el.find(".js-balance[data-coin='"+view.market.basisCoin+"']").
+            text((app.account.balance[view.market.basisCoin]/100000000.0).toFixed(2));
     }
 }
 
@@ -1361,7 +1390,9 @@ MarketView.renderMarkets = function(markets) {
 MarketView.bindEvents = function() {
     var view = this;
     var bform = view.el.find("form.form-buy");
+    var bformButton = view.el.find(".js-submit-buy");
     var sform = view.el.find("form.form-sell");
+    var sformButton = view.el.find(".js-submit-sell");
 
     // Display calculations for buying
     bform.find("input[name='amount'],input[name='price']").on('input', function() {
@@ -1374,15 +1405,18 @@ MarketView.bindEvents = function() {
     });
 
     // On buy submit
+    bformButton.click(function(){ bform.submit(); });
     bform.submit(function(e) {
         e.preventDefault();
         bform.disableInput();
+        bformButton.disableInput();
         view.market.submitOrder({
             orderType:  "B",
             amount:     +bform.find("input[name='amount']").val(),
             price:      +bform.find("input[name='price']").val(),
         }, function(err, res) {
             bform.enableInput();
+            bformButton.enableInput();
             if (err) { app.alert(err.message); return; }
             view.updatePendingOrders();
         });
@@ -1400,15 +1434,18 @@ MarketView.bindEvents = function() {
     });
 
     // On sell submit
+    sformButton.click(function(){ sform.submit(); });
     sform.submit(function(e) {
         e.preventDefault();
         sform.disableInput();
+        sformButton.disableInput();
         view.market.submitOrder({
             orderType:  "A",
             amount:     +sform.find("input[name='amount']").val(),
             price:      +sform.find("input[name='price']").val(),
         }, function(err, res) {
             sform.enableInput();
+            sformButton.enableInput();
             if (err) { app.alert(err.message); return; }
             view.updatePendingOrders();
         });
@@ -1430,9 +1467,31 @@ MarketView.bindEvents = function() {
         });
     });
 
-    // Update the markets sidebar.
+    // Update the balances;
+    app.addListener("DID_UPDATE_BALANCE", function(balance) {
+        view.renderBalances();
+    }, view);
+
+    // Update the all market information
     app.addListener("DID_UPDATE_MARKETS", function(markets, marketsByName) {
         view.renderMarkets(markets);
+        for (var name in marketsByName) {
+            var market = marketsByName[name];
+            // Update market prices
+            view.el.find(".js-best-bid[data-market='"+name+"']").text(util.toPrecision(market.bestBid, 5));
+            view.el.find(".js-best-ask[data-market='"+name+"']").text(util.toPrecision(market.bestAsk, 5));
+            // Update the default buy/sell prices
+            if (name == view.market.name) {
+                var bidInput = view.el.find("input.js-buy-price");
+                var askInput = view.el.find("input.js-sell-price");
+                if (+bidInput.val() == 0) {
+                    bidInput.val(util.toPrecision(market.bestAsk, 5));
+                }
+                if (+askInput.val() == 0) {
+                    askInput.val(util.toPrecision(market.bestBid, 5));
+                }
+            }
+        }
     }, view);
 
     // TODO replace with sockets.
@@ -1493,7 +1552,8 @@ MarketView.destroy = function() {
 
 function marketHandler(path) {
     if (path.hashParts.length != 3) {
-        app.router.replacePath("/#market/DOGE/BTC");
+        // HACK
+        app.router.replacePath("/#market/BTC/USD");
         return;
     }
     var coin = path.hashParts[1];
@@ -1777,6 +1837,11 @@ Handlebars.registerHelper('divide8', function(n) {
     return util.exactDivide(n, 8);
 });
 
+// Usage: {{toFixed dollars 2}}
+Handlebars.registerHelper('toFixed', function(n, decs) {
+    return (n/100000000.0).toFixed(decs);
+});
+
 // Usage: {{toPrecision amount}}
 Handlebars.registerHelper('toPrecision', function(n, sig) {
     return util.toPrecision(n, sig);
@@ -2036,15 +2101,23 @@ function padZeros(n, width) {
 
 // "1212345678", 8 -> "12.12345678"
 // "1212345600", 8 -> "12.123456"
-// "123", 8 -> "0.00000123"
-// "1200000000", 8 -> "123.0"
+// "1200000000", 8 -> "12.0"
+// "1200",       2 -> "12.0"
+// "123",        8 -> "0.00000123"
+// "0",          * -> "0.0"
+// "1",          0 -> "1.0"
+// "1",          1 -> "0.1"
 function exactDivide(n, decs) {
     var ns = Number(n).toFixed(0);
     if (!ns.match(validate.RE_INTEGER)) { return ns }
     if (ns.length > decs) {
-        return ns.substring(0, ns.length-decs)+"."+ns.substring(ns.length-decs).replace(/0{1,7}$/, '');;
+        return ns.substring(0, ns.length-decs)+"."+
+            (ns.substring(ns.length-decs, ns.length-decs+1) || '0')+
+            (ns.substring(ns.length-decs+1).replace(/0{1,}$/, ''));
     } else {
-        return "0."+padZeros(ns, decs).replace(/0{1,7}$/, '');;
+        return "0."+
+            (padZeros(ns, decs).substring(0,1) || '0')+
+            (padZeros(ns, decs).substring(1).replace(/0{1,}$/, ''));
     }
 }
 
@@ -2062,10 +2135,12 @@ function exactMultiply(n, decs) {
     return ns;
 }
 
-// Trim floating point into at most 8 decimal places
+// Trim floating point into at most 'decs' decimal places
 // The result is an estimate, a string
-// 0.12345678901 -> "0.12345678"
-// 0.12 -> "0.12"
+// 0.12345678101, 8 -> "0.12345679"
+// 0.12345678901, 8 -> "0.12345679"
+// 0.12,          2 -> "0.12"
+// 1234.0,        2 -> "1234.0"
 function trimToDecs(n, decs) {
     var ns = Math.round(n * Math.pow(10, decs));
     return exactDivide(ns, decs);
@@ -2145,11 +2220,11 @@ exports.RE_ADDRESS = /^([A-Z0-9]{25,34})$/i;
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['about.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>About Us</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n    <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n            <p class=\"lead\">\n                FtNox is a next generation cryptocurrency exchange done right.\n            </p>\n            <h3>Secure</h3>\n            <ul>\n                <li>Dedicated Hosting</li>\n                <li>Cold Storage Management</li>\n                <li>Two-Factor Authentication</li>\n                <li>Audit Trail</li>\n            </ul>\n            <h3>Performant</h3>\n            <p>We provide correctness without sacrificing speed. Each order is guaranteed to execute quickly.</p>\n            <h3>Customizable</h3>\n            <p>Branding is easy. Our interfaces for your customers and your staff are intuitive. See for yourself at our <a>partner sites</a>.</p>\n            </div>\n        </div>\n    </div>\n</div>\n";
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>About Us</h2>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<div class=\"container\">\n    <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n            <p class=\"lead\">\n                FtNox is a next generation cryptocurrency exchange done right.\n            </p>\n            <h3>Secure</h3>\n            <ul>\n                <li>Dedicated Hosting</li>\n                <li>Cold Storage Management</li>\n                <li>Two-Factor Authentication</li>\n                <li>Audit Trail</li>\n            </ul>\n            <h3>Performant</h3>\n            <p>We provide correctness without sacrificing speed. Each order is guaranteed to execute quickly.</p>\n            <h3>Customizable</h3>\n            <p>Branding is easy. Our interfaces for your customers and your staff are intuitive. See for yourself at our <a>partner sites</a>.</p>\n            </div>\n        </div>\n    </div>\n</div>\n";
   },"useData":true});
 templates['account.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
-  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Account</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n    <div class=\"row ftnox-tab-container\">\n\n        <ul class=\"ftnox-tabs nav nav-pills nav-stacked col-xs-3\">\n            <li class=\"active\"><a href=\"#balance\" data-toggle=\"tab\">Balance</a></li>\n            <li><a href=\"#history\" data-toggle=\"tab\">Transactions</a></li>\n            <li><a href=\"#security\" data-toggle=\"tab\">Security</a></li>\n            <li><a href=\"#api\" data-toggle=\"tab\">API Credentials</a></li>\n        </ul>\n\n        <div class=\"ftnox-tab-content tab-content col-xs-9\">\n            <div class=\"tab-pane active panel panel-default\" id=\"balance\">\n                <div class=\"panel-heading panel-heading-lg\">\n                    <h4 class=\"panel-title\">Balance</h4>\n                </div>\n                <div class=\"panel-body\">\n                    "
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Account</h2>\n    </div>\n</div>\n\n<!-- Alerts -->\n<!-- doesn't fit because tabs are shifted up -->\n<!-- <div id=\"app-alerts\" class=\"container\"></div> -->\n\n<div class=\"container\">\n    <div class=\"row ftnox-tab-container\">\n\n        <ul class=\"ftnox-tabs nav nav-pills nav-stacked col-xs-3\">\n            <li class=\"active\"><a href=\"#balance\" data-toggle=\"tab\">Balance</a></li>\n            <li><a href=\"#history\" data-toggle=\"tab\">Transactions</a></li>\n            <li><a href=\"#security\" data-toggle=\"tab\">Security</a></li>\n            <li><a href=\"#api\" data-toggle=\"tab\">API Credentials</a></li>\n        </ul>\n\n        <div class=\"ftnox-tab-content tab-content col-xs-9\">\n            <div class=\"tab-pane active panel panel-default\" id=\"balance\">\n                <div class=\"panel-heading panel-heading-lg\">\n                    <h4 class=\"panel-title\">Balance</h4>\n                </div>\n                <div class=\"panel-body\">\n                    "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "account_balance", (depth0 && depth0.balance), {"name":"render","hash":{},"data":data})))
     + "\n                </div>\n            </div>\n\n            <div class=\"tab-pane panel panel-default\" id=\"history\">\n                <div class=\"panel-heading panel-heading-lg\">\n                    <h4 class=\"panel-title\">Transactions</h4>\n                    <ul class=\"pagination\">\n                        <li class=\"disabled\"><a href=\"#\">&larr;</a></li>\n                        <li class=\"active\"><a href=\"#\">1 <span class=\"sr-only\">(current)</span></a></li>\n                        <li><a href=\"#\">2</a></li>\n                        <li><a href=\"#\">3</a></li>\n                        <li><a href=\"#\">4</a></li>\n                        <li><a href=\"#\">5</a></li>\n                        <li><a href=\"#\">&rarr;</a></li>\n                    </ul>\n                </div>\n                <div class=\"panel-body\">\n                    "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "account_transactions", {"name":"render","hash":{},"data":data})))
@@ -2280,10 +2355,10 @@ templates['alert.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(de
     + "\n</div>\n";
 },"useData":true});
 templates['api.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>API Documentation</h2>\n    </div>\n</div>\n\n<div class=\"container\">\n\n    <div class=\"panel panel-default\">\n\n        <div class=\"panel-heading\">\n            <h3 class=\"panel-title\">General Information</h3>\n        </div>\n\n        <div class=\"panel-body\">\n\n            \n            <h4>HTTP method & parameters</h4>\n            <p>\n                The server accepts all parameters in the form of <code>x-www-form-urlencoded</code> POST parameters.\n            </p>\n            <br />\n\n            <h4>Authentication</h4>\n            <p>\n                All API requests must include the <code>api_key</code> parameter. You can find them <a href=\"/#account\">here</a>.<br/>\n                In the near future, HMAC-SHA512 signatures and incrementing nonces will be used.\n            </p>\n<pre>\nSample request to /account/balance:\n\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=MY_API_KEY\n</pre>\n            <br />\n\n            <h4>Units</h4>\n            <p>\n                All units are in Satoshis (1/100000000).<br />\n                All timestamps are seconds from epoch UTC.\n            </p>\n\n    </div></div><!--panel-->\n    <div class=\"panel panel-default\">\n\n        <div class=\"panel-heading\">\n            <h3 class=\"panel-title\">Account API Calls</h3>\n        </div>\n\n        <div class=\"panel-body\">\n\n            \n            <h4>Balance</h4>\n<pre>\nGET /account/balance\nParams: None\n\nResponse JSON:\n{\n    status: \"OK\",\n    data: {\n        \"BTC\":  10000,\n        \"DOGE\": 10000,\n        \"LTC\":  10000,\n        ...\n    }\n}\n</pre>\n            <br />\n\n            <h4>Deposit Address</h4>\n<pre>\nGET /account/deposit_address\nParams:\n    coin:   The type of coin, e.g. \"BTC\"\n\nResponse JSON:\n{\n    status: \"OK\",\n    data:   \"1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU\"\n}\n</pre>\n            <br />\n\n            <h4>List Deposits</h4>\n<pre>\nGET /account/deposits\nParams:\n    address:    Deposit address, as returned by a call to '/account/deposit_address'.\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"coin\": \"BTC\",\n            \"txid\": \"e3985f8279169d572ae1b3e89d9b449e35bf2e2c8bc1262c5f648c28df059055\",\n            \"vout\": 0,\n            \"blockhash\": \"0000000000000000ac2c5fe4942a7d6baa8cb2ff6bc9932e9eb23a5f15b8e939\",\n            \"blockheight\": 289635,\n            \"address\": \"1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU\",\n            \"userId\": 1,\n            \"amount\": 500000,\n            \"scriptPk\": \"76a9149040d4a7c8deced4a8d3805f2bbbdc81b82a039288ac\",\n            \"orphaned\": 0,\n            \"credited\": 1,\n            \"confirms\": 2158,\n            \"time\": 1394332995\n        },\n        ...\n    ]\n}\n</pre>\n            <br />\n\n            <h4>Withdraw</h4>\n<pre>\nPOST /account/withdraw\nParams:\n    to_address: The address to send the coins to\n    coin:       The type of coin, e.g. \"BTC\"\n    amount:     The amount to withdraw in Satoshis\n\nResponse JSON:  The resulting balance. See /account/balance.\n</pre>\n            <br />\n\n            <h4>List Withdraws</h4>\n<pre>\nGET /account/withdrawals\nParams:\n    coin:       The type of coin, e.g. \"BTC\"\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 2,\n            \"userId\": 1,\n            \"wallet\": \"main\",\n            \"coin\": \"BTC\",\n            \"toAddress\": \"1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU\",\n            \"amount\": 500000,\n            \"status\": 1,\n            \"time\": 1395037039\n        },\n        ...\n    ]\n}\n</pre>\n\n        </div></div><!--panel-->\n        <div class=\"panel panel-default\">\n\n            <div class=\"panel-heading\">\n                <h3 class=\"panel-title\">Exchange API Calls</h3>\n            </div>\n\n            <div class=\"panel-body\">\n\n                \n                <h4>List Markets</h4>\n<pre>\nGET /exchange/markets\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"coin\": \"DOGE\",\n            \"basisCoin\": \"BTC\",\n            \"last\": \"0.0000e+00\"\n        },\n        {\n            \"coin\": \"LTC\",\n            \"basisCoin\": \"BTC\",\n            \"last\": \"0.0000e+00\"\n        },\n        ...\n    ]\n}\n</pre>\n                <br />\n\n                <h4>Orderbook</h4>\n<pre>\nGET /exchange/orderbook\n\nTODO: document\n</pre>\n                <br />\n\n                <h4>Historical Prices</h4>\n<pre>\nGET /exchange/pricelog\n\nTODO: document\n</pre>\n                <br />\n\n                <h4>Place Order</h4>\n<pre>\nPOST /exchange/add_order\nParams:\n    market:     The market to enter order into, e.g. \"DOGE/BTC\"\n    amount:     The amount of coins (e.g. DOGE) to buy or sell, in satoshis.\n    price:      The price of a coin (e.g. DOGE) in basis coins (e.g. BTC).\n                This is a floating point number, like 0.00000124.\n                The number is rounded to 5 significant digits.\n    order_type: \"B\" = bid, \"A\" = ask\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        ... // order data\n    }\n}\n</pre>\n                <br />\n\n                <h4>Cancel Order</h4>\n<pre>\nPOST /exchange/cancel_order\nParams:\n    id:         The order id, a long positive integer.\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": \"CANCELED\"\n}\n</pre>\n                <br />\n\n                <h4>List Pending Orders</h4>\n<pre>\nGET /exchange/pending_orders\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"coin\": \"DOGE\",\n            \"basisCoin\": \"BTC\",\n            \"status\": 0,            // 0 = pending, 1 = reserved, 2 = complete, 3 = canceled\n            \"type\": \"B\",            // \"B\" = bid, \"A\" = ask\n            \"amount\": 1000000000,   // max amount of coins (e.g. DOGE) to purchase for bids, to sell for asks\n            \"basisAmount\": 100000,  // max amount of basis coins (e.g. BTC) to spend for bids, to receive for asks\n            \"filled\": 0,            // amount of coins purchased for bids, sold for asks\n            \"basisFilled\": 0        // amount of basis coins spent for bids, received for asks\n            \"basisFeeRatio\": 0,     // fee schedule, 0.001 = 0.1%\n            \"basisFee\": 0,          // max fee to pay\n            \"basisFeeFilled\": 0,    // amount of fee paid\n            \"price\": 0.0001,        // price in basis coins per coin\n            \"time\": 1395638636,\n        },\n        ...\n    ]\n}\n</pre>\n\n            </div>\n        </div>\n\n</div></div><!--panel-->\n\n</div><!--.container-->\n";
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>API Documentation</h2>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<div class=\"container\">\n\n    <div class=\"panel panel-default\">\n\n        <div class=\"panel-heading\">\n            <h3 class=\"panel-title\">General Information</h3>\n        </div>\n\n        <div class=\"panel-body\">\n\n            \n            <h4>HTTP method & parameters</h4>\n            <p>\n                The server accepts all parameters in the form of <code>x-www-form-urlencoded</code> POST parameters.\n            </p>\n            <br />\n\n            <h4>Authentication</h4>\n            <p>\n                All API requests must include the <code>api_key</code> parameter. You can find them <a href=\"/#account\">here</a>.<br/>\n                In the near future, HMAC-SHA512 signatures and incrementing nonces will be used.\n            </p>\n<pre>\nSample request to /account/balance:\n\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=MY_API_KEY\n</pre>\n            <br />\n\n            <h4>Units</h4>\n            <p>\n                All units are in Satoshis (1/100000000).<br />\n                All timestamps are seconds from epoch UTC.\n            </p>\n\n    </div></div><!--panel-->\n    <div class=\"panel panel-default\">\n\n        <div class=\"panel-heading\">\n            <h3 class=\"panel-title\">Account API Calls</h3>\n        </div>\n\n        <div class=\"panel-body\">\n\n            \n            <h4>Balance</h4>\n<pre>\nGET /account/balance\nParams: None\n\nResponse JSON:\n{\n    status: \"OK\",\n    data: {\n        \"BTC\":  10000,\n        \"DOGE\": 10000,\n        \"LTC\":  10000,\n        ...\n    }\n}\n</pre>\n            <br />\n\n            <h4>Deposit Address</h4>\n<pre>\nGET /account/deposit_address\nParams:\n    coin:   The type of coin, e.g. \"BTC\"\n\nResponse JSON:\n{\n    status: \"OK\",\n    data:   \"1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU\"\n}\n</pre>\n            <br />\n\n            <h4>List Deposits</h4>\n<pre>\nGET /account/deposits\nParams:\n    address:    Deposit address, as returned by a call to '/account/deposit_address'.\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"coin\": \"BTC\",\n            \"txid\": \"e3985f8279169d572ae1b3e89d9b449e35bf2e2c8bc1262c5f648c28df059055\",\n            \"vout\": 0,\n            \"blockhash\": \"0000000000000000ac2c5fe4942a7d6baa8cb2ff6bc9932e9eb23a5f15b8e939\",\n            \"blockheight\": 289635,\n            \"address\": \"1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU\",\n            \"userId\": 1,\n            \"amount\": 500000,\n            \"scriptPk\": \"76a9149040d4a7c8deced4a8d3805f2bbbdc81b82a039288ac\",\n            \"orphaned\": 0,\n            \"credited\": 1,\n            \"confirms\": 2158,\n            \"time\": 1394332995\n        },\n        ...\n    ]\n}\n</pre>\n            <br />\n\n            <h4>Withdraw</h4>\n<pre>\nPOST /account/withdraw\nParams:\n    to_address: The address to send the coins to\n    coin:       The type of coin, e.g. \"BTC\"\n    amount:     The amount to withdraw in Satoshis\n\nResponse JSON:  The resulting balance. See /account/balance.\n</pre>\n            <br />\n\n            <h4>List Withdraws</h4>\n<pre>\nGET /account/withdrawals\nParams:\n    coin:       The type of coin, e.g. \"BTC\"\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 2,\n            \"userId\": 1,\n            \"wallet\": \"main\",\n            \"coin\": \"BTC\",\n            \"toAddress\": \"1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU\",\n            \"amount\": 500000,\n            \"status\": 1,\n            \"time\": 1395037039\n        },\n        ...\n    ]\n}\n</pre>\n\n        </div></div><!--panel-->\n        <div class=\"panel panel-default\">\n\n            <div class=\"panel-heading\">\n                <h3 class=\"panel-title\">Exchange API Calls</h3>\n            </div>\n\n            <div class=\"panel-body\">\n\n                \n                <h4>List Markets</h4>\n<pre>\nGET /exchange/markets\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"coin\": \"DOGE\",\n            \"basisCoin\": \"BTC\",\n            \"last\": \"0.0000e+00\"\n        },\n        {\n            \"coin\": \"LTC\",\n            \"basisCoin\": \"BTC\",\n            \"last\": \"0.0000e+00\"\n        },\n        ...\n    ]\n}\n</pre>\n                <br />\n\n                <h4>Orderbook</h4>\n<pre>\nGET /exchange/orderbook\n\nTODO: document\n</pre>\n                <br />\n\n                <h4>Historical Prices</h4>\n<pre>\nGET /exchange/pricelog\n\nTODO: document\n</pre>\n                <br />\n\n                <h4>Place Order</h4>\n<pre>\nPOST /exchange/add_order\nParams:\n    market:     The market to enter order into, e.g. \"DOGE/BTC\"\n    amount:     The amount of coins (e.g. DOGE) to buy or sell, in satoshis.\n    price:      The price of a coin (e.g. DOGE) in basis coins (e.g. BTC).\n                This is a floating point number, like 0.00000124.\n                The number is rounded to 5 significant digits.\n    order_type: \"B\" = bid, \"A\" = ask\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        ... // order data\n    }\n}\n</pre>\n                <br />\n\n                <h4>Cancel Order</h4>\n<pre>\nPOST /exchange/cancel_order\nParams:\n    id:         The order id, a long positive integer.\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": \"CANCELED\"\n}\n</pre>\n                <br />\n\n                <h4>List Pending Orders</h4>\n<pre>\nGET /exchange/pending_orders\n\nResponse JSON:\n{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"coin\": \"DOGE\",\n            \"basisCoin\": \"BTC\",\n            \"status\": 0,            // 0 = pending, 1 = reserved, 2 = complete, 3 = canceled\n            \"type\": \"B\",            // \"B\" = bid, \"A\" = ask\n            \"amount\": 1000000000,   // max amount of coins (e.g. DOGE) to purchase for bids, to sell for asks\n            \"basisAmount\": 100000,  // max amount of basis coins (e.g. BTC) to spend for bids, to receive for asks\n            \"filled\": 0,            // amount of coins purchased for bids, sold for asks\n            \"basisFilled\": 0        // amount of basis coins spent for bids, received for asks\n            \"basisFeeRatio\": 0,     // fee schedule, 0.001 = 0.1%\n            \"basisFee\": 0,          // max fee to pay\n            \"basisFeeFilled\": 0,    // amount of fee paid\n            \"price\": 0.0001,        // price in basis coins per coin\n            \"time\": 1395638636,\n        },\n        ...\n    ]\n}\n</pre>\n\n            </div>\n        </div>\n\n</div></div><!--panel-->\n\n</div><!--.container-->\n";
 },"useData":true});
 templates['beta.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div id=\"site-index\">\n    <div class=\"section section-top\">\n        <div class=\"container\">\n            <span class=\"glyphicon glyphicon-transfer\"></span>\n            <div class=\"on-top\">\n                <h1>Launch Your Bitcoin Exchange.</h1>\n                <p>We provide expert technology and hosting for your cryptocurrency exchange.</p>\n                <a id=\"request-invite\" href=\"#signup\" class=\"btn btn-custom-dark\">Request Invitation</a>\n            </div>\n        </div>\n    </div><!--.section-->\n\n    <div class=\"section\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <div class=\"col-xs-4\">\n                    <h2>Secure</h2>\n                    <ul>\n                        <li>Dedicated Hosting</li>\n                        <li>Cold Storage Management</li>\n                        <li>Two-Factor Authentication</li>\n                        <li>Audit Trail</li>\n                    </ul>\n                </div>\n                <div class=\"col-xs-4\">\n                    <h2>Performant</h2>\n                    <p>We provide correctness without sacrificing speed. Each order is guaranteed to execute quickly.</p>\n                </div>\n                <div class=\"col-xs-4\">\n                    <h2>Customizable</h2>\n                    <p>Branding is easy. Our interfaces for your customers and your staff are intuitive. See for yourself at our <a>partner sites</a>.</p>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section section-horizontal section-dark\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <!--\n                <div class=\"col-xs-4\">\n                    <h2>Everything</h2>\n                </div>\n                -->\n                <div class=\"col-xs-9 col-xs-offset-2\">\n                    <ul class=\"horizontal-list\">\n                        <li>KYC</li>\n                        <li>Multi-currency</li>\n                        <li>Programmable APIs</li>\n                        <li>Custom integrations</li>\n                    </ul>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section\" id=\"signup\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <div class=\"section-header\">\n                    <h2>Request Invitation</h2>\n                </div>\n                <div class=\"col-md-offset-2 col-xs-8\">\n                    <div class=\"panel panel-default\">\n                        <div class=\"panel-heading\">\n                            <h4 class=\"panel-title\">Invitation Form</h4>\n                        </div>\n                        <form class=\"form-signup form-horizontal panel-panel-default\" action=\"/asd\" method=\"post\">\n                            <div class=\"panel-body\">\n\n                                <div class=\"form-group\">\n                                    <label for=\"name\" class=\"col-xs-3 control-label\">Name</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"name\" type=\"text\" class=\"form-control\" placeholder=\"Name\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"email\" class=\"col-xs-3 control-label\">Email</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"email\" type=\"text\" class=\"form-control\" placeholder=\"Email\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"country\" class=\"col-xs-3 control-label\">Country</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"country\" type=\"text\" class=\"form-control\" placeholder=\"Country\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"linkedin\" class=\"col-xs-3 control-label\">LinkedIn</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"linkedin\" type=\"text\" class=\"form-control\" placeholder=\"LinkedIn\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"other\" class=\"col-xs-3 control-label\">Comments</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <textarea name=\"other\" class=\"form-control\" placeholder=\"Questions? Comments? Leave them here!\"></textarea>\n                                    </div></div>\n                                </div>\n\n                            </div><!--.panel-body-->\n\n                            <div class=\"panel-footer clearfix\">\n                                <button class=\"btn btn-custom col-xs-4 pull-right\" type=\"submit\">Send Request</button>\n                            </div>\n                        </form>\n                    </div>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section section-horizontal section-dark\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <div class=\"col-xs-4 col-md-offset-2\">\n                    <h2 class=\"pull-right\">Visit partner site</h2>\n                </div>\n                <div class=\"col-xs-4\">\n                    <!-- <a href=\"/\" class=\"btn btn-custom-dark col-xs-6\">Go Now &raquo;</a> -->\n                    <h2>(Coming Soon)</h2>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section\">\n        <div class=\"container\">\n            <div class=\"section-header\">\n                <h2>Recent News</h2>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-8 col-md-offset-2\">\n                    <div class=\"panel panel-default\">\n                        <div class=\"panel-body\">\n                            <h4><a href=\"#\">Bitcoin Core (Bitcoin-Qt) 0.9.1 released - update required<span class=\"dim\"> 04/08/2014</a></span></h4>\n                            <p>If you are using the graphical version of 0.9.0 on any platform, you must update immediately.<a href=\"https://bitcointalk.org/index.php?topic=562400.msg6132729#msg6132729\">Read more &raquo;</a></p>\n                        </div>\n                    </div>\n                    <div class=\"panel panel-default\">\n                        <div class=\"panel-body\">\n                            <h4><a href=\"#\">BtcTrade closing all deposits.<span class=\"dim\"> 04/09/2014</a></span></h4>\n                            <p><a href=\"http://www.btctrade.com/html/gonggao/0410.html\">Read more &raquo;</a></p>\n                        </div>\n                    </div>\n                    \n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n\n\n</div>\n";
+  return "<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<div id=\"site-index\">\n    <div class=\"section section-top\">\n        <div class=\"container\">\n            <span class=\"glyphicon glyphicon-transfer\"></span>\n            <div class=\"on-top\">\n                <h1>Launch Your Bitcoin Exchange.</h1>\n                <p>We provide expert technology and hosting for your cryptocurrency exchange.</p>\n                <a id=\"request-invite\" href=\"#signup\" class=\"btn btn-custom-dark\">Request Invitation</a>\n            </div>\n        </div>\n    </div><!--.section-->\n\n    <div class=\"section\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <div class=\"col-xs-4\">\n                    <h2>Secure</h2>\n                    <ul>\n                        <li>Dedicated Hosting</li>\n                        <li>Cold Storage Management</li>\n                        <li>Two-Factor Authentication</li>\n                        <li>Audit Trail</li>\n                    </ul>\n                </div>\n                <div class=\"col-xs-4\">\n                    <h2>Performant</h2>\n                    <p>We provide correctness without sacrificing speed. Each order is guaranteed to execute quickly.</p>\n                </div>\n                <div class=\"col-xs-4\">\n                    <h2>Customizable</h2>\n                    <p>Branding is easy. Our interfaces for your customers and your staff are intuitive. See for yourself at our <a>partner sites</a>.</p>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section section-horizontal section-dark\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <!--\n                <div class=\"col-xs-4\">\n                    <h2>Everything</h2>\n                </div>\n                -->\n                <div class=\"col-xs-9 col-xs-offset-2\">\n                    <ul class=\"horizontal-list\">\n                        <li>KYC</li>\n                        <li>Multi-currency</li>\n                        <li>Programmable APIs</li>\n                        <li>Custom integrations</li>\n                    </ul>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section\" id=\"signup\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <div class=\"section-header\">\n                    <h2>Request Invitation</h2>\n                </div>\n                <div class=\"col-md-offset-2 col-xs-8\">\n                    <div class=\"panel panel-default\">\n                        <div class=\"panel-heading\">\n                            <h4 class=\"panel-title\">Invitation Form</h4>\n                        </div>\n                        <form class=\"form-signup form-horizontal panel-panel-default\" action=\"/asd\" method=\"post\">\n                            <div class=\"panel-body\">\n\n                                <div class=\"form-group\">\n                                    <label for=\"name\" class=\"col-xs-3 control-label\">Name</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"name\" type=\"text\" class=\"form-control\" placeholder=\"Name\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"email\" class=\"col-xs-3 control-label\">Email</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"email\" type=\"text\" class=\"form-control\" placeholder=\"Email\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"country\" class=\"col-xs-3 control-label\">Country</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"country\" type=\"text\" class=\"form-control\" placeholder=\"Country\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"linkedin\" class=\"col-xs-3 control-label\">LinkedIn</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <input name=\"linkedin\" type=\"text\" class=\"form-control\" placeholder=\"LinkedIn\" required>\n                                    </div></div>\n                                </div>\n\n                                <div class=\"form-group\">\n                                    <label for=\"other\" class=\"col-xs-3 control-label\">Comments</label>\n                                    <div class=\"col-xs-9\"><div class=\"input-group\">\n                                            <textarea name=\"other\" class=\"form-control\" placeholder=\"Questions? Comments? Leave them here!\"></textarea>\n                                    </div></div>\n                                </div>\n\n                            </div><!--.panel-body-->\n\n                            <div class=\"panel-footer clearfix\">\n                                <button class=\"btn btn-custom col-xs-4 pull-right\" type=\"submit\">Send Request</button>\n                            </div>\n                        </form>\n                    </div>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section section-horizontal section-dark\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <div class=\"col-xs-4 col-md-offset-2\">\n                    <h2 class=\"pull-right\">Visit partner site</h2>\n                </div>\n                <div class=\"col-xs-4\">\n                    <!-- <a href=\"/\" class=\"btn btn-custom-dark col-xs-6\">Go Now &raquo;</a> -->\n                    <h2>(Coming Soon)</h2>\n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n    <div class=\"section\">\n        <div class=\"container\">\n            <div class=\"section-header\">\n                <h2>Recent News</h2>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-xs-8 col-md-offset-2\">\n                    <div class=\"panel panel-default\">\n                        <div class=\"panel-body\">\n                            <h4><a href=\"#\">Bitcoin Core (Bitcoin-Qt) 0.9.1 released - update required<span class=\"dim\"> 04/08/2014</a></span></h4>\n                            <p>If you are using the graphical version of 0.9.0 on any platform, you must update immediately.<a href=\"https://bitcointalk.org/index.php?topic=562400.msg6132729#msg6132729\">Read more &raquo;</a></p>\n                        </div>\n                    </div>\n                    <div class=\"panel panel-default\">\n                        <div class=\"panel-body\">\n                            <h4><a href=\"#\">BtcTrade closing all deposits.<span class=\"dim\"> 04/09/2014</a></span></h4>\n                            <p><a href=\"http://www.btctrade.com/html/gonggao/0410.html\">Read more &raquo;</a></p>\n                        </div>\n                    </div>\n                    \n                </div>\n            </div><!--.container-->\n        </div><!--.row-->\n    </div><!--.section-->\n\n\n\n</div>\n";
 },"useData":true});
 templates['beta_success.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -2292,7 +2367,7 @@ templates['beta_success.html'] = template({"compiler":[5,">= 2.0.0"],"main":func
     + " soon.\n            </p>\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
 templates['bootstrap_test.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div id=\"bootstrap_test\" class=\"container\">\n<style type=\"text/css\">\n.bs-example {\n    padding: 10px;\n    margin-left: 0;\n    margin-right: 0;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #444;\n    border-radius: 4px 4px 0 0;\n    box-shadow: none;\n}\n.bs-example>.dropdown>.dropdown-menu {\n    position: static;\n    display: block;\n    margin-bottom: 5px;\n}\n</style>\n\n<div id=\"about\">\n\n    <h2>Bootstrap test</h2>\n    <hr/>\n    <p class=\"lead\">\n        This is a theme test for bootstrap components\n    </p>\n    <ul>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n    </ul>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"dropdown clearfix\">\n            <button class=\"btn dropdown-toggle sr-only\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\">\n                Dropdown\n                <span class=\"caret\"></span>\n            </button>\n                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu2\">\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Another action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Something else here</a></li>\n                <li role=\"presentation\" class=\"divider\"></li>\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Separated link</a></li>\n            </ul>\n        </div>\n    </div>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read this important alert message.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This alert needs your attention, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're not looking too good.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> Change a few things up and try submitting again.\n        </div>\n    </div>\n\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read <a href=\"#\" class=\"alert-link\">this important alert message</a>.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This <a href=\"#\" class=\"alert-link\">alert needs your attention</a>, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're <a href=\"#\" class=\"alert-link\">not looking too good</a>.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> <a href=\"#\" class=\"alert-link\">Change a few things up</a> and try submitting again.\n        </div>\n    </div>\n\n    <h3>Code</h3>\n    <div class=\"bs-example\">\n<pre>\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=eIsWZZYqy18wx0zPXAKAIvkj\n</pre>\n\n        This is in a code element: <code>blah blah blah</code>\n\n    </div>\n\n</div>\n</div>\n";
+  return "<div id=\"bootstrap_test\" class=\"container\">\n<style type=\"text/css\">\n.bs-example {\n    padding: 10px;\n    margin-left: 0;\n    margin-right: 0;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #444;\n    border-radius: 4px 4px 0 0;\n    box-shadow: none;\n}\n.bs-example>.dropdown>.dropdown-menu {\n    position: static;\n    display: block;\n    margin-bottom: 5px;\n}\n</style>\n\n<div id=\"bootstrap_test\">\n\n    <h2>Bootstrap test</h2>\n    <hr/>\n    <p class=\"lead\">\n        This is a theme test for bootstrap components\n    </p>\n    <ul>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n        <li>Here is a list item</li>\n    </ul>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"dropdown clearfix\">\n            <button class=\"btn dropdown-toggle sr-only\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\">\n                Dropdown\n                <span class=\"caret\"></span>\n            </button>\n                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu2\">\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Another action</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Something else here</a></li>\n                <li role=\"presentation\" class=\"divider\"></li>\n                <li role=\"presentation\" class=\"dropdown-header\">Dropdown header</li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"#\">Separated link</a></li>\n            </ul>\n        </div>\n    </div>\n\n    <h3>Alert test</h3>\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read this important alert message.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This alert needs your attention, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're not looking too good.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> Change a few things up and try submitting again.\n        </div>\n    </div>\n\n    <div class=\"bs-example\">\n        <div class=\"alert alert-success\">\n            <strong>Well done!</strong> You successfully read <a href=\"#\" class=\"alert-link\">this important alert message</a>.\n        </div>\n        <div class=\"alert alert-info\">\n            <strong>Heads up!</strong> This <a href=\"#\" class=\"alert-link\">alert needs your attention</a>, but it's not super important.\n        </div>\n        <div class=\"alert alert-warning\">\n            <strong>Warning!</strong> Better check yourself, you're <a href=\"#\" class=\"alert-link\">not looking too good</a>.\n        </div>\n        <div class=\"alert alert-danger\">\n            <strong>Oh snap!</strong> <a href=\"#\" class=\"alert-link\">Change a few things up</a> and try submitting again.\n        </div>\n    </div>\n\n    <h3>Code</h3>\n    <div class=\"bs-example\">\n<pre>\nPOST https://ftnox.com/account/balance\nContent-Type: application/x-www-form-urlencoded\n\napi_key=eIsWZZYqy18wx0zPXAKAIvkj\n</pre>\n\n        This is in a code element: <code>blah blah blah</code>\n\n    </div>\n\n</div>\n</div>\n";
   },"useData":true});
 templates['breadcrumbs.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n<ol class=\"breadcrumb\">\n    ";
@@ -2328,39 +2403,39 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
   var stack1, functionType="function", escapeExpression=this.escapeExpression;
   return "\n        <div class=\"row enter-order\">\n            <div class=\"col-xs-6\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Buy "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h4>\n                    </div>\n\n                    <!-- todo: replace hard coded values with balance -->   \n                    <div class=\"panel-dark clearfix\">\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Your Balance</p>\n                            <p class=\"value\"><a href=\"/#account\">24.2459 "
+    + "</h4>\n                    </div>\n\n                    <!-- todo: replace hard coded values with balance -->   \n                    <div class=\"panel-dark clearfix\">\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Your Balance</p>\n                            <p class=\"value available-balance\"><a href=\"/#account\"><span class=\"js-balance\" data-coin=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Lowest Ask Price</p>\n                            <p class=\"value\">0.00000417 "
+    + "\">?</span> "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\n                        </div>\n                    </div>\n\n                    <div class=\"panel-body\">\n                        <form class=\"form-buy form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-4 control-label\">Amount</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\"><span class=\"coin\">"
+    + "</a></p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Lowest Sell Price</p>\n                            <p class=\"value\">$<span class=\"js-best-ask\" data-market=\""
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">?</span></p> \n                        </div>\n                    </div>\n\n                    <div class=\"panel-body\">\n                        <form class=\"form-buy form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-4 control-label\">Amount</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\"><span class=\"coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span></span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"price\" class=\"col-xs-4 control-label\">Price per "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input buy-price name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"\" required value=\""
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.last)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input name=\"price\" type=\"text\" class=\"form-control js-buy-price\" placeholder=\"\" required value=\""
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.bestAsk)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n                                    <span class=\"market-name input-group-addon\"><span class=\"coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span></span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-4 control-label\">Total Cost</label>\n                                <div class=\"col-xs-8\" style=\"margin-top: 6px;\">\n                                    <span class=\"send_amount\">0</span>\n                                    "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " (or less)\n                                </div>\n                            </div>\n                        </form>\n                    </div>\n                    <div class=\"panel-footer clearfix\">\n                        <button class=\"btn btn-primary btn-custom pull-right col-xs-4\" type=\"submit\">Buy <strong>"
+    + "</span></span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-4 control-label\">Total Cost</label>\n                                <div class=\"col-xs-8\" style=\"margin-top: 6px;\">\n                                    $<span class=\"send_amount amount\">0</span>  (or less)\n                                </div>\n                            </div>\n                        </form>\n                    </div>\n                    <div class=\"panel-footer clearfix\">\n                        <button class=\"js-submit-buy btn btn-primary btn-custom pull-right col-xs-4\" type=\"submit\">Buy <strong>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</strong></button>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"col-xs-6\">\n                <div class=\"order-form-panel panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h4 class=\"panel-title\">Sell "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h4>\n                    </div>\n\n                    <!-- todo: replace hard coded values with balance -->   \n                    <div class=\"panel-dark clearfix\">\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Your Balance</p>\n                            <p class=\"value\"><a href=\"/#account\">3,424.524 "
+    + "</h4>\n                    </div>\n\n                    <!-- todo: replace hard coded values with balance -->   \n                    <div class=\"panel-dark clearfix\">\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Your Balance</p>\n                            <p class=\"value available-balance\"><a href=\"/#account\"><span class=\"js-balance\" data-coin=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</a></p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Highest Bid Price</p>\n                            <p class=\"value\">0.000003974 "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\n                        </div>\n                    </div>\n\n                    <div class=\"panel-body\">\n                        <form class=\"form-sell form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-4 control-label\">Amount</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\"><span class=\"coin\">"
+    + "\">?</span> "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</a></p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <p class=\"key\">Highest Buy Price</p>\n                            <p class=\"value\">$<span class=\"js-best-bid\" data-market=\""
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">?</span></p> \n                        </div>\n                    </div>\n\n                    <div class=\"panel-body\">\n                        <form class=\"form-sell form-horizontal\">\n                            <div class=\"form-group\">\n                                <label for=\"amount\" class=\"col-xs-4 control-label\">Amount</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input name=\"amount\" type=\"text\" class=\"form-control\" placeholder=\"\" required>\n                                    <span class=\"input-group-addon\"><span class=\"coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span></span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"price\" class=\"col-xs-4 control-label\">Price per "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input sell-price name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"\" required value=\""
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.last)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</label>\n                                <div class=\"col-xs-8\"><div class=\"input-group ig-coin\">\n                                    <input name=\"price\" type=\"text\" class=\"form-control js-sell-price\" placeholder=\"\" required value=\""
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.bestBid)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n                                    <span class=\"market-name input-group-addon\"><span class=\"coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span></span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-4 control-label\">Total Credit</label>\n                                <div class=\"col-xs-8\" style=\"margin-top: 6px;\">\n                                    <span class=\"receive_amount\">0</span>\n                                    "
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.basisCoin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " (or more)\n                                </div>\n                            </div>\n                        </form>\n                    </div>\n                    <div class=\"panel-footer clearfix\">\n                        <button class=\"btn btn-primary btn-custom pull-right col-xs-4\" type=\"submit\">Sell <strong>"
+    + "</span></span>\n                                </div></div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"\" class=\"col-xs-4 control-label\">Total Credit</label>\n                                <div class=\"col-xs-8\" style=\"margin-top: 6px;\">\n                                    $<span class=\"receive_amount amount\">0</span>  (or more)\n                                </div>\n                            </div>\n                        </form>\n                    </div>\n                    <div class=\"panel-footer clearfix\">\n                        <button class=\"js-submit-sell btn btn-primary btn-custom pull-right col-xs-4\" type=\"submit\">Sell <strong>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</strong></button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        ";
 },"3":function(depth0,helpers,partials,data) {
@@ -2369,7 +2444,7 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_pending_orders", (depth0 && depth0.orders), {"name":"render","hash":{},"data":data})))
     + "\n                    </div>\n                </div>\n            </div>\n        </div>\n        ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <div class=\"js-exchange-markets ftnox-page-header\">\n        \n    </div>\n\n    <div class=\"container\">\n\n        <!--<h2 class=\"row js-marketName coin\">"
+  var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "<div id=\"market\">\n\n    <div class=\"js-exchange-markets ftnox-page-header\">\n        \n    </div>\n\n    <!-- Alerts -->\n    <div id=\"app-alerts\" class=\"container\"></div>\n\n    <div class=\"container\">\n\n        <!--<h2 class=\"row js-marketName coin\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h2>-->\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
@@ -2377,9 +2452,9 @@ templates['exchange.html'] = template({"1":function(depth0,helpers,partials,data
   buffer += "\n\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer + "\n\n        <!-- orderbook chart -->\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Orderbook Chart</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-chart orderbook-chart\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Bids</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-bids\">\n                            "
+  return buffer + "\n\n        <!-- orderbook chart -->\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Orderbook Chart</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-chart orderbook-chart\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Buy Orders</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-bids\">\n                            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.bids), {"name":"render","hash":{},"data":data})))
-    + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Asks</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-asks\">\n                            "
+    + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h3 class=\"panel-title\">Sell Orders</h3>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"js-asks\">\n                            "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_orders", (depth0 && depth0.asks), {"name":"render","hash":{},"data":data})))
     + "\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n    </div><!--.container-->\n\n</div>\n";
 },"useData":true});
@@ -2414,7 +2489,7 @@ templates['exchange_markets.html'] = template({"1":function(depth0,helpers,parti
   var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "\n        "
     + escapeExpression((helper = helpers.render || (depth0 && depth0.render) || helperMissing,helper.call(depth0, "exchange_market_button", depth0, {"name":"render","hash":{},"data":data})))
-    + "\n        ";
+    + "\n    ";
 },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var stack1, buffer = "<div class=\"container\">\n    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.markets), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
@@ -2427,28 +2502,28 @@ templates['exchange_orders.html'] = template({"1":function(depth0,helpers,partia
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n            ";
 },"2":function(depth0,helpers,partials,data) {
-  var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "\n            <tr>\n                <td class=\"amount\">"
+  var stack1, helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
+  return "\n            <tr>\n                <td class=\"amount\">$"
     + escapeExpression((helper = helpers.toPrecision || (depth0 && depth0.toPrecision) || helperMissing,helper.call(depth0, (depth0 && depth0.fp), 5, {"name":"toPrecision","hash":{},"data":data})))
     + "</td>\n                <td class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.a), {"name":"divide8","hash":{},"data":data})))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                \n            </tr>\n            ";
 },"4":function(depth0,helpers,partials,data) {
-  return "\n            <tr>\n                <td colspan=\"999\" style=\"text-align: center;\">No orders</td>\n            </tr>\n            ";
+  return "\n            <tr>\n                <td colspan=\"2\" style=\"text-align: center;\">No orders</td>\n            </tr>\n            ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"exchange-orders\">\n    <table class=\"table table-striped table-condensed\">\n        <thead><tr>\n            <th>Price</th>\n            <th>Amount <span class=\"coin\">("
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")</span></th>\n        </tr></thead>\n        <tbody class=\"js-exchange-orders-body exchange-orders-body\">\n            ";
+  var stack1, buffer = "<div class=\"exchange-orders\">\n    <table class=\"table table-striped table-condensed\">\n        <thead><tr>\n            <th>Price</th>\n            <th>Amount</th>\n        </tr></thead>\n        <tbody class=\"js-exchange-orders-body exchange-orders-body\">\n            ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(4, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n        </tbody>\n    </table>\n</div>\n";
 },"useData":true});
 templates['exchange_pending_orders.html'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n    ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.orders), {"name":"each","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.orders), {"name":"each","hash":{},"fn":this.programWithDepth(2, data, depth0),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n    ";
-},"2":function(depth0,helpers,partials,data) {
+},"2":function(depth0,helpers,partials,data,depth1) {
   var stack1, helper, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, buffer = "\n    <tr data-order-id=\""
     + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
     + "\">\n        ";
@@ -2458,25 +2533,27 @@ templates['exchange_pending_orders.html'] = template({"1":function(depth0,helper
     + escapeExpression((helper = helpers.formatDate || (depth0 && depth0.formatDate) || helperMissing,helper.call(depth0, (depth0 && depth0.time), {"name":"formatDate","hash":{
     'format': ("YYYY-MM-DD hh:mma")
   },"data":data})))
-    + "</td>\n        <td class=\"amount\">"
+    + "</td>\n        <td class=\"amount\">$"
     + escapeExpression((helper = helpers.toPrecision || (depth0 && depth0.toPrecision) || helperMissing,helper.call(depth0, (depth0 && depth0.price), 5, {"name":"toPrecision","hash":{},"data":data})))
     + "</td>\n        <td class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.amount), {"name":"divide8","hash":{},"data":data})))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = (depth1 && depth1.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n        <td class=\"amount\">"
     + escapeExpression((helper = helpers.divide8 || (depth0 && depth0.divide8) || helperMissing,helper.call(depth0, (depth0 && depth0.filled), {"name":"divide8","hash":{},"data":data})))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = (depth1 && depth1.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n        <td><a href=\"#\" class=\"js-cancel-order btn btn-default btn-xs\" data-order-id=\""
     + escapeExpression(((helper = helpers.id || (depth0 && depth0.id)),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
     + "\" type=\"submit\">Cancel</a></td>\n    </tr>\n    ";
 },"3":function(depth0,helpers,partials,data) {
-  return "\n        <td>Bid</td>\n        ";
+  return "\n        <td>Buy</td>\n        ";
   },"5":function(depth0,helpers,partials,data) {
-  return "\n        <td>Ask</td>\n        ";
+  return "\n        <td>Sell</td>\n        ";
   },"7":function(depth0,helpers,partials,data) {
   return "\n    <tr>\n        <td colspan=\"6\" style=\"text-align: center;\">You have no open orders</td>\n    </tr>\n    ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "<table class=\"table table-striped table-condensed head\">\n<thead>\n    <tr>\n        <th>Type</th>\n        <th>Date</th>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount <span class=\"coin\" style=\"font-weight: normal\">("
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.market)),stack1 == null || stack1 === false ? stack1 : stack1.coin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")</span></th>\n        <th>Filled</th>\n        <th></th>\n    </tr>\n</thead>\n<tbody>\n    ";
+  var stack1, buffer = "<table class=\"table table-striped table-condensed head\">\n<thead>\n    <tr>\n        <th>Type</th>\n        <th>Date</th>\n        <th>Price</th>\n        <th style=\"vertical-align: middle;\">Amount</th>\n        <th>Filled</th>\n        <th></th>\n    </tr>\n</thead>\n<tbody>\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.orders), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(7, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n</tbody>\n</table>\n";
@@ -2484,7 +2561,9 @@ templates['exchange_pending_orders.html'] = template({"1":function(depth0,helper
 templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) {
   return "\n                    <li name=\"market\"><a class=\"active\" href=\"/#market\">Trade</a></li>\n                ";
   },"3":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n\n                    <li class=\"btn-group\">\n                      <button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">\n                        username@email.com <span class=\"caret\"></span>\n                      </button>\n                      <ul class=\"dropdown-menu\" role=\"menu\">\n                        <li><a href=\"/#account\">Account</a></li>\n                        ";
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, buffer = "\n\n                    <li class=\"btn-group\">\n                      <button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">\n                        "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " <span class=\"caret\"></span>\n                      </button>\n                      <ul class=\"dropdown-menu\" role=\"menu\">\n                        <li><a href=\"/#account\">Account</a></li>\n                        ";
   stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.roles)),stack1 == null || stack1 === false ? stack1 : stack1.treasury), {"name":"if","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n                        <li class=\"divider\"></li>\n                        <li><a href=\"/#logout\">Logout</a></li>\n                      </ul>\n                    </li>\n\n                ";
@@ -2499,7 +2578,7 @@ templates['layout.html'] = template({"1":function(depth0,helpers,partials,data) 
   buffer += "\n                    <li name=\"contact\"><a href=\"/#api\">API</a></li>\n                    <li name=\"about\"><a href=\"/#about\">About</a></li>\n\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.user), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.program(6, data),"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<!-- Begin page content -->\n<div id=\"content\">";
+  buffer += "\n            </ul>\n        </div>\n    </div>\n</div>\n\n<!-- Begin page content -->\n<div id=\"content\">";
   stack1 = ((helper = helpers.content || (depth0 && depth0.content)),(typeof helper === functionType ? helper.call(depth0, {"name":"content","hash":{},"data":data}) : helper));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "</div>\n\n<div id=\"footer\">\n    <div class=\"container\">\n        <div class=\"col-xs-3\">\n            <h5>About</h5>\n            <ul>\n                <li><a href=\"#about\">About</a></li>\n                <li><a href=\"#\">Legal</a></li>\n                <li>&nbsp;</li>\n                <li>&copy; 2014 AllInBits, Inc.</li>\n            </ul>\n        </div>\n        <div class=\"col-xs-3\">\n            <h5>Resources</h5>\n            <ul>\n                <li><a href=\"#api\">API</a></li>\n            </ul>\n        </div>\n        <div class=\"col-xs-3\">\n            <h5>Location</h5>\n            <ul>\n                <li>Ft Nox</li>\n                <li>2501 Bryant St,</li>\n                <li>San Francisco, CA 94110</li>\n                <li><a href=\"callto:+14154098733\">+14154098733</a></li>\n            </ul>\n        </div>\n        <div class=\"col-xs-3\">\n            <h5>Contact</h5>\n            <ul>\n                <li><a href=\"mailto:hello@ftnox.com\">hello@ftnox.com</a></li>\n                <li><a href=\"mailto:invest@ftnox.com\">invest@ftnox.com</a></li>\n                <li><a href=\"mailto:careers@ftnox.com\">careers@ftnox.com</a></li>\n                <li><a href=\"https://twitter.com/ft_nox\">@ft_nox (Twitter)</a></li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
@@ -2510,19 +2589,19 @@ templates['loggedout.html'] = template({"compiler":[5,">= 2.0.0"],"main":functio
 templates['login.html'] = template({"1":function(depth0,helpers,partials,data) {
   return "\n                <div class=\"form-group\">\n                    <input name=\"totp_code\" type=\"text\" class=\"form-control\" placeholder=\"6 digit auth token\" required>\n                </div>\n                ";
   },"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Login</h2>\n    </div>\n</div>\n\n<div id=\"login\" class=\"col-xs-4 col-xs-offset-4\">\n    <div class=\"panel panel-default row\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\" style=\"text-align: center\">Login</h4>\n        </div>\n        <form class=\"form-login\">\n            <div class=\"panel-body\">\n                <div class=\"form-group\">\n                    <input name=\"email\" type=\"text\" class=\"form-control\" placeholder=\"Email address\" required autofocus>\n                </div>\n                <div class=\"form-group\">\n                    <input name=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n                </div>\n                ";
+  var stack1, buffer = "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Login</h2>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<div id=\"login\" class=\"col-xs-4 col-xs-offset-4\">\n    <div class=\"panel panel-default row\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\" style=\"text-align: center\">Login</h4>\n        </div>\n        <form class=\"form-login\">\n            <div class=\"panel-body\">\n                <div class=\"form-group\">\n                    <input name=\"email\" type=\"text\" class=\"form-control\" placeholder=\"Email address\" required autofocus>\n                </div>\n                <div class=\"form-group\">\n                    <input name=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n                </div>\n                ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.requireTOTP), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer + "\n            </div>\n            <div class=\"panel-footer\">\n                <button class=\"btn btn-custom\" type=\"submit\">Login</button>\n                <span style=\"margin-left: 10px;\">\n                    or <a href=\"/#register\">Register</a>\n                </span>\n            </div>\n        </form>\n    </div>\n</div>\n";
 },"useData":true});
 templates['register.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
-  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Register</h2>\n    </div>\n</div>\n\n<div id=\"register\" class=\"col-xs-4 col-xs-offset-4\">\n    <div class=\"panel panel-default row\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\" style=\"text-align: center\">Register</h4>\n        </div>\n        <form class=\"form-register\">\n            <div class=\"panel-body\">\n                <div class=\"form-group\">\n                    <input name=\"email\" type=\"text\" class=\"form-control\" placeholder=\"Email address\" required autofocus>\n                </div>\n                <div class=\"form-group\">\n                    <input name=\"password\"  type=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n                </div>\n                <div class=\"form-group\">\n                    <input name=\"password2\" type=\"password\" class=\"form-control\" placeholder=\"Password Repeat\" required>\n                </div>\n            </div>\n            <div class=\"panel-footer clearfix\">\n                <button class=\"btn btn-custom\" type=\"submit\">Register</button>\n                <span style=\"margin-left: 10px;\">\n                    or <a href=\"/#login\">Login</a>\n                </span>\n            </div>\n        </div>\n    </form>\n</div>\n";
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Register</h2>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<div id=\"register\" class=\"col-xs-4 col-xs-offset-4\">\n    <div class=\"panel panel-default row\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\" style=\"text-align: center\">Register</h4>\n        </div>\n        <form class=\"form-register\">\n            <div class=\"panel-body\">\n                <div class=\"form-group\">\n                    <input name=\"email\" type=\"text\" class=\"form-control\" placeholder=\"Email address\" required autofocus>\n                </div>\n                <div class=\"form-group\">\n                    <input name=\"password\"  type=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n                </div>\n                <div class=\"form-group\">\n                    <input name=\"password2\" type=\"password\" class=\"form-control\" placeholder=\"Password Repeat\" required>\n                </div>\n            </div>\n            <div class=\"panel-footer clearfix\">\n                <button class=\"btn btn-custom\" type=\"submit\">Register</button>\n                <span style=\"margin-left: 10px;\">\n                    or <a href=\"/#login\">Login</a>\n                </span>\n            </div>\n        </form>\n    </div>\n</div>\n";
   },"useData":true});
 templates['register_confirmed.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var helper, functionType="function", escapeExpression=this.escapeExpression;
-  return "<div class=\"page-header\">\n    <h1>Registered.</h1>\n</div>\n<p class=\"lead\">Now check your email at <b>"
+  return "<div class=\"ftnox-page-header\">\n    <div class=\"container\">\n        <h2>Register</h2>\n    </div>\n</div>\n\n<!-- Alerts -->\n<div id=\"app-alerts\" class=\"container\"></div>\n\n<div id=\"register\" class=\"col-xs-4 col-xs-offset-4\">\n    <div class=\"panel panel-default row\">\n        <div class=\"panel-heading\">\n            <h4 class=\"panel-title\" style=\"text-align: center\">Registered!</h4>\n        </div>\n        <div class=\"container\">\n            <p class=\"lead\">Now check your email at <b>"
     + escapeExpression(((helper = helpers.email || (depth0 && depth0.email)),(typeof helper === functionType ? helper.call(depth0, {"name":"email","hash":{},"data":data}) : helper)))
-    + "</b> and click on the confirmation link.</p>\n<p>If you don't see the email, check your spambox.</p>\n";
+    + "</b> and click on the confirmation link.</p>\n            <p>If you don't see the email, check your spambox.</p>\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
 templates['static_base.html'] = template({"compiler":[5,">= 2.0.0"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", buffer = "<!DOCTYPE html>\n<html>\n<head>\n    <title>FtNox</title>\n    <link rel=\"stylesheet\" media=\"screen\" href=\"/css/bootstrap.sortable.css\"></link>\n    <link rel=\"stylesheet\" media=\"screen\" href=\"/css/style.css\"></link>\n    <link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\">\n    <link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\">\n</head>\n<body>\n\n<!-- Everything goes in here -->\n<div id=\"main\">\n    ";

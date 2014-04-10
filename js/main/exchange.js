@@ -11,8 +11,9 @@ app.exchange = {
 };
 
 app.addListener("DID_APP_INIT", function() {
-    addMarketInfo({coin:"DOGE", basisCoin:"BTC", last:0.0000040000}); // HACK
-    addMarketInfo({coin:"LTC", basisCoin:"BTC", last:0.026});         // HACK
+    // TODO: load this dynamically from the server.
+    addMarketInfo({coin:"BTC", basisCoin:"USD"});
+    addMarketInfo({coin:"LTC", basisCoin:"USD"});
     //updateMarkets();
 });
 
@@ -20,12 +21,18 @@ function addMarketInfo(marketInfo) {
     var name = marketInfo.coin+"/"+marketInfo.basisCoin;
     var market = app.exchange.marketsByName[name];
     if (market) {
-        market.last = Number(marketInfo.last);
+        // Market exists, update data.
+        market.last =       Number(marketInfo.last || 0);
+        market.bestBid =    Number(marketInfo.bestBid || 0) || undefined;
+        market.bestAsk =    Number(marketInfo.bestAsk || 0) || undefined;
     } else {
+        // Create new market.
         market = Market({
             basisCoin:  marketInfo.basisCoin,
             coin:       marketInfo.coin,
-            last:       Number(marketInfo.last),
+            last:       Number(marketInfo.last || 0),
+            bestBid:    Number(marketInfo.bestBid || 0),
+            bestAsk:    Number(marketInfo.bestAsk || 0),
         });
         app.exchange.marketsByName[name] = market;
     }
@@ -174,6 +181,9 @@ function MarketView(market) {
     var view = util.newObject(MarketView);
     view.market = market;
     view.chartView = chart.ChartView(market);
+    // TODO: don't require balanceView, it's not shown.
+    // but, do request the balance.
+    // Looks like we should create a Balance object to manage that.
     view.balanceView = undefined;
     view.updateTask = undefined;
     view.render();
@@ -194,12 +204,26 @@ MarketView.render = function() {
         user:       app.user,
     }));
     view.renderMarkets(app.exchange.markets);
+    view.renderBalances();
     view.el.find("[data-toggle='tooltip']").tooltip();
     //view.el.find(".js-marketName").text(view.market.name);
     view.el.find(".js-chart").empty().append(view.chartView.el);
     if (app.user) {
         view.balanceView = account.BalanceView();
         view.el.find(".js-account-balance").replaceWith(view.balanceView.el);
+    }
+}
+
+MarketView.renderBalances = function() {
+    var view = this;
+    if (app.account.balance[view.market.coin] !== undefined) {
+        view.el.find(".js-balance[data-coin='"+view.market.coin+"']").
+            text(util.exactDivide(app.account.balance[view.market.coin], 8));
+    }
+    if (app.account.balance[view.market.basisCoin] !== undefined) {
+        // HACK
+        view.el.find(".js-balance[data-coin='"+view.market.basisCoin+"']").
+            text((app.account.balance[view.market.basisCoin]/100000000.0).toFixed(2));
     }
 }
 
@@ -213,7 +237,9 @@ MarketView.renderMarkets = function(markets) {
 MarketView.bindEvents = function() {
     var view = this;
     var bform = view.el.find("form.form-buy");
+    var bformButton = view.el.find(".js-submit-buy");
     var sform = view.el.find("form.form-sell");
+    var sformButton = view.el.find(".js-submit-sell");
 
     // Display calculations for buying
     bform.find("input[name='amount'],input[name='price']").on('input', function() {
@@ -226,15 +252,18 @@ MarketView.bindEvents = function() {
     });
 
     // On buy submit
+    bformButton.click(function(){ bform.submit(); });
     bform.submit(function(e) {
         e.preventDefault();
         bform.disableInput();
+        bformButton.disableInput();
         view.market.submitOrder({
             orderType:  "B",
             amount:     +bform.find("input[name='amount']").val(),
             price:      +bform.find("input[name='price']").val(),
         }, function(err, res) {
             bform.enableInput();
+            bformButton.enableInput();
             if (err) { app.alert(err.message); return; }
             view.updatePendingOrders();
         });
@@ -252,15 +281,18 @@ MarketView.bindEvents = function() {
     });
 
     // On sell submit
+    sformButton.click(function(){ sform.submit(); });
     sform.submit(function(e) {
         e.preventDefault();
         sform.disableInput();
+        sformButton.disableInput();
         view.market.submitOrder({
             orderType:  "A",
             amount:     +sform.find("input[name='amount']").val(),
             price:      +sform.find("input[name='price']").val(),
         }, function(err, res) {
             sform.enableInput();
+            sformButton.enableInput();
             if (err) { app.alert(err.message); return; }
             view.updatePendingOrders();
         });
@@ -282,9 +314,31 @@ MarketView.bindEvents = function() {
         });
     });
 
-    // Update the markets sidebar.
+    // Update the balances;
+    app.addListener("DID_UPDATE_BALANCE", function(balance) {
+        view.renderBalances();
+    }, view);
+
+    // Update the all market information
     app.addListener("DID_UPDATE_MARKETS", function(markets, marketsByName) {
         view.renderMarkets(markets);
+        for (var name in marketsByName) {
+            var market = marketsByName[name];
+            // Update market prices
+            view.el.find(".js-best-bid[data-market='"+name+"']").text(util.toPrecision(market.bestBid, 5));
+            view.el.find(".js-best-ask[data-market='"+name+"']").text(util.toPrecision(market.bestAsk, 5));
+            // Update the default buy/sell prices
+            if (name == view.market.name) {
+                var bidInput = view.el.find("input.js-buy-price");
+                var askInput = view.el.find("input.js-sell-price");
+                if (+bidInput.val() == 0) {
+                    bidInput.val(util.toPrecision(market.bestAsk, 5));
+                }
+                if (+askInput.val() == 0) {
+                    askInput.val(util.toPrecision(market.bestBid, 5));
+                }
+            }
+        }
     }, view);
 
     // TODO replace with sockets.
@@ -345,7 +399,8 @@ MarketView.destroy = function() {
 
 function marketHandler(path) {
     if (path.hashParts.length != 3) {
-        app.router.replacePath("/#market/DOGE/BTC");
+        // HACK
+        app.router.replacePath("/#market/BTC/USD");
         return;
     }
     var coin = path.hashParts[1];

@@ -241,7 +241,7 @@ WithdrawView.bindEvents = function() {
             function(err, res) {
                 form.enableInput();
                 if (err) {
-                    view.alert(res.data);
+                    view.alert(err.message);
                     return;
                 }
                 view.updateWithdrawals();
