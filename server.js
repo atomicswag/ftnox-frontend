@@ -1,8 +1,9 @@
-var http = require("http"),
-    url = require("url"),
-    path = require("path"),
-    fs = require("fs")
-    port = process.argv[2] || 8889;
+var http =  require("http"),
+    url =   require("url"),
+    path =  require("path"),
+    fs =    require("fs"),
+    mime =  require("mime"),
+    port =  process.argv[2] || 8889;
 
 if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
@@ -13,15 +14,15 @@ if (typeof String.prototype.startsWith != 'function') {
 http.createServer(function(request, response) {
  
     var uri = url.parse(request.url).pathname;
-    var filename;
+    var fileName;
     if (uri.startsWith("/treasury")) {
-        filename = path.join(process.cwd(), "static", uri);
+        fileName = path.join(process.cwd(), "static", uri);
     } else {
-        filename = path.join(process.cwd(), "static/main", uri);
+        fileName = path.join(process.cwd(), "static/main", uri);
     }
-    console.log(filename);
+    console.log(fileName);
     
-    path.exists(filename, function(exists) {
+    path.exists(fileName, function(exists) {
         if(!exists) {
             response.writeHead(404, {"Content-Type": "text/plain"});
             response.write("404 Not Found\n");
@@ -29,9 +30,10 @@ http.createServer(function(request, response) {
             return;
         }
  
-        if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+        if (fs.statSync(fileName).isDirectory()) fileName += '/index.html';
  
-        fs.readFile(filename, "binary", function(err, file) {
+        // Read & serve file.
+        fs.readFile(fileName, "binary", function(err, file) {
             if(err) {
                 response.writeHead(500, {"Content-Type": "text/plain"});
                 response.write(err + "\n");
@@ -39,7 +41,12 @@ http.createServer(function(request, response) {
                 return;
             }
  
-            response.writeHead(200);
+            var mimeType = mime.lookup(fileName);
+            var charset =  mime.charsets.lookup(mimeType);
+            response.writeHead(200, {
+                "Content-Type":     mimeType,
+                "Content-Encoding": charset
+            });
             response.write(file, "binary");
             response.end();
         });

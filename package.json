@@ -6,6 +6,7 @@
     "dependencies": {
         "handlebars":   "2.0.0-alpha.1",
         "sugar":        "1.4.1",
-        "demodule":     "jaekwon/demodule"
+        "demodule":     "jaekwon/demodule",
+        "mime":         "1.2.11"
     }
 }
