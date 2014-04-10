@@ -17,7 +17,7 @@
                 {{#if user}}
                     <li name="market"><a class="active" href="/#market">Trade</a></li>
                 {{/if}}
-                    <li name="contact"><a href="/#api">API</a></li>
+                    <li name="account"><a href="/#account">Account</a></li>
                     <li name="about"><a href="/#about">About</a></li>
 
                 {{#if user}}
@@ -27,8 +27,12 @@
                         {{user.email}} <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="/#account">Account</a></li>
+                        <li><a href="/#account/balance">Balance TODO</a></li>
+                        <li><a href="/#account/history">History TODO</a></li>
+                        <li><a href="/#account/security">Security TODO</a></li>
+                        <li><a href="/#account/api">API TODO</a></li>
                         {{#if user.roles.treasury}}
+                            <li class="divider"></li>
                             <li name="treasury"><a href="/treasury/">Treasury</a></li>
                         {{/if}}
                         <li class="divider"></li>
