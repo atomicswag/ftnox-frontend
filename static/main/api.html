@@ -43,26 +43,34 @@
 <div id="app-alerts" class="container"></div>
 
 <!-- Begin page content -->
-<div id="content"><div class="container">
+<div id="content"><div class="ftnox-page-header">
+    <div class="container">
+        <h2>API Documentation</h2>
+    </div>
+</div>
 
-<div id="api">
-<h2>API Docs</h2>
-<hr />
-<div>
+<div class="container">
 
+    <div class="panel panel-default">
 
-<h3>General information</h3>
-<h4>HTTP method & parameters</h4>
-<p>
-    The server accepts all parameters in the form of <code>x-www-form-urlencoded</code> POST parameters.
-</p>
-<br />
+        <div class="panel-heading">
+            <h3 class="panel-title">General Information</h3>
+        </div>
 
-<h4>Authentication</h4>
-<p>
-    All API requests must include the <code>api_key</code> parameter. You can find them <a href="/#account">here</a>.<br/>
-    In the near future, HMAC-SHA512 signatures and incrementing nonces will be used.
-</p>
+        <div class="panel-body">
+
+            
+            <h4>HTTP method & parameters</h4>
+            <p>
+                The server accepts all parameters in the form of <code>x-www-form-urlencoded</code> POST parameters.
+            </p>
+            <br />
+
+            <h4>Authentication</h4>
+            <p>
+                All API requests must include the <code>api_key</code> parameter. You can find them <a href="/#account">here</a>.<br/>
+                In the near future, HMAC-SHA512 signatures and incrementing nonces will be used.
+            </p>
 <pre>
 Sample request to /account/balance:
 
@@ -71,18 +79,25 @@ Content-Type: application/x-www-form-urlencoded
 
 api_key=MY_API_KEY
 </pre>
-<br />
+            <br />
 
-<h4>Units</h4>
-<p>
-    All units are in Satoshis (1/100000000).<br />
-    All timestamps are seconds from epoch UTC.
-</p>
-<br />
+            <h4>Units</h4>
+            <p>
+                All units are in Satoshis (1/100000000).<br />
+                All timestamps are seconds from epoch UTC.
+            </p>
 
+    </div></div><!--panel-->
+    <div class="panel panel-default">
 
-<h3>Account API Calls</h3>
-<h4>Balance</h4>
+        <div class="panel-heading">
+            <h3 class="panel-title">Account API Calls</h3>
+        </div>
+
+        <div class="panel-body">
+
+            
+            <h4>Balance</h4>
 <pre>
 GET /account/balance
 Params: None
@@ -98,9 +113,9 @@ Response JSON:
     }
 }
 </pre>
-<br />
+            <br />
 
-<h4>Deposit Address</h4>
+            <h4>Deposit Address</h4>
 <pre>
 GET /account/deposit_address
 Params:
@@ -112,9 +127,9 @@ Response JSON:
     data:   "1E9jy9377qyUCjHYTeo3XPRDDLeJBku8cU"
 }
 </pre>
-<br />
+            <br />
 
-<h4>List Deposits</h4>
+            <h4>List Deposits</h4>
 <pre>
 GET /account/deposits
 Params:
@@ -143,9 +158,9 @@ Response JSON:
     ]
 }
 </pre>
-<br />
+            <br />
 
-<h4>Withdraw</h4>
+            <h4>Withdraw</h4>
 <pre>
 POST /account/withdraw
 Params:
@@ -155,9 +170,9 @@ Params:
 
 Response JSON:  The resulting balance. See /account/balance.
 </pre>
-<br />
+            <br />
 
-<h4>List Withdraws</h4>
+            <h4>List Withdraws</h4>
 <pre>
 GET /account/withdrawals
 Params:
@@ -181,11 +196,18 @@ Response JSON:
     ]
 }
 </pre>
-<br />
 
+        </div></div><!--panel-->
+        <div class="panel panel-default">
 
-<h3>Exchange API Calls</h3>
-<h4>List Markets</h4>
+            <div class="panel-heading">
+                <h3 class="panel-title">Exchange API Calls</h3>
+            </div>
+
+            <div class="panel-body">
+
+                
+                <h4>List Markets</h4>
 <pre>
 GET /exchange/markets
 
@@ -207,25 +229,25 @@ Response JSON:
     ]
 }
 </pre>
-<br />
+                <br />
 
-<h4>Orderbook</h4>
+                <h4>Orderbook</h4>
 <pre>
 GET /exchange/orderbook
 
 TODO: document
 </pre>
-<br />
+                <br />
 
-<h4>Historical Prices</h4>
+                <h4>Historical Prices</h4>
 <pre>
 GET /exchange/pricelog
 
 TODO: document
 </pre>
-<br />
+                <br />
 
-<h4>Place Order</h4>
+                <h4>Place Order</h4>
 <pre>
 POST /exchange/add_order
 Params:
@@ -245,9 +267,9 @@ Response JSON:
     }
 }
 </pre>
-<br />
+                <br />
 
-<h4>Cancel Order</h4>
+                <h4>Cancel Order</h4>
 <pre>
 POST /exchange/cancel_order
 Params:
@@ -259,9 +281,9 @@ Response JSON:
     "data": "CANCELED"
 }
 </pre>
-<br />
+                <br />
 
-<h4>List Pending Orders</h4>
+                <h4>List Pending Orders</h4>
 <pre>
 GET /exchange/pending_orders
 
@@ -289,10 +311,11 @@ Response JSON:
     ]
 }
 </pre>
-<br />
 
-</div>
-</div>
+            </div>
+        </div>
+
+</div></div><!--panel-->
 
 </div><!--.container-->
 </div>

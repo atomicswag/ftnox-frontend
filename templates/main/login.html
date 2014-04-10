@@ -1,10 +1,16 @@
-<div id="login" class="col-xs-4 col-xs-offset-4" style="margin-top: 60px;">
+<div class="ftnox-page-header">
+    <div class="container">
+        <h2>Login</h2>
+    </div>
+</div>
+
+<div id="login" class="col-xs-4 col-xs-offset-4">
     <div class="panel panel-default row">
         <div class="panel-heading">
             <h4 class="panel-title" style="text-align: center">Login</h4>
         </div>
-        <div class="panel-body">
-            <form class="form-login">
+        <form class="form-login">
+            <div class="panel-body">
                 <div class="form-group">
                     <input name="email" type="text" class="form-control" placeholder="Email address" required autofocus>
                 </div>
@@ -16,13 +22,13 @@
                     <input name="totp_code" type="text" class="form-control" placeholder="6 digit auth token" required>
                 </div>
                 {{/if}}
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Login</button>
-                    <span style="margin-left: 10px;">
-                        or, <a href="/#register">Register</a>
-                    </span>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="panel-footer">
+                <button class="btn btn-custom" type="submit">Login</button>
+                <span style="margin-left: 10px;">
+                    or <a href="/#register">Register</a>
+                </span>
+            </div>
+        </form>
     </div>
 </div>

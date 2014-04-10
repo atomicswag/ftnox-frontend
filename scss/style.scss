@@ -50,6 +50,12 @@ body {
     font: 14px/20px sans-serif;
 }
 
+h4 .dim {
+    font-size: 15px;
+    padding-left: 0.3em;
+    color: hsl($hue,$sat,75%);
+}
+
 /* ---------------------------------------------------------------------- */
 // ftnox-page-header
 /* ---------------------------------------------------------------------- */
@@ -192,6 +198,22 @@ body {
     }
 }
 
+.btn-custom-dark {
+    @include gradient-vertical(hsl($hue,70%,40%), hsl($hue,70%,30%));
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.69);
+    box-shadow: hsl($hue,60%,50%) 0 1px 0 inset;
+    -webkit-font-smoothing: antialiased;
+    border-color: hsl($hue,$sat,25%);
+    color: hsl($hue,$sat,90%);
+    font-weight: bold;  
+
+    &:hover, &:active {
+        @include gradient-vertical(hsl($hue,70%,36%), hsl($hue,70%,26%));
+        border-color: hsl($hue,$sat,21%);
+        color: hsl($hue,$sat,80%);
+    }
+}
+
 /* ---------------------------------------------------------------------- */
 // PANEL
 /* ---------------------------------------------------------------------- */
@@ -224,6 +246,34 @@ body {
             color: $txt;
         }
     }
+}
+.panel-default > .panel-heading.panel-heading-lg {
+    height: 48px;
+    h4.panel-title {
+        float: left;
+        font-size: 1.33em;
+        line-height: 38px;
+        font-weight: normal;
+    }
+}
+
+/* ---------------------------------------------------------------------- */
+// TABLE
+/* ---------------------------------------------------------------------- */
+.modal-header {
+    height: 48px;
+    @include gradient-vertical(hsl($hue,$sat,96%), hsl($hue,$sat,90%));
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid $bc;
+    padding: 5px 15px;
+    .close {
+        margin-top: 5px;
+    }
+}
+.modal-title {
+    font-size: 1.33em;
+    font-weight: normal;
+    line-height: 38px;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -298,6 +348,29 @@ table.table th {
         &.section-horizontal {
             h2 {
                 margin: 0;
+                line-height: 36px;
+            }
+        }
+        &.section-dark {
+            background: hsl($hue,35%,50%);
+            h2 {
+                color: hsl($hue,75%,65%);
+                color: #fff;
+                font-weight: bold;
+            }
+            ul.horizontal-list {
+                list-style: none;
+                padding: 0;
+                li {
+                    float: left;
+                    background: hsl($hue,45%,45%);
+                    border: 1px solid hsl($hue,48%,40%);
+                    padding: 0 0.8em;
+                    line-height: 34px;
+                    margin-right: 0.8em;
+                    text-transform: uppercase;
+                    color: #fff
+                }
             }
         }
         &.section-top {
@@ -321,10 +394,7 @@ table.table th {
                     position: relative;
                     z-index: 10;
                 }
-                h1 {
-                    font-weight: bold;
-                    color: hsl($hue,75%,65%);
-                }
+
                 p {
                     color: hsl($hue,$sat,60%);
                     font-size: 18px;
@@ -337,28 +407,28 @@ table.table th {
         }
         .section-header {
             margin: 0 0 3em;
-        }
-        .section-body {
-            h3 {
-                margin-top: 0;
-                font-weight: normal;
+            h2 {
+                text-align: center;
             }
         }
 
     }
-    h1, h2 {
+    h1 {
+        font-weight: bold;
+        font-size: 36px;
+        color: hsl($hue,75%,65%);
+        text-transform: uppercase;
+    }
+    h2 {
         font-weight: normal;
         color: hsl($hue,40%,40%);
         text-transform: uppercase;
-    }
-    h1 {
-        font-size: 36px;
-        text-align: center;
-    }
-    h2 {
         font-size: 24px;
         margin-top: 0;
         margin-bottom: 15px;
+    }
+    h4 {
+        margin-top: 0;
     }
     ul {
         list-style: square;   
@@ -372,24 +442,19 @@ table.table th {
     .input-group {
         width: 100%;
     }
-    .portrait {
-        img {
-            margin: 0 0 20px;
-        }
+
+}
+
+
+/* ---------------------------------------------------------------------- */
+// Portrait
+/* ---------------------------------------------------------------------- */
+
+.portrait {
+    img {
+        margin: 0 0 20px;
     }
-    ul.horizontal-list {
-        list-style: none;
-        padding: 0;
-        li {
-            float: left;
-            border: 1px solid $bc;
-            padding: .5em 0.8em;
-            margin-right: 0.8em;
-            margin-bottom: 0;
-            text-transform: uppercase;
-        }
-        
-    }
+    text-align: center;
 }
 
 /* ---------------------------------------------------------------------- */
