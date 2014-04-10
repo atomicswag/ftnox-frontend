@@ -1422,6 +1422,7 @@ MarketView.bindEvents = function() {
             bform.enableInput();
             bformButton.enableInput();
             if (err) { app.alert(err.message); return; }
+            account.updateBalance(); // HACK
             view.updatePendingOrders();
         });
         return false;
@@ -1451,6 +1452,7 @@ MarketView.bindEvents = function() {
             sform.enableInput();
             sformButton.enableInput();
             if (err) { app.alert(err.message); return; }
+            account.updateBalance(); // HACK
             view.updatePendingOrders();
         });
         return false;
